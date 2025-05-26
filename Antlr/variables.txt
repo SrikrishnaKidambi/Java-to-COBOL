@@ -1,0 +1,15 @@
+Scope:Method:add->Class:Test_method->GLOBAL
+  Type:int
+    x
+    y
+
+Scope:Method:main->Class:Test_method->GLOBAL
+  Type:String
+    args [size=[]]
+
+Scope:Block->Method:main->Class:Test_method->GLOBAL
+  Type:int
+    x
+    y
+    res
+
