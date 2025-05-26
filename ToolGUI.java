@@ -5,7 +5,6 @@ import java.io.*;
 
 public class ToolGUI {
     private static final String DEFAULT_CODE = "public class Test {\n    // code comes here\n}";
-
     public static void main(String[] args) {
         // Create the main frame
         JFrame frame = new JFrame("RISHA LAB - Java to COBOL");
