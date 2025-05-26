@@ -6,27 +6,14 @@ public class Test {
         int b = 10;
         //Basic move statement
         a = b;
-        // Basic addition
-        int c = a - b;
-
-        // Compound assignment
-        a -= b;
-
-        // Postfix increment
-        a--;
-
-        // Prefix increment
-        --a;
-
-        // Postfix in assignment
-        c = a--;
-
-        // Prefix in assignment
-        c = --a;
-
+        int c=a%b;
+        a%=b;
+        a += ++a + b-- - --c ;
+        // result += ++c;
         // Print results to verify logic
         System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        System.out.println("b = " + b); // hello world
         System.out.println("c = " + c);
+        // System.out.println("result= "+result);
     }
 }
