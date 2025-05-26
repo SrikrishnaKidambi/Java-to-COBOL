@@ -1,6 +1,7 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.gui.TreeViewer;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -20,6 +21,12 @@ public class ParseTreeGeneration {
         ParseTree tree = parser.compilationUnit(); // entry rule for Java
 
         System.out.println(tree.toStringTree(parser));  // print the parse tree
+        
+        //cobol code generation
+        ParseTreeWalker walker = new ParseTreeWalker();
+        JavaToCobolListenerPD listener = new JavaToCobolListenerPD(tokens);
+        walker.walk(listener, tree);
+        System.out.println("Generated COBOL:\n" + listener.getCobolCodePD());
 
         TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
         viewer.setScale(1.5); // Optional: zoom in a bit
