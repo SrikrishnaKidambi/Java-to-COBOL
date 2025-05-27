@@ -15,7 +15,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private static final String INDENT_COMMENT="      ";
     private final TokenStream tokens;
     private final StringBuilder cobolCodePD = new StringBuilder();
-
+    //*********Important************//
+    private boolean insideSwitch=false;
+    private boolean insideblock=false; // please add boolean for block type contructs and the use or to insideblock to handle the period logic
+    private void updateInsideBlock(){
+        insideblock=(insideSwitch);
+    }
+    //**************************** //
     public JavaToCobolListenerPD(TokenStream tokens){
         this.tokens = tokens;
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
@@ -41,7 +47,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String[] tokens = varDecl.split("\\s+"); // Split by whitespace
                 String var = tokens[tokens.length - 1]; // Get variable name
 
-                cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if(text.matches(".*=\\s*\\w+\\s*[+\\-\\*\\/\\%]\\s*\\w+\\s*;?")){
@@ -58,19 +64,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String op1 = rhs.substring(0, opPos).trim();
                 String op2 = rhs.substring(opPos + 1).trim();
                 if(operator=='+'){
-                    cobolCodePD.append(INDENT).append("ADD ").append(op1).append(" TO ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append(op1).append(" TO ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='-'){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(op2).append(" FROM ").append(op1).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(op2).append(" FROM ").append(op1).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='*'){
-                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='/'){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='%'){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -97,19 +103,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String targetVar = parts[0].trim();
                 String operand = parts[1].replace(";", "").trim();
                 if(operator.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append(operand).append(" TO ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append(operand).append(" TO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(operand).append(" FROM ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(operand).append(" FROM ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("*")){
-                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(operand).append(" BY ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(operand).append(" BY ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("/")){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(operand).append(" INTO ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(operand).append(" INTO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("%")){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(targetVar).append(" BY ").append(operand).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(targetVar).append(" BY ").append(operand).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -118,10 +124,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             char op=text.charAt(0);
             String var = text.replaceAll("[+;\\-;]", "").trim();
             if(op=='+'){
-                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(insideblock?"\n":".\n");
             }
             else if(op=='-'){
-                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if (text.matches("\\w+\\+\\+\\s*;?") || text.matches("\\w+\\-\\-\\s*;?")) {
@@ -129,10 +135,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             char op = text.charAt(text.indexOf('+') != -1 ? text.indexOf('+') : text.indexOf('-'));
             String var = text.replaceAll("[+;\\-;]", "").trim();
             if(op=='+'){
-                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(insideblock?"\n":".\n");
             }
             else if(op=='-'){
-                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if (text.matches("\\w+\\s*=\\s*\\w+\\+\\+\\s*;?") || text.matches("\\w+\\s*=\\s*\\w+\\-\\-\\s*;?")) {
@@ -143,12 +149,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String rhs = parts[1].replace(";", "").replace("++", "").replace("--","").trim(); // a
                 String op = parts[1].replace(";", "").trim();
                 op = op.substring(op.length()-1);
-                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(".\n");
+                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
                 if(op.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(insideblock?"\n":".\n");
                 }
                 else if(op.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -161,17 +167,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String op = parts[1].replace(";", "").trim();
                 op = op.substring(0,1);
                 if(op.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(insideblock?"\n":".\n");
                 }
                 else if(op.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(insideblock?"\n":".\n");
                 }
-                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(".\n");
+                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if (text.matches(".*=\\s*\\w+\\s*;?") ) {
-            //move statement mapping
+        else if (text.matches(".*=\\s*.+\\s*;?")) {
+            // move statement mapping
             String[] parts = text.split("=");
+
             if (parts.length == 2) {
                 String lhs = parts[0].trim();
                 String[] lhsTokens = lhs.split("\\s+");
@@ -179,10 +186,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
                 String rhs = parts[1].replace(";", "").trim();
 
-                // Avoid matching arithmetic expressions here (like a = b + c)
-                // So only handle if rhs is a simple variable or literal (letters or digits)
-                if (rhs.matches("[\\w\\d]+")) {
-                    cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(targetVar).append(".\n");
+                // Match string/char literals or simple variables/literals
+                if (rhs.matches("\"[^\"]*\"|'[^']*'|[\\w\\d_]+")) {
+                    cobolCodePD.append(INDENT)
+                            .append("MOVE ").append(rhs).append(" TO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -229,7 +236,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     cobolCodePD.append(INDENT).append(pre).append("\n");
                 }
 
-                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(rhs).append(".\n");
+                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(rhs).append(insideblock?"\n":".\n");
 
                 for(String post:postOps){
                     cobolCodePD.append(INDENT).append(post).append("\n");
@@ -246,13 +253,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if(text.startsWith("System.out.println")){
             String displayedContent=extractDisplayStatement(text);
             if(displayedContent!=null){
-                cobolCodePD.append(INDENT).append("DISPLAY ").append(displayedContent).append(".\n");
+                cobolCodePD.append(INDENT).append("DISPLAY ").append(displayedContent).append(insideblock?"\n":".\n");
             }
         }
         else if(text.startsWith("System.out.print")){
             String displayedContent=extractDisplayStatement(text);
             if(displayedContent!=null){
-                cobolCodePD.append(INDENT).append("DISPLAY ").append(displayedContent).append(" WITH NO ADVANCING").append(".\n");
+                cobolCodePD.append(INDENT).append("DISPLAY ").append(displayedContent).append(" WITH NO ADVANCING").append(insideblock?"\n":".\n");
             }
         }
         else if (text.matches(".*=\\s*\\w+\\.next(Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*;?")) {
@@ -265,7 +272,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String[] tokens = varDecl.split("\\s+"); // Split by whitespace
                 String var = tokens[tokens.length - 1]; // Get variable name
 
-                cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if(text.matches(".*=\\s*\\w+\\s*[+\\-\\*\\/\\%]\\s*\\w+\\s*;?")){
@@ -282,19 +289,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String op1 = rhs.substring(0, opPos).trim();
                 String op2 = rhs.substring(opPos + 1).trim();
                 if(operator=='+'){
-                    cobolCodePD.append(INDENT).append("ADD ").append(op1).append(" TO ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append(op1).append(" TO ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='-'){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(op2).append(" FROM ").append(op1).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(op2).append(" FROM ").append(op1).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='*'){
-                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='/'){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator=='%'){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(op1).append(" BY ").append(op2).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -321,19 +328,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String targetVar = parts[0].trim();
                 String operand = parts[1].replace(";", "").trim();
                 if(operator.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append(operand).append(" TO ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append(operand).append(" TO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(operand).append(" FROM ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append(operand).append(" FROM ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("*")){
-                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(operand).append(" BY ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("MULTIPLY ").append(operand).append(" BY ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("/")){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(operand).append(" INTO ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(operand).append(" INTO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
                 else if(operator.equals("%")){
-                    cobolCodePD.append(INDENT).append("DIVIDE ").append(targetVar).append(" BY ").append(operand).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(".\n");
+                    cobolCodePD.append(INDENT).append("DIVIDE ").append(targetVar).append(" BY ").append(operand).append(" GIVING ").append(targetVar).append(" REMAINDER ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -342,10 +349,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             char op=text.charAt(0);
             String var = text.replaceAll("[+;\\-;]", "").trim();
             if(op=='+'){
-                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(insideblock?"\n":".\n");
             }
             else if(op=='-'){
-                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if (text.matches("\\w+\\+\\+\\s*;?") || text.matches("\\w+\\-\\-\\s*;?")) {
@@ -353,10 +360,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             char op = text.charAt(text.indexOf('+') != -1 ? text.indexOf('+') : text.indexOf('-'));
             String var = text.replaceAll("[+;\\-;]", "").trim();
             if(op=='+'){
-                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(var).append(insideblock?"\n":".\n");
             }
             else if(op=='-'){
-                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(".\n");
+                cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(var).append(insideblock?"\n":".\n");
             }
         }
         else if (text.matches("\\w+\\s*=\\s*\\w+\\+\\+\\s*;?") || text.matches("\\w+\\s*=\\s*\\w+\\-\\-\\s*;?")) {
@@ -367,12 +374,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String rhs = parts[1].replace(";", "").replace("++", "").replace("--","").trim(); // a
                 String op = parts[1].replace(";", "").trim();
                 op = op.substring(op.length()-1);
-                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(".\n");
+                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
                 if(op.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(insideblock?"\n":".\n");
                 }
                 else if(op.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -385,17 +392,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String op = parts[1].replace(";", "").trim();
                 op = op.substring(0,1);
                 if(op.equals("+")){
-                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("ADD ").append("1 TO ").append(rhs).append(insideblock?"\n":".\n");
                 }
                 else if(op.equals("-")){
-                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(".\n");
+                    cobolCodePD.append(INDENT).append("SUBTRACT ").append("1 FROM ").append(rhs).append(insideblock?"\n":".\n");
                 }
-                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(".\n");
+                cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if (text.matches(".*=\\s*\\w+\\s*;?") ) {
-            //move statement mapping
+        else if (text.matches(".*=\\s*.+\\s*;?")) {
+            // move statement mapping
             String[] parts = text.split("=");
+
             if (parts.length == 2) {
                 String lhs = parts[0].trim();
                 String[] lhsTokens = lhs.split("\\s+");
@@ -403,10 +411,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
                 String rhs = parts[1].replace(";", "").trim();
 
-                // Avoid matching arithmetic expressions here (like a = b + c)
-                // So only handle if rhs is a simple variable or literal (letters or digits)
-                if (rhs.matches("[\\w\\d]+")) {
-                    cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(targetVar).append(".\n");
+                // Match string/char literals or simple variables/literals
+                if (rhs.matches("\"[^\"]*\"|'[^']*'|[\\w\\d_]+")) {
+                    cobolCodePD.append(INDENT)
+                            .append("MOVE ").append(rhs).append(" TO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
         }
@@ -457,7 +465,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     cobolCodePD.append(INDENT).append(pre).append("\n");
                 }
 
-                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(targetVar).append(" ").append(operator).append(" ").append(rhs).append(".\n");
+                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(targetVar).append(" ").append(operator).append(" ").append(rhs).append(insideblock?"\n":".\n");
 
                 for(String post:postOps){
                     cobolCodePD.append(INDENT).append(post).append("\n");
@@ -507,15 +515,28 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     cobolCodePD.append(INDENT).append(pre).append("\n");
                 }
 
-                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(rhs).append(".\n");
+                cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(rhs).append(insideblock?"\n":".\n");
 
                 for(String post:postOps){
                     cobolCodePD.append(INDENT).append(post).append("\n");
                 }
             }
         }
+        else if(ctx.SWITCH()!=null){
+            String switchVar = ctx.getChild(1).getText().replace("(", "").replace(")", "");
+            cobolCodePD.append(INDENT).append("EVALUATE ").append(switchVar).append("\n");
+            insideSwitch=true;
+            updateInsideBlock();
+        }
     }
-    
+    public void exitStatement(JavaParser.StatementContext ctx){
+        String text=tokens.getText(ctx);
+        if (ctx.SWITCH() != null) {
+            cobolCodePD.append(INDENT).append("END-EVALUATE.\n");
+            insideSwitch=false;
+            updateInsideBlock();
+        }
+    }
     //-----------------Helper function for DISPLAY based statements----------------
     private String extractDisplayStatement(String text){
         int start=text.indexOf('(');
@@ -534,6 +555,17 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             return res;
         }
         return null;
+    }
+    //-------------------Switch case implementation--------------------
+    @Override
+    public void enterSwitchLabel(JavaParser.SwitchLabelContext ctx){
+        if(ctx.CASE()!=null){
+            String label = ctx.getChild(1).getText();
+            cobolCodePD.append(INDENT).append("WHEN ").append(label).append("\n");
+        }
+        else if(ctx.DEFAULT()!=null){
+            cobolCodePD.append(INDENT).append("WHEN OTHER\n");
+        }
     }
     //-------------------Helper function to process the comments--------------------
     private void addLeadingComments(ParserRuleContext ctx){
