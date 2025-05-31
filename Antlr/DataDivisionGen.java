@@ -6,9 +6,9 @@ public class DataDivisionGen {
     private static String mapJavaTypeToCobolPic(String javaType) {
         javaType = javaType.toLowerCase();
         if (javaType.contains("int") || javaType.contains("long")) {
-            return "PIC 9(5).";
+            return "PIC S9(5).";
         } else if (javaType.contains("float") || javaType.contains("double")) {
-            return "PIC 9(5)V9(2).";
+            return "PIC S9(5)V9(2).";
         } else if (javaType.contains("char")) {
             return "PIC X(1).";
         } else if (javaType.contains("boolean")) {
