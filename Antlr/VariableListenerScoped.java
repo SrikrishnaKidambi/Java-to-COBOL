@@ -10,6 +10,7 @@ public class VariableListenerScoped extends JavaParserBaseListener{
     private final Map<String, Map<String,List<VariableInfo>>> variables=new LinkedHashMap<>();  // a map that stores the scope of the variables and for each key there will be another map that stores the type as key and names of the variables as values
     private final Deque<String> scopeStack=new ArrayDeque<>();      // initialising a stack that stores the curret scope of the variables.
     private String curr_Type=null;  // a variable that stores the type of the variable that is being visited which can be used for storing the type of the variable as a key for the list of variables at a particular scope
+    private String currentMethod=null;
 
     public VariableListenerScoped(){
         scopeStack.push("GLOBAL");
@@ -39,6 +40,7 @@ public class VariableListenerScoped extends JavaParserBaseListener{
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
         String methodName = ctx.identifier().getText();
         scopeStack.push("Method:"+methodName);
+        currentMethod=methodName;
 
         JavaParser.FormalParametersContext parameters = ctx.formalParameters();
         if(parameters != null && parameters.formalParameterList() != null){
@@ -53,6 +55,7 @@ public class VariableListenerScoped extends JavaParserBaseListener{
     @Override
     public void exitMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
         scopeStack.pop();
+        currentMethod=null;
     }
 
     // Loop Blocks
@@ -222,11 +225,16 @@ public class VariableListenerScoped extends JavaParserBaseListener{
             cleanType = type.replaceAll("\\[\\]", "");
         }
         
+        String annotatedName=name;
+        if(currentMethod!=null && !"main".equals(currentMethod)){
+            annotatedName=name+"_"+currentMethod;
+        }
+
         // Create final variable for lambda
         final String finalArraySize = arraySize;
         
         // Create VariableInfo object
-        VariableInfo varInfo = new VariableInfo(name, finalArraySize);
+        VariableInfo varInfo = new VariableInfo(annotatedName, finalArraySize);
         
         // Check for duplicates before adding
         Map<String, List<VariableInfo>> scopeMap = variables.computeIfAbsent(scope, k -> new LinkedHashMap<>());

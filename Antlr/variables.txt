@@ -1,3 +1,11 @@
+Scope:Method:sayHello->Class:Test->GLOBAL
+  Type:int
+    x_sayHello
+
+Scope:Block->Method:sayHello->Class:Test->GLOBAL
+  Type:String
+    msg_sayHello
+
 Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args [size=[]]
