@@ -35,9 +35,9 @@ public class ParseTreeGeneration {
         walker.walk(pdListener, tree);
         // System.out.println("Generated COBOL:\n" + pdListener.getCobolCodePD());
         pdDivision = pdListener.getCobolCodePD();
-        // VariableExtractor idDdListener = new VariableExtractor();
-        // VariableExtractor.variableExtractor(className);
-        // idDdDivisions = idDdListener.getIdentificationDataDivisions();
+        VariableExtractor idDdListener = new VariableExtractor();
+        VariableExtractor.variableExtractor(className);
+        idDdDivisions = idDdListener.getIdentificationDataDivisions();
         Path outputPath = Paths.get("../finalCobolCode.cbl");
         // System.out.println("----------------Data division starts-----------------");
         // System.out.println(idDdDivisions);
