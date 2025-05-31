@@ -1,11 +1,13 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class VariableExtractor {
-    public static void main(String[] args) throws Exception{
-        CharStream codeStream = CharStreams.fromFileName("Test_method.java");
+    public static void variableExtractor(String className) throws Exception{
+        CharStream codeStream = CharStreams.fromFileName("Test.java");
         String codeTxt = codeStream.toString();
         
         JavaLexer lexer = new JavaLexer(codeStream);    // initialising lexer
@@ -25,6 +27,15 @@ public class VariableExtractor {
         // appender.applyInsertions("Test1_modified.java");
         // MethodInjector.injectMethods("Test1.java", extractor.getVariableData());
         // System.out.println("Modified file written to Test1_modified.java");
-        DataDivisionGen.generateDataDivision("variables.txt", "cobol_test1.cbl");
+        DataDivisionGen.generateDataDivision("variables.txt", "cobol_test1.cbl",className);
+    }
+    public String getIdentificationDataDivisions(){
+        String filePath = "cobol_test1.cbl";  // Ensure this path is correct
+        try {
+            return Files.readString(Paths.get(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

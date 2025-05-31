@@ -17,13 +17,13 @@ public class DataDivisionGen{
         }
     }
 
-    public static void generateDataDivision(String inputFile,String outputFile)throws IOException{
+    public static void generateDataDivision(String inputFile,String outputFile,String className)throws IOException{
         try(BufferedReader reader=new BufferedReader(new FileReader(inputFile));
         PrintWriter writer=new PrintWriter(new FileWriter(outputFile))){
             String[] cblPgmID=outputFile.split("\\.");    // extracting the name of the cobol file
 
             writer.println("       IDENTIFICATION DIVISION.");
-            writer.println("       PROGRAM-ID. "+cblPgmID[0]+".");
+            writer.println("       PROGRAM-ID. "+className+".");
             writer.println();
             writer.println();
             writer.println("       DATA DIVISION.");

@@ -1,15 +1,15 @@
-Scope:Method:add->Class:Test_method->GLOBAL
-  Type:int
-    x
-    y
-
-Scope:Method:main->Class:Test_method->GLOBAL
+Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args [size=[]]
 
-Scope:Block->Method:main->Class:Test_method->GLOBAL
-  Type:int
-    x
-    y
-    res
+Scope:Block->Method:main->Class:Test->GLOBAL
+  Type:Scanner
+    scanner
+  Type:double
+    num1
+    num2
+    sum
+    diff
+    product
+    division
 
