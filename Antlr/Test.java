@@ -1,19 +1,12 @@
 import java.util.Scanner;
 
 public class Test {
+
+    private static void sayHello(int x){
+        String msg="Hello World!";
+        System.out.println(msg);
+    }
     public static void main(String[] args) {
-        String grade= "A";
-        //assigning the comments to the students according to the grades
-        switch (grade) {
-            case "A":
-                System.out.println("Excellent");
-                break;
-            case "B":
-                System.out.println("Good");
-                break;
-            default:
-                System.out.println("Invalid");
-        }
-        int b=10;
+        sayHello(4);
     }
 }
