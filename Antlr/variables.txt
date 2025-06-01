@@ -3,12 +3,8 @@ Scope:Method:main->Class:Test->GLOBAL
     args [size=[]]
 
 Scope:Block->Method:main->Class:Test->GLOBAL
-  Type:String
-    fullname
-    parts [size=[]]
-    firstname
-    lastname
-    updatedFirstname
+  Type:Scanner
+    scanner
   Type:int
-    a
+    day
 

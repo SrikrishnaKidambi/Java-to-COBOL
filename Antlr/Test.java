@@ -1,16 +1,38 @@
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
-        String fullname= "Srikrishna Kidambi";
-        String[] parts;
-        parts= fullname.split(" ");
-        String firstname;
-        firstname = parts[0];
-        String lastname = parts[1];
-        String updatedFirstname = "Venkata " + parts[0] + 'd';
-        int a = 8 + 7 + 9;
-        System.out.println("Full name: "+fullname);
-        System.out.println("First name: "+firstname);
-        System.out.println("Last name: "+lastname);
-        System.out.println("Updated First name: "+updatedFirstname);
+        Scanner scanner = new Scanner(System.in);
+
+        // Take input from user
+        System.out.print("Enter a number (1-7) for the day of the week: ");
+        int day = scanner.nextInt();
+
+        // Determine day using switch-case
+        switch (day) {
+            case 1:
+                System.out.println("Sunday");
+                break;
+            case 2:
+                System.out.println("Monday");
+                break;
+            case 3:
+                System.out.println("Tuesday");
+                break;
+            case 4:
+                System.out.println("Wednesday");
+                break;
+            case 5:
+                System.out.println("Thursday");
+                break;
+            case 6:
+                System.out.println("Friday");
+                break;
+            case 7:
+                System.out.println("Saturday");
+                break;
+            default:
+                System.out.println("Invalid input! Please enter a number between 1 and 7.");
+        }
     }
 }
