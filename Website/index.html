@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JAVA2COB: Tool which do rule based translation from java to COBOL</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <link rel="shortcut icon" href="favicon.ico">  
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- FontAwesome JS -->
+    <script defer src="assets/fontawesome/js/all.js"></script>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
+    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/prism/prism.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">  
+      
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+    
+</head> 
+
+<body class="body-green">
+    <div class="page-wrapper">
+        <!-- ******Header****** -->
+        <header id="header" class="header">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
+                        <a href="index.html">
+<!--                             <span aria-hidden="true" class="icon_documents_alt icon"></span> -->
+                            <span class="text-highlight"></span><span class="text-bold">JAVA2COB</span>
+                        </a>
+                    </h1>
+                    
+                </div>
+                
+                <!-- <div class="top-search-box">
+	                 <form class="form-inline search-form justify-content-center" action="" method="get">
+	            
+			            <input type="text" placeholder="Search..." name="search" class="form-control search-input">
+			            
+			            <button type="submit" class="btn search-btn" value="Search"><i class="fas fa-search"></i></button>
+			            
+			        </form>
+                </div> -->
+                
+            </div><!--//container-->
+        </header><!--//header-->
+        <div class="doc-wrapper">
+            <div class="container">
+                <!-- <div id="doc-header" class="doc-header text-center">
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i> Quick Start</h1>
+                    <div class="meta"><i class="far fa-clock"></i> Last updated: Nov 21st, 2020</div>
+                </div>//doc-header -->
+                <div class="doc-body row">
+                    <div class="doc-content col-md-9 col-12 order-1">
+                        <div class="content-inner">
+                            <section id="download-section" class="doc-section">
+                                <h1 class="section-title">JAVA2COB: Rule based translation from java to COBOL</h1>
+                                <br>
+                                <h3 class="block-title">Tool Description</h3>
+                                <div class="section-block">
+                                    <p>
+                                        JAVA2COB is a open-source tool that performs the rule based translation of Java code to COBOL.
+                                    </p>
+                                    <a href="https://github.com/SrikrishnaKidambi/Java-to-COBOL.git" target="_blank">JAVA2COB Github Repository</a>
+<!--                                     <p style="color: red;">
+                                        <u>Note</u>: The current version of eTagger may have issues on runnning on some architectures of Mac systems.  
+                                    </p> -->
+<!--                                     <a href="https://github.com/rishalab/eTagger/archive/main.zip" class="btn btn-green" target="_blank"><i class="fas fa-download"></i> Download Tool Zip</a> -->
+                                </div>
+                            </section><!--//doc-section-->
+                            <section id="installation-section" class="doc-section">
+                                <h2 class="section-title">Installation</h2>
+                                <div id="step1"  class="section-block">
+                                     <h3 class="block-title" id="requirements">Requirements</h3>
+                                    <!-- <div class="code-block">
+                                        <p>
+                                        <b> Hardware and Operating System:</b>
+                                        <ul>
+                                            <li>Windows 8/10/11, macOS 12+, or Linux (Ubuntu 20.04+)</li>
+                                            <li>Processor: Intel Pentuim, Core i3/i5/i7/i9 or Ultra, AMD Ryzen 5 or better</li>
+                                            <li>RAM: Minimum of 4GB</li>
+                                            <li>Storage: 25 MB</li>
+                                        </ul> -->
+                                            <!-- The software was tested on a Windows 11 system with 16 GB RAM.
+                                            <br/> --> 
+                                        <!-- <b>Requirements:</b> -->
+
+                                        <ul>
+                                            <li><a href = "https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html">Java</a>  Version 14.0+ (Installation of java is mandatory to run the tool)</li>
+                                            <!-- <li><a href="https://jupyter.org/install">Jupyter</a> version 1.0.0, if you're planning to run the evaluation notebooks</li> -->
+                                            <!-- <li><a href="https://pypi.org/project/google-generativeai/">google-generativeai</a> version 0.4.0</li> -->
+                                            <!-- <li><a href="https://docs.streamlit.io/get-started/installation">streamlit</a> version 1.38.0 for GUI frontend</li> -->
+                                            <!-- <li><a href="https://pypi.org/project/rouge-score/">rouge-score</a> version 0.1.2 for evaluation scoring</li> -->
+                                            <!-- <li><a href="https://pypi.org/project/evaluate/">evaluate</a> version 0.4.1</li> -->
+                                            <li><a href="https://sourceforge.net/projects/gnucobol/">Gnu COBOL</a> This is needed to run the cobol code generated. The tutorial for installation can be found here 👉 <a href ="https://www.youtube.com/watch?v=u9M52sAnrOs">Tutorial</a></li>
+                                            <!-- <li><a href="https://pypi.org/project/uvicorn/">uvicorn</a></li>
+                                            <li><a href="https://pypi.org/project/lizard/1.8.7/">lizard</a></li>
+                                            <li><a href="https://pypi.org/project/pygit2/0.16.2/">pygit2</a></li>
+                                            <li><a href="https://pypi.org/project/pygount/">pygount</a></li>
+                                            <li>A Chormium-based browser</li> -->
+                                        </ul>
+                                        <!-- <br/> -->
+                                        <!-- <b>API Tokens and Accesses</b>
+                                        <ul>
+                                            <li><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token">GitHub Finegrained PAT</a></li>
+                                            <li><a href="https://vercel.com/docs/accounts/create-an-account">Vercel Account</a> for accessing backend API endpoint. Be sure to mail your signed-up email to <a href="mailto:cs23m104@iittp.ac.in">cs23m104@iittp.ac.in</a> with the purpose of using the tool for gaining access. This is for security reasons.</li>
+                                        </ul> -->
+					    <!-- <ul>
+					   <li>Intel processors from Pentium, Core i3, i7, i9, and Xeon series.</li>
+					    <li>Un.</li>
+					    <li>Have <a href="https://cran.r-project.org">R</a> installed in your system.</li>
+					   </ul> -->
+					                    </p>
+				    
+				    <!-- <b>If you are using Ubuntu 22.04 please run the below commands to install R.</b>
+				    <ul>
+					    <li>wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo gpg --dearmor -o /usr/share/keyrings/r-project.gpg</li>
+
+					    <li>echo "deb [signed-by=/usr/share/keyrings/r-project.gpg] https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" | sudo tee -a /etc/apt/sources.list.d/r-project.list</li>
+					    <li>sudo apt update</li>
+					    <li>sudo apt install --no-install-recommends r-base</li>
+					    <li>sudo -i R</li>
+					   </ul> -->
+                                
+                                    </div>
+                                </section>
+
+                                <section id="usage" class="doc-section">
+                                    <h2 class="section-title">Usage</h2>
+                                    <div class="section-block">
+                                        <p>
+                                            <b>The tool has a GUI and this can be accessed by following the steps below:</b>
+                                        </p>
+                                        <ol>
+                                                <li>Clone the GitHub repository by running the following command:
+                                                    <div class="code-block">
+                                                        <code>git clone https://github.com/SrikrishnaKidambi/Java-to-COBOL.git </code>
+                                                    </div>
+                                                </li>
+
+                                                
+                                                <li>
+                                                    Go to the repo directory <code>cd Java-to-COBOL</code>
+                                                </li>
+                                                <br>
+                                                <li>Set up the parse tree generation:
+                                                    <ul>
+                                                        <li>Change the directory to Antlr:  
+                                                    
+                                                        <code>cd Antlr</code></li>
+                                                        <br>
+                                                        <li>Compile the java files needed to generate parse tree:
+                                                            
+                                                            <ol>
+                                                                <br>
+                                                                <li>For Windows:  <code>javac -cp ".;antlr-4.13.2-complete.jar" *.java</code></li>
+                                                                <br>
+                                                                <li>For Linux/Mac:  <code>javac -cp ".:antlr-4.13.2-complete.jar" *.java</code></li>
+                                                            </ol>
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </li>
+                                                <br>
+                                                <li>Head back to the main tool directory <code>cd ..</code>
+                                                    
+                                                </li>
+                                                <br>
+                                                <li>
+                                                    Compile the ToolGUI class <code>javac ToolGUI.java</code>
+                                                </li>
+                                                <br>
+                                                <li>
+                                                    Now we are gdod to go you should be able to see the GUI whenever you run the command <code>java ToolGUI</code> in the tool's base directory.
+                                                </li>
+                                                <!-- <br> -->
+                                                <!-- <li>Enable Developer Mode: In the top right corner, toggle the <i>Developer Mode</i> switch to enable it</li>
+                                                <img class="img-fluid" src="assets/images/demo/load_unpacked.png" alt="screenshot" width="500" height="700"/>
+
+                                                <li>Load the extension
+                                                    <ul>
+                                                        <li>Click the <i>Load Unpacked</i> button</li>
+                                                        <li>In the file browser, select the folder where the repository was cloned (it should contain `manifest.json` file)</li>
+                                                        <li>Click <i>Open</i></li>
+                                                        <li>Click on the pin icon to pin the extension to your browser's toolbar</li>
+                                                    </ul>
+                                                </li>
+                                                
+
+                                                <li>Enjoy the extension!: Run the extension on the main page of any public GitHub repository to see the assessment results</li> -->
+
+                                </section>
+      
+                            
+                            <section id="feature-section" class="doc-section">
+                                <h2 class="section-title">GUI Usage screenshots</h2>
+                                <div class="section-block">
+
+                                    <ul style="list-style: none;">
+                                        <li>
+                                            <br>
+                                            <img class="img-fluid" src="assets/images/demo/upload.png" alt="screenshot" width="1200" height="1600"/>
+                                            <br>
+                                            <br>
+                                            <ul>
+                                                <li>Using the upload button you can upload the java code which needs to be translated in the left part of GUI.</li>
+                                                <li>You can also directly paste the code copied from any source in the left part without using upload button.</li>
+                                            </ul>
+                                            <br>
+                                        </li>
+                                        <li>
+                                            <br>
+                                            <img class="img-fluid" src="assets/images/demo/run_1.png" alt="elegant icons" width="1200" height="1600"/>
+                                            <ul>
+                                                <li>Click the run button in the left part of GUI to start translation.</li>
+                                                <li>Select your Operating system in the dialog box as the command to run Antlr differ in both(as seen above) and then you can see the COBOL code in the right part as below 👇.</li>
+                                            </ul>
+                                            <br><br>
+                                        </li>
+
+                                        <li>
+                                            <br>
+                                            <img class="img-fluid" src="assets/images/demo/after_run.png" alt="elegant icons" width="1200" height="1600"/>
+            
+                                            <br><br>
+                                        </li>
+
+                                        <li>
+                                            <br>
+                                            <img class="img-fluid" src="assets/images/demo/upload.png" alt="elegant icons" width="1200" height="1600"/>
+                                            <ul>
+                                                <li>You can copy the code onto the clipboard by clicking the copy button in the right side of GUI.</li>
+                                                <li>You can also save the code by clicking the save button in the right side of GUI.</li>
+                                            </ul>
+                                            <br><br>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                            </section>
+
+                            
+                            <section id="icons-section" class="doc-section">
+                                <h2 class="section-title">Approach diagram</h2>
+                                <div class="section-block">
+                                            
+                                            <img class="img-fluid" src="assets/images/demo/java2cob_approach_diagram.png" alt="approach" />
+                                            <br>
+                                            <br>
+                                <b>Key phases in the tool:</b>
+                                
+                                <ol>
+                                    <br>
+                                    <h3>1) Initial set up for the tool: </h3>
+                                    <p>The antlr tool will take in the Java 14 grammar as input and provides the java parser and java lexer. We got the java parser and lexer from antlr repo and antlr4 jar from their website. These were the prerequisites for the generation of <b>AST/Parse Tree</b>.</p>
+                                   
+                                    <h3>2) Workflow of the tool: </h3>
+                                    <p>When the java source code is given to the tool firstly it is tokenized by the lexer which is called as <b>lexical analysis</b> which converts the code into tokens and those tokens are given to the java parser and it creates the parse tree. An instance of parse tree walker can be created and we can pass the parse tree and custom listener to it to walk the nodes of the parse tree and convert the java constructs into cobol constructs thereby we get the translated cobol code.</p>
+                                    <h3>3) Workflow of the code translation: </h3>
+                                    <p>We have analysed the data division and procedure division of the code seperately. So one parse tree walker walks through the nodes and returns the identification and data division of the cobol code and the other parse tree walker walks through the nodes and returns procedure division of the code.</p>
+                                    <h3>4) Contructs our tool supports: </h3>
+                                    <p>We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods.</p>
+                                </ol>
+                                
+                            </section>
+                            <section id="uses-section" class="doc-section">
+                                <h2 class="section-title">Goal</h2>
+                                <div class="section-block">
+                                    JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code.
+                                        So our tool helps the developers to write code in java and convert it to cobol and use it for maintainance purposes. Also using this tool we can create datasets for COBOL and these datasets can be used to develop other tools as well as to train the LLMs and making LLMs capable to fix bugs in cobol codes, understand and generate 
+                                        good COBOL codes.
+                                </div>
+                                
+                            </section>
+                            <!-- <section id="metric-section" class="doc-section">
+                                <h2 class="section-title">Metrics used in AC<sup>2</sup></h2>
+                                <div class="section-block">
+                                    
+                                    <strong>Cohesion using LCOM4</strong>: It measures the degree to which componentsare functionally related. The values are stored in seperate files for each version.
+                                    <br><br>
+                                    <strong>A2A (Architecture-to-architecture)</strong>: It gives the similarity measure of the component-level changes between thearchitectures between two releases.
+                                    We modified the original A2A metric in the context of AC2 tool to get the following metrics:
+                                    <br><br>
+                                    <ul>
+                                        <li>
+                                            <strong>Architectural Similarity</strong>: It is calculated using directory viewwhere directory is considered as a component and files as its entities.
+
+                                        </li>
+                                        <li>
+                                            <strong>Functional Similarity</strong>: We use call graphs to calculate the funcitonal similarity in which function calls and definitions are considered as entities.
+                                        </li>
+                                        <li><strong>Class Similarity</strong>: For this metric, we use collaboration graphs, the class definitions are considered as the entities.</li>
+                                        <li><strong>Module Similarity</strong>: Similarily we use modules as entities for this metric. </li>
+
+                                    </ul>
+                                </div>
+                                
+                            </section>-->
+				
+			<section id="result-section" class="doc-section">
+                                <h2 class="section-title">Results</h2>
+                                <div class="section-block">
+                                    <p>TBD</p>
+                                    
+                                    
+                                </div>
+                                
+                            </section>
+                            
+                            
+                             
+                            
+                            
+                
+                            
+                            
+                            
+                            <section id="video-section" class="doc-section">
+                                <h2 class="section-title">Demo Video</h2>
+                                <div class="section-block">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            TBD
+                                            <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/wrc8Wv_Nu20" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                            </section>
+                        </div><!--//content-inner-->
+                    </div><!--//doc-content-->
+                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                        <div id="doc-nav" class="doc-nav">
+	                        
+	                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+	                                <a class="nav-link scrollto" href="#installation-section">Installation</a>
+                                    <nav class="doc-sub-menu nav flex-column">
+                                        <a class="nav-link scrollto" href="#requirements">Requirements</a>
+                                        <a class="nav-link scrollto" href="#usage">Usage</a>
+                                    </nav><!--//nav-->
+                                    <a class="nav-link scrollto" href="#feature-section">Screenshots</a>
+                                    <a class="nav-link scrollto" href="#icons-section">Approach</a>
+                                    
+                                    <a class="nav-link scrollto" href="#uses-section">Goals</a>
+					                <a class="nav-link scrollto" href="#result-section">Results</a>
+                            
+	                                <a class="nav-link scrollto" href="#video-section">Demo Video</a>
+	                            </nav><!--//doc-menu-->
+	                        
+                        </div>
+                    </div><!--//doc-sidebar-->
+                </div><!--//doc-body-->              
+            </div><!--//container-->
+        </div><!--//doc-wrapper-->
+        
+        <div id="promo-block" class="promo-block">
+            <div class="container">
+                <div class="promo-block-inner">
+                   
+                    <!-- <h3 class="promo-title">Contributors</h3> -->
+                    <div class="content-holder col-lg-7 col-md-6 col-7">
+                        <div class="content-holder-inner">
+                            <div class="desc">
+                                <h3 class="promo-title">Contributors</h3>
+                                <p> Srikrishna Kidambi, Sai Krishna Brahmajosyula, Sridhar Chimalakonda</p>
+                                <!-- <a class="btn btn-cta" href="" target="_blank"><i class="fas fa-external-link-alt"></i> Preprint</a> -->
+                            </div><!--//desc-->
+                        </div><!--//content-holder-inner-->
+                    </div><!--//content-holder-->
+
+                </div><!--//promo-block-inner-->  
+            </div><!--//container-->
+        </div><!--//promo-block-->
+        
+    </div><!--//page-wrapper-->
+    <!-- Main Javascript -->          
+    <script type="text/javascript" src="assets/plugins/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>    
+    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>      
+    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>                                                             
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    
+</body>
+</html> 
