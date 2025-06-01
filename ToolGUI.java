@@ -174,6 +174,7 @@ public class ToolGUI {
         // frame.add(consoleScroll, BorderLayout.SOUTH);
 
         String[] classname = new String[1];
+        classname[0]="Unknown";
         JButton uploadButton = new JButton("Upload");
         uploadButton.setForeground(textColor);
         uploadButton.setBackground(new Color(50, 50, 50));
@@ -202,7 +203,7 @@ public class ToolGUI {
                     if (matcher.find()) {
                         classname[0] = matcher.group(1);
                         // Replace original class name with "Test"
-                        content = content.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
+                        // content = content.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
                     } else {
                         classname[0] = "Unknown";
                     }
@@ -229,40 +230,65 @@ public class ToolGUI {
                 Matcher matcher = pattern.matcher(javaCode);
 
                 if (matcher.find()) {
-                    classname[0] = matcher.group(1); // Save the original class name
+                    if(classname[0].equals("Unknown") || !classname[0].equals(matcher.group(1))){
+                        classname[0] = matcher.group(1); // Save the original class name
+                    }
                     javaCode = javaCode.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
                 } else {
                     JOptionPane.showMessageDialog(frame, "No valid public class found.");
                     return;
                 }
-                File file = new File("C:\\Users\\srikr\\OneDrive\\Documents\\GitHub\\Java-to-COBOL\\Antlr\\Test.java");
+
+                // Write the modified code to Test.java
+                File file = new File("Antlr/Test.java");
                 FileWriter writer = new FileWriter(file);
                 writer.write(javaCode);
                 writer.close();
-                String command = "cd C:\\Users\\srikr\\OneDrive\\Documents\\GitHub\\Java-to-COBOL\\Antlr && "
-                       + "java -cp \".;antlr-4.13.2-complete.jar\" ParseTreeGeneration " + classname[0];
-                ProcessBuilder builder = new ProcessBuilder(
-                        "cmd.exe", "/c", command
-                );
+
+                // Ask for OS type
+                Object[] options = {"Windows", "Linux/Mac"};
+                int choice = JOptionPane.showOptionDialog(frame,
+                        "Select your Operating System",
+                        "Choose OS",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+
+                if (choice == -1) {
+                    JOptionPane.showMessageDialog(frame, "You must select an OS.");
+                    return;
+                }
+
+                String separator = (choice == 0) ? ";" : ":";
+                String shell = (choice == 0) ? "cmd.exe" : "bash";
+                String shellFlag = (choice == 0) ? "/c" : "-c";
+                String command = "cd Antlr && java -cp \"."
+                        + separator + "antlr-4.13.2-complete.jar\" ParseTreeGeneration " + classname[0];
+
+                ProcessBuilder builder = new ProcessBuilder(shell, shellFlag, command);
                 builder.redirectErrorStream(true);
                 Process process = builder.start();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
-                //consoleArea.setText(""); // Clear previous output
+                // consoleArea.setText(""); // Optional: clear previous output
                 while ((line = reader.readLine()) != null) {
-                   // consoleArea.append(line + "\n");
+                    // consoleArea.append(line + "\n");
                 }
 
-                //getting the cobol code
-                String cobolCode = Files.readString(Paths.get("C:\\Users\\srikr\\OneDrive\\Documents\\GitHub\\Java-to-COBOL\\finalCobolCode.cbl"));
+                // Read the COBOL output
+                String cobolPath = "finalCobolCode.cbl"; 
+                String cobolCode = Files.readString(Paths.get(cobolPath));
                 cobolCodeArea.setText(cobolCode);
-                
+
             } catch (Exception ex) {
                 ex.printStackTrace();
-                //consoleArea.append("Error: " + ex.getMessage() + "\n");
+                // consoleArea.append("Error: " + ex.getMessage() + "\n");
             }
         });
+
 
 
         frame.setVisible(true);
