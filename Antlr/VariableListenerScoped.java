@@ -226,9 +226,9 @@ public class VariableListenerScoped extends JavaParserBaseListener{
         }
         
         String annotatedName=name;
-        if(currentMethod!=null && !"main".equals(currentMethod)){
-            annotatedName=name+"_"+currentMethod;
-        }
+        // if(currentMethod!=null && !"main".equals(currentMethod)){
+        //     annotatedName=name+"_"+currentMethod;
+        // }
 
         // Create final variable for lambda
         final String finalArraySize = arraySize;
