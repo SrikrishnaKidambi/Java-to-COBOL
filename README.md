@@ -24,7 +24,11 @@
 - Use the command ``` java ToolGUI ``` to run the tool and follow the steps in the tool for using the tool.
 
 ## Steps to install dependencies :
-- Install Java 14+ version. Link for installation of Java 
+- Install Java 14+ version. Link for installation of Java in your system : [Java]("https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html")
+- Installation of COBOL (GNU)in your system : [GNU COBOL]("https://sourceforge.net/projects/gnucobol/"). Installation of GNU COBOL is essential for executing the generated COBOL code. Follow the tutorial if needed : [COBOL Installation]("https://www.youtube.com/watch?v=u9M52sAnrOs"). 
+
+## Steps for using the tool : 
+- 
 
 ### Instructions to run the tool:
 - To run this tool use the below command:
