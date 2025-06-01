@@ -1,23 +1,14 @@
-Scope:Method:sayHello->Class:Test->GLOBAL
-  Type:int
-    x_sayHello
-
-Scope:Block->Method:sayHello->Class:Test->GLOBAL
-  Type:String
-    msg_sayHello
-
 Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args [size=[]]
 
 Scope:Block->Method:main->Class:Test->GLOBAL
-  Type:Scanner
-    scanner
-  Type:double
-    num1
-    num2
-    sum
-    diff
-    product
-    division
+  Type:String
+    fullname
+    parts [size=[]]
+    firstname
+    lastname
+    updatedFirstname
+  Type:int
+    a
 

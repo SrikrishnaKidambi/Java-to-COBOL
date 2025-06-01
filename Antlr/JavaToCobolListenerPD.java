@@ -42,7 +42,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
         String methodName=ctx.identifier().getText();
         currentMethod=methodName;
-        String methodPara=methodName.equals("main")?"MAIN-PARA":methodName+"-PARA";
+        String methodPara=methodName.equals("main")?INDENT+"MAIN-PARA.":INDENT+methodName+"-PARA.";
         methodBuffer=new StringBuilder();
         currentMethodPara=methodPara;
         inMethod=true;
@@ -640,7 +640,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     return;
         // }
 
-        String text=tokens.getText(ctx).trim();
+        // String text=tokens.getText(ctx).trim();
         if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$")){
             String methodName=text.substring(0,text.indexOf('(')).trim().toUpperCase()+"-PARA";
             emitCobol(INDENT+"PERFORM "+methodName+"\n");
@@ -1099,7 +1099,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                         +(targetVar)
                         +(" = ")
                         +(rhs)
-                        +(insideblock ? "\n" : ".\n"););
+                        +(insideblock ? "\n" : ".\n"));
                 // cobolCodePD.append(INDENT)
                 //         .append("COMPUTE ")
                 //         .append(targetVar)

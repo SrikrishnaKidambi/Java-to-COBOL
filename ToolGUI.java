@@ -29,12 +29,50 @@ public class ToolGUI {
         Color textColor = new Color(0, 255, 0);  // green text
 
         // Heading
-        JLabel heading = new JLabel("Java to COBOL", SwingConstants.CENTER);
+        JLabel heading = new JLabel("Java to COBOL", SwingConstants.CENTER) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2d = (Graphics2D) g.create();
+                Font font = getFont();
+                String text = getText();
+
+                g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+                FontMetrics fm = g2d.getFontMetrics(font);
+                int textWidth = fm.stringWidth(text);
+                int textHeight = fm.getAscent();
+
+                int x = (getWidth() - textWidth) / 2;
+                int y = (getHeight() + textHeight) / 2 - fm.getDescent();
+
+                // Use LinearGradientPaint for three-color gradient
+                float[] fractions = {0.0f, 0.5f, 1.0f};
+                Color[] colors = {
+                    new Color(255, 153, 51),   // Orange
+                    Color.WHITE,
+                    new Color(19, 136, 8)      // Green
+                };
+
+                LinearGradientPaint gradient = new LinearGradientPaint(
+                    x, 0, x + textWidth, 0, fractions, colors
+                );
+
+                g2d.setFont(font);
+                g2d.setPaint(gradient);
+                g2d.drawString(text, x, y);
+
+                g2d.dispose();
+            }
+        };
+
         heading.setFont(new Font("Serif", Font.BOLD, 24));
-        heading.setForeground(textColor);
-        heading.setBackground(bgColor);
         heading.setOpaque(true);
+        heading.setBackground(Color.BLACK);
         frame.add(heading, BorderLayout.NORTH);
+
 
         // Code areas
         JTextArea javaCodeArea = new JTextArea(DEFAULT_CODE, 20, 40);
@@ -186,6 +224,17 @@ public class ToolGUI {
         runButton.addActionListener(e -> {
             try {
                 String javaCode = javaCodeArea.getText();
+
+                Pattern pattern = Pattern.compile("public\\s+class\\s+(\\w+)");
+                Matcher matcher = pattern.matcher(javaCode);
+
+                if (matcher.find()) {
+                    classname[0] = matcher.group(1); // Save the original class name
+                    javaCode = javaCode.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "No valid public class found.");
+                    return;
+                }
                 File file = new File("C:\\Users\\srikr\\OneDrive\\Documents\\GitHub\\Java-to-COBOL\\Antlr\\Test.java");
                 FileWriter writer = new FileWriter(file);
                 writer.write(javaCode);
