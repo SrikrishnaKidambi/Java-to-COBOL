@@ -12,26 +12,34 @@
 ## Features of the tool :
 
 
-## Steps of Tool :
+## Steps of install Tool :
+#### Follow the below steps to do the required set up for the tool and run it:
 - Use the Command for cloning the tool from the GitHub Repo : 
-    ``` https://github.com/SrikrishnaKidambi/Java-to-COBOL.git ```
+    ``` git clone https://github.com/SrikrishnaKidambi/Java-to-COBOL.git ```
 - Navigate to the tool repository using the command : ``` cd Java-to-COBOL  ```
-- Compile the GUI files for Java : ``` javac ToolGUI.java```
-- Navigate the backend code the tool and then compile the java code using the command 
+- Navigate to ```cd Antlr``` and then compile the java code to set up the tool using the command 
     - For Windows : ``` javac -cp ".;antlr-4.13.2-complete.jar" *.java ```
     - For Linux/Mac : ``` javac -cp ".:antlr-4.13.2-complete.jar" *.java ```
 - Navigate back to the root directory of the tool repository : ``` cd .. ```
-- Use the command ``` java ToolGUI ``` to run the tool and follow the steps in the tool for using the tool.
+- Compile the GUI files for Java : ``` javac ToolGUI.java```
+- Use the command ``` java ToolGUI ``` to run the tool.
+- **Once the above things are set up you can just navigate to the tool repo ```cd Java-to-COBOL``` and just run the command ``` java ToolGUI ```.**
 
 ## Steps to install dependencies :
-- Install Java 14+ version. Link for installation of Java in your system : [Java]("https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html")
-- Installation of COBOL (GNU)in your system : [GNU COBOL]("https://sourceforge.net/projects/gnucobol/"). Installation of GNU COBOL is essential for executing the generated COBOL code. Follow the tutorial if needed : [COBOL Installation]("https://www.youtube.com/watch?v=u9M52sAnrOs"). 
+- Install Java 14+ version. Link for installation of Java in your system : [Java](https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html)
+- Installation of COBOL (GNU)in your system : [GNU COBOL](https://sourceforge.net/projects/gnucobol/). Installation of GNU COBOL is essential for executing the generated COBOL code. Follow the tutorial if needed : [COBOL Installation](https://www.youtube.com/watch?v=u9M52sAnrOs). 
 
 ## Steps for using the tool : 
-- 
+- Navigate to the tool repo ```cd Java-to-COBOL``` and just run the command ``` java ToolGUI ```.
+- ![image](https://github.com/user-attachments/assets/e0da3b7c-8eb4-4df8-a3cc-23f5f9376b14)
+- Using the upload button you can upload the java code which needs to be translated in the left part of GUI.
+- You can also directly paste the code copied from any source in the left part without using upload button.
+- ![image](https://github.com/user-attachments/assets/decb538b-ece9-4af5-a585-5387426c74da)
+- Click the run button in the left part of GUI to start translation.
+- Select your Operating system in the dialog box as the command to run Antlr differ in both(as seen above) and then you can see the COBOL code in the right part as below 👇.
+- ![image](https://github.com/user-attachments/assets/85cb365f-9f68-4dc2-bd05-34b87e1044d3)
+- ![image](https://github.com/user-attachments/assets/2c3fc567-1a2c-4806-afe8-ef34bb025cb4)
+- You can copy the code onto the clipboard by clicking the copy button in the right side of GUI.
+- You can also save the code by clicking the save button in the right side of GUI.
 
-### Instructions to run the tool:
-- To run this tool use the below command:
-```terminal
-java ToolGUI.java
-```
+## Tool Demonstration video :
