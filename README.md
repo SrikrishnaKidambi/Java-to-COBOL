@@ -1,8 +1,5 @@
-# Java-to-COBOL
-This project aims to convert the java code to COBOL code using rule based method.
+# Java2COBOL - A Java to COBOL translator
 
-### Instructions to run the tool:
-- To run this tool use the below command:
-```terminal
-java ToolGUI.java
-```
+![Risha logo](docs/risha.png)
+
+![IIT TP logo](docs/iittp.png)
