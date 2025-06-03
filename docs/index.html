@@ -258,7 +258,7 @@
                                 <ol>
                                     <br>
                                     <h3>1) Initial set up for the tool: </h3>
-                                    <p>The antlr tool will take in the Java 14 grammar as input and provides the java parser and java lexer. We got the java parser and lexer from antlr repo and antlr4 jar from their website. These were the prerequisites for the generation of <b>AST/Parse Tree</b>.</p>
+                                    <p>The antlr tool will take in the Java 14 grammar as input and provides the java parser and java lexer. We got the java parser and lexer from antlr repo and antlr4 jar from their website. These were the prerequisites for the generation of <b>Parse Tree</b>.</p>
                                    
                                     <h3>2) Workflow of the tool: </h3>
                                     <p>When the java source code is given to the tool firstly it is tokenized by the lexer which is called as <b>lexical analysis</b> which converts the code into tokens and those tokens are given to the java parser and it creates the parse tree. An instance of parse tree walker can be created and we can pass the parse tree and custom listener to it to walk the nodes of the parse tree and convert the java constructs into cobol constructs thereby we get the translated cobol code.</p>
