@@ -20,7 +20,11 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     //*********Important************//
     private boolean insideSwitch=false;
     private boolean insideblock=false; // please add boolean for block type contructs and the use or to insideblock to handle the period logic
+    private void updateInsideBlock() {
+        insideblock = (!switchStack.isEmpty() || !blockStack.isEmpty());
+    }
     private Stack<String>blockStack=new Stack<>();
+    private Stack<Boolean> switchStack = new Stack<>();
     private Stack<Integer>ifStatementStack=new Stack<>();
     private int currentIfLevel=0;
     private int braceDepth=0;
@@ -67,10 +71,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }else{
             cobolCodePD.append(line);
         }
-    }
-
-    private void updateInsideBlock(){
-        insideblock=(insideSwitch || !blockStack.isEmpty());
     }
 
     private void mapVariable(String javaVar,String cobolVar){
@@ -810,7 +810,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             emitCobol((INDENT)+("STOP RUN")+(insideblock?"\n":".\n"));
             // cobolCodePD.append(INDENT).append("STOP RUN").append(insideblock?"\n":".\n");
         }
-        else if(text.equals("break;") && !insideSwitch){
+        else if(text.equals("break;") && switchStack.empty()){
             emitCobol((INDENT)+("EXIT PERFORM")+(insideblock?"\n":".\n"));
             // cobolCodePD.append(INDENT).append("EXIT PERFORM").append(insideblock?"\n":".\n");
         }
@@ -1119,7 +1119,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             String switchVar = ctx.getChild(1).getText().replace("(", "").replace(")", "");
             emitCobol((INDENT)+("EVALUATE ")+(switchVar)+("\n"));
             // cobolCodePD.append(INDENT).append("EVALUATE ").append(switchVar).append("\n");
-            insideSwitch=true;
+            switchStack.push(true);
             updateInsideBlock();
         }
         
@@ -1310,9 +1310,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // Handle SWITCH block termination
         if (ctx.SWITCH() != null) {
             // cobolCodePD.append(INDENT).append("END-EVALUATE.\n");
-            emitCobol(INDENT+"END-EVALUATE.\n");
-            insideSwitch = false;
+            
+            if (!switchStack.isEmpty()) {
+                switchStack.pop();
+            }
             updateInsideBlock();
+            emitCobol(INDENT+"END-EVALUATE"+(insideblock?"\n":".\n"));
         }
 
         // handling for statements
