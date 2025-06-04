@@ -40,6 +40,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
+        addLeadingComments(ctx);
         String methodName=ctx.identifier().getText();
         currentMethod=methodName;
         String methodPara=methodName.equals("main")?INDENT+"MAIN-PARA.":INDENT+methodName+"-PARA.";
@@ -109,7 +110,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     @Override
     public void enterLocalVariableDeclaration(JavaParser.LocalVariableDeclarationContext ctx){
         // suppress the MOVE for variable declaration that is done inside the for loop.
-
+        addLeadingComments(ctx);
         if(insideForLoopHeader){
             return;
         }
@@ -1511,6 +1512,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     //-------------------Switch case implementation--------------------
     @Override
     public void enterSwitchLabel(JavaParser.SwitchLabelContext ctx){
+        addLeadingComments(ctx);
         if(ctx.CASE()!=null){
             String label = ctx.getChild(1).getText();
             emitCobol((INDENT)+("WHEN ")+(label)+("\n"));
