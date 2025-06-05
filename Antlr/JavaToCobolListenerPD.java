@@ -195,7 +195,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String sourceVar = matcher.group(1); // e.g., input
                 String delimiter = matcher.group(2); // e.g., "-"
                 // Estimate number of splits (you can tune this or parse sample input if available)
-                int estimatedParts = 2;
+                int estimatedParts = 5;
                 //-------------Important note is above ☝️ we need to get the map of array sizes from data division and then update estimated parts by that value.
                 // Generate INTO part: parts(1), parts(2), ...
                 StringBuilder intoClause = new StringBuilder();
@@ -722,7 +722,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String sourceVar = matcher.group(1); // e.g., input
                 String delimiter = matcher.group(2); // e.g., "-"
                 // Estimate number of splits (you can tune this or parse sample input if available)
-                int estimatedParts = 2;
+                int estimatedParts = 5;
                 //-------------Important note is above ☝️ we need to get the map of array sizes from data division and then update estimated parts by that value.
                 // Generate INTO part: parts(1), parts(2), ...
                 StringBuilder intoClause = new StringBuilder();

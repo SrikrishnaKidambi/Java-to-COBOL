@@ -4,10 +4,11 @@ public class DivisibleByThree {
     }
 
     static void printMultiplesOf3() {
-        for (int i = 1; i <= 30; i++) {
-            if (i % 3 == 0) {
-                System.out.println(i);
-            }
+        int i = 3;
+        System.out.println("Multiples of 3 upto 30 are: ");
+        while (i <= 30) {
+            System.out.println(i);
+            i = i + 3;
         }
     }
 }

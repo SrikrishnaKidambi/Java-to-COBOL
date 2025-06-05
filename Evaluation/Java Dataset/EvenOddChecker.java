@@ -9,8 +9,8 @@ public class EvenOddChecker {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a number: ");
         int n = sc.nextInt();
-
-        if (n % 2 == 0) {
+        int rem = n % 2;
+        if (rem == 0) {
             System.out.println("Even");
         } else {
             System.out.println("Odd");
