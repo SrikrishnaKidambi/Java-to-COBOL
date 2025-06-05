@@ -21,7 +21,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private boolean insideSwitch=false;
     private boolean insideblock=false; // please add boolean for block type contructs and the use or to insideblock to handle the period logic
     private void updateInsideBlock() {
-        insideblock = (!switchStack.isEmpty() || !blockStack.isEmpty());
+        insideblock = (!switchStack.isEmpty() || !blockStack.isEmpty() || inMethod);
     }
     private Stack<String>blockStack=new Stack<>();
     private Stack<Boolean> switchStack = new Stack<>();
@@ -52,6 +52,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         currentMethodPara=methodPara;
         inMethod=true;
         methodVarNameMap.putIfAbsent(currentMethod, new HashMap<>());
+        updateInsideBlock();
     }
 
     @Override
@@ -61,6 +62,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             methodBuffer=null;
             currentMethodPara=null;
             inMethod=false;
+            updateInsideBlock();
         }
         currentMethod=null;
     }

@@ -4,6 +4,11 @@ Scope:Method:main->Class:Test->GLOBAL
 
 Scope:Block->Method:main->Class:Test->GLOBAL
   Type:int
-    category
-    option
+    arr [size=[5]]
+  Type:Scanner
+    scanner
+
+Scope:For->Block->Method:main->Class:Test->GLOBAL
+  Type:int
+    i
 

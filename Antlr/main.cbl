@@ -5,5 +5,7 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
       * Variables for Method:main
-           05  category     PIC S9(5).
-           05  option       PIC S9(5).
+       01  arr-ARRAY      .
+           05  arr          PIC S9(5) OCCURS 5 TIMES
+           05  scanner      PIC X(10).
+           05  i            PIC S9(5).
