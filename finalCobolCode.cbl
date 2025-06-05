@@ -21,12 +21,10 @@
        MAIN-PARA.
       * Input from ODT is enabled
        PERFORM VARYING i FROM 0 BY 1 UNTIL NOT (i < 5)
-       MOVE 0 TO i
-       PERFORM ARR-PARA
+       ACCEPT arr(i + 1)
        END-PERFORM.
        DISPLAY "The contents of the array are:".
        PERFORM VARYING i FROM 0 BY 1 UNTIL NOT (i < 5)
-       MOVE 0 TO i
        DISPLAY arr(i + 1)
        END-PERFORM.
        EXIT.

@@ -168,6 +168,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String[] lhsTokens = lhs.split("\\s+");
                 String targetVar = lhsTokens[lhsTokens.length - 1]; // get variable name
 
+                if(forLoopInitVars.contains(targetVar)){
+                    return;
+                }
+
                 String rhs = parts[1].replace(";", "").trim();
 
                 // Match string/char literals or simple variables/literals
@@ -644,7 +648,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // }
 
         // String text=tokens.getText(ctx).trim();
-        if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$")){
+
+        if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$") && !text.contains("=")){
             String methodName=text.substring(0,text.indexOf('(')).trim().toUpperCase()+"-PARA";
             emitCobol(INDENT+"PERFORM "+methodName+"\n");
             return;
@@ -829,7 +834,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String varDecl = parts[0].trim(); // e.g., "int b" or "name"
                 String[] tokens = varDecl.split("\\s+"); // Split by whitespace
                 String var = tokens[tokens.length - 1]; // Get variable name
-                emitCobol((INDENT)+("ACCEPT ")+(var)+(insideblock?"\n":".\n"));
+                String cobolVar=convertArrayAccessToCobol(varDecl);
+                // emitCobol((INDENT)+("ACCEPT ")+(var)+(insideblock?"\n":".\n"));  ---- this is the recent change -------------
+                emitCobol((INDENT)+("ACCEPT ")+(cobolVar)+(insideblock?"\n":".\n"));  //---- this is the recent change -------------
+                
                 // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
             }
         }
