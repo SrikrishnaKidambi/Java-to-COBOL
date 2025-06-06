@@ -1,3 +1,4 @@
+//done ✅
 public class DivisibleByThree {
     public static void main(String[] args) {
         printMultiplesOf3();

@@ -5,6 +5,6 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
       * Variables for Method:main
-           05  sc           PIC X(10).
-           05  num          PIC S9(5).
-           05  count        PIC S9(5).
+           05  i            PIC S9(5).
+           05  rem1         PIC S9(5).
+           05  rem2         PIC S9(5).

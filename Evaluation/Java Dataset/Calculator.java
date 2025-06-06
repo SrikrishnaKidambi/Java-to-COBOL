@@ -1,3 +1,4 @@
+//done ✅
 import java.util.Scanner;
 
 public class Calculator {
@@ -9,19 +10,23 @@ public class Calculator {
         int b = sc.nextInt();
         System.out.print("Enter operation (+, -, *, /): ");
         char op = sc.next().charAt(0);
-
+        int res;
         if (op == '+') {
-            System.out.println("Sum: " + (a + b));
+            res = a+b;
+            System.out.println("Sum: " + res);
         }
         else if (op == '-') {
-            System.out.println("Difference: " + (a - b));
+            res = a-b;
+            System.out.println("Difference: " + res);
         } 
         else if (op == '*') {
-            System.out.println("Product: " + (a * b));
+            res = a*b;
+            System.out.println("Product: " + res);
         } 
         else if (op == '/') {
             if (b != 0) {
-                System.out.println("Quotient: " + ((double) a / b));
+                res = a/b;
+                System.out.println("Quotient: " + res);
             } 
             else {
                 System.out.println("Cannot divide by zero");

@@ -1,9 +1,10 @@
+//done ✅
 import java.util.Scanner;
 
 public class SplitCSV {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter comma-separated values (e.g., apple,banana,grape): ");
+        System.out.print("Enter comma-separated values (e.g., apple,banana,grape) 5 vals: ");
         String input = sc.nextLine();
         // works only if items array length is 5
         String[] items = input.split(",");

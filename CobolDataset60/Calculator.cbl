@@ -11,6 +11,7 @@
        01  sc              PIC X(10).
        01  a               PIC S9(5).
        01  b               PIC S9(5).
+       01  res             PIC S9(5).
        01  op              PIC X(1).
 
 
@@ -19,87 +20,37 @@
 
        MAIN-PARA.
       * Input from ODT is enabled
-       DISPLAY "Enter first number: "
+       DISPLAY "Enter first number: " WITH NO ADVANCING
        ACCEPT a
-       DISPLAY "Enter second number: "
+       DISPLAY "Enter second number: " WITH NO ADVANCING
        ACCEPT b
-       DISPLAY "Enter operation (+, -, *, /): "
-       COMPUTE if (op = = FUNCTION ORD('+')) {
-            System.out.println("Sum: " + (a + b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('-')) {
-            System.out.println("Difference: " + (a - b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('*')) {
-            System.out.println("Product: " + (a * b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('/')) {
-            if (b != 0) {
-                System.out.println("Quotient: " + ((double) a / b))
-            } else {
-                System.out.println("Cannot divide by zero")
-            }
-        } else {
-            System.out.println("Invalid operation")
-        }
-       IF op  =  '+'
+       DISPLAY "Enter operation (+, -, *, /): " WITH NO ADVANCING
+       ACCEPT op
+       IF op = '+'
+       ADD a TO b GIVING res
+       DISPLAY "Sum: "   res
        ELSE
-       IF op  =  '-'
+       IF op = '-'
+       SUBTRACT b FROM a GIVING res
+       DISPLAY "Difference: "   res
        ELSE
-       IF op  =  '*'
+       IF op = '*'
+       MULTIPLY a BY b GIVING res
+       DISPLAY "Product: "   res
        ELSE
-       IF op  =  '/'
+       IF op = '/'
+       IF b NOT= 0
+       DIVIDE a BY b GIVING res
+       DISPLAY "Quotient: "   res
        ELSE
-       DISPLAY "Sum: "   (a + b)
-       COMPUTE if (op = = FUNCTION ORD('-')) {
-            System.out.println("Difference: " + (a - b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('*')) {
-            System.out.println("Product: " + (a * b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('/')) {
-            if (b != 0) {
-                System.out.println("Quotient: " + ((double) a / b))
-            } else {
-                System.out.println("Cannot divide by zero")
-            }
-        } else {
-            System.out.println("Invalid operation")
-        }
-       IF op  =  '-'
-       ELSE
-       IF op  =  '*'
-       ELSE
-       IF op  =  '/'
-       ELSE
-       DISPLAY "Difference: "   (a - b)
-       COMPUTE if (op = = FUNCTION ORD('*')) {
-            System.out.println("Product: " + (a * b))
-        } else if (FUNCTION ORD(op) == FUNCTION ORD('/')) {
-            if (b != 0) {
-                System.out.println("Quotient: " + ((double) a / b))
-            } else {
-                System.out.println("Cannot divide by zero")
-            }
-        } else {
-            System.out.println("Invalid operation")
-        }
-       IF op  =  '*'
-       ELSE
-       IF op  =  '/'
-       ELSE
-       DISPLAY "Product: "   (a * b)
-       COMPUTE if (op = = FUNCTION ORD('/')) {
-            if (b != 0) {
-                System.out.println("Quotient: " + ((double) a / b))
-            } else {
-                System.out.println("Cannot divide by zero")
-            }
-        } else {
-            System.out.println("Invalid operation")
-        }
-       IF op  =  '/'
-       ELSE
-       IF b  NOT =  0
-       ELSE
-       DISPLAY "Quotient: "   ((double) a / b)
        DISPLAY "Cannot divide by zero"
+       END-IF
+       ELSE
        DISPLAY "Invalid operation"
+       END-IF
+       END-IF
+       END-IF
+       END-IF
        EXIT.
        STOP RUN.
 

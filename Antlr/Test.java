@@ -1,14 +1,12 @@
 public class Test {
     public static void main(String[] args) {
-        printMultiplesOf3();
-    }
-
-    static void printMultiplesOf3() {
-        int i = 3;
-        System.out.println("Multiples of 3 upto 30 are: ");
-        while (i <= 30) {
-            System.out.println(i);
-            i = i + 3;
+        for (int i = 1; i <= 100; i++) {
+            int rem1= i % 3;
+            int rem2= i % 7;
+            if (rem1==0 && rem2==0) {
+                System.out.println("First number divisible by both 3 and 7 is: " + i);
+                break;
+            }
         }
-	}
+    }
 }
