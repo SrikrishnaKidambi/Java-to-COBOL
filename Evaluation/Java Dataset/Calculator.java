@@ -12,17 +12,22 @@ public class Calculator {
 
         if (op == '+') {
             System.out.println("Sum: " + (a + b));
-        } else if (op == '-') {
+        }
+        else if (op == '-') {
             System.out.println("Difference: " + (a - b));
-        } else if (op == '*') {
+        } 
+        else if (op == '*') {
             System.out.println("Product: " + (a * b));
-        } else if (op == '/') {
+        } 
+        else if (op == '/') {
             if (b != 0) {
                 System.out.println("Quotient: " + ((double) a / b));
-            } else {
+            } 
+            else {
                 System.out.println("Cannot divide by zero");
             }
-        } else {
+        } 
+        else {
             System.out.println("Invalid operation");
         }
     }
