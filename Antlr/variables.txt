@@ -3,6 +3,11 @@ Scope:Method:main->Class:Test->GLOBAL
     args [size=[]]
 
 Scope:Block->Method:main->Class:Test->GLOBAL
+  Type:Scanner
+    sc
   Type:int
-    value
+    a
+    b
+  Type:char
+    op
 

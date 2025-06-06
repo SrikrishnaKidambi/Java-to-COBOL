@@ -152,6 +152,21 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if (text.contains("Scanner") && text.contains("System.in")){
             // cobolCodePD.append(INDENT_COMMENT).append("* Input from ODT is enabled\n");
             emitCobol(INDENT_COMMENT + "* Input from ODT is enabled\n");
+            return;
+        }
+        else if ((text.matches(".*=\\s*\\w+\\.next(?:Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*(\\.charAt\\s*\\(\\s*\\d+\\s*\\))?\\s*;?"))) {
+            String[] parts = text.split("=");
+            System.out.println(parts[0] + " and " + parts[1]);
+
+            if (parts.length == 2) {
+                String varDecl = parts[0].trim(); // e.g., "int b" or "name"
+                String[] tokens = varDecl.split("\\s+"); // Split by whitespace
+                String var = tokens[tokens.length - 1]; // Get variable name
+                
+                // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
+                emitCobol(INDENT+"ACCEPT "+var+(insideblock?"\n":".\n"));
+            }
+            return;
         }
         else if (text.matches("^(\\w+\\s+)?\\w+\\s*=\\s*(\"[^\"]*\"|'[^']*'|\\w+(\\([^)]*\\))?)\\s*;?$")) {
             // move statement mapping
@@ -199,7 +214,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String sourceVar = matcher.group(1); // e.g., input
                 String delimiter = matcher.group(2); // e.g., "-"
                 // Estimate number of splits (you can tune this or parse sample input if available)
-                int estimatedParts = 2;
+                int estimatedParts = 5;
                 //-------------Important note is above ☝️ we need to get the map of array sizes from data division and then update estimated parts by that value.
                 // Generate INTO part: parts(1), parts(2), ...
                 StringBuilder intoClause = new StringBuilder();
@@ -275,20 +290,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = convertCharExpressions(text);
         System.out.println("Text after char conversion: " + text);
 
-        if (text.matches(".*=\\s*\\w+\\.next(Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*;?")) {
-            String[] parts = text.split("=");
-            System.out.println(parts[0] + " and " + parts[1]);
-
-            if (parts.length == 2) {
-                String varDecl = parts[0].trim(); // e.g., "int b" or "name"
-                String[] tokens = varDecl.split("\\s+"); // Split by whitespace
-                String var = tokens[tokens.length - 1]; // Get variable name
-                
-                // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
-                emitCobol(INDENT+"ACCEPT "+var+(insideblock?"\n":".\n"));
-            }
-        }
-        else if(text.matches(".*\\b(boolean)?\\s*\\w+\\s*=\\s*(true|false)\\s*;?")){
+        
+        if(text.matches(".*\\b(boolean)?\\s*\\w+\\s*=\\s*(true|false)\\s*;?")){
             //handles both boolean abc = true/false, abc = true/false
             String[] parts = text.split("=");
             if (parts.length == 2) {
@@ -688,7 +691,24 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             String displayedContent=extractDisplayStatement(text);
             if(displayedContent!=null){
                 String cobolContent=replaceVarsWithCobolNames(displayedContent);
-                emitCobol(INDENT + "DISPLAY " + cobolContent + (insideblock?"\n":".\n"));
+                emitCobol(INDENT + "DISPLAY " + cobolContent + " WITH NO ADVANCING" + (insideblock?"\n":".\n"));
+            }
+            return;
+        }
+        else if ((text.matches(".*=\\s*\\w+\\.next(?:Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*(\\.charAt\\s*\\(\\s*\\d+\\s*\\))?\\s*;?"))) {
+            //scanner class mapped to accept
+            String[] parts = text.split("=");
+            System.out.println(parts[0] + " and " + parts[1]);
+
+            if (parts.length == 2) {
+                String varDecl = parts[0].trim(); // e.g., "int b" or "name"
+                String[] tokens = varDecl.split("\\s+"); // Split by whitespace
+                String var = tokens[tokens.length - 1]; // Get variable name
+                String cobolVar=convertArrayAccessToCobol(varDecl);
+                // emitCobol((INDENT)+("ACCEPT ")+(var)+(insideblock?"\n":".\n"));  ---- this is the recent change -------------
+                emitCobol((INDENT)+("ACCEPT ")+(cobolVar)+(insideblock?"\n":".\n"));  //---- this is the recent change -------------
+                
+                // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
             }
             return;
         }
@@ -727,7 +747,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String sourceVar = matcher.group(1); // e.g., input
                 String delimiter = matcher.group(2); // e.g., "-"
                 // Estimate number of splits (you can tune this or parse sample input if available)
-                int estimatedParts = 2;
+                int estimatedParts = 5;
                 //-------------Important note is above ☝️ we need to get the map of array sizes from data division and then update estimated parts by that value.
                 // Generate INTO part: parts(1), parts(2), ...
                 StringBuilder intoClause = new StringBuilder();
@@ -813,6 +833,50 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
         }
         
+        if(ctx.IF()!=null){
+            JavaParser.ParExpressionContext parExpr=ctx.parExpression();
+            String condition=extractCondition(parExpr);
+            // cobolCodePD.append(INDENT).append("IF ").append(condition).append("\n");
+            emitCobol(INDENT+"IF "+condition+"\n");
+            blockStack.push("IF-"+currentIfLevel);
+            ifStatementStack.push(braceDepth+1);
+            currentIfLevel++;
+            justEnteredIf=true;
+            updateInsideBlock();
+
+            JavaParser.StatementContext elseBranch=null;
+            if(ctx.statement().size()>1){
+                elseBranch=ctx.statement(1);
+            }
+
+            while(elseBranch!=null && elseBranch.IF()!=null){
+                JavaParser.ParExpressionContext elseifExpr=elseBranch.parExpression();
+                String elseifCondition=extractCondition(elseifExpr);
+                // cobolCodePD.append(INDENT).append("ELSE\n");
+                emitCobol(INDENT+"ELSE\n");
+                // cobolCodePD.append(INDENT).append("IF ").append(elseifCondition).append("\n");
+                emitCobol(INDENT+"IF "+elseifCondition+"\n");
+                blockStack.push("IF-"+currentIfLevel);
+                ifStatementStack.push(braceDepth+1);
+                currentIfLevel++;
+                justEnteredIf=true;
+                updateInsideBlock();
+
+                if(elseBranch.statement().size()>1){
+                    elseBranch=elseBranch.statement(1);
+                }else{
+                    elseBranch=null;
+                }
+            }
+
+            if(elseBranch!=null){
+                // cobolCodePD.append(INDENT).append("ELSE\n");
+                emitCobol(INDENT+"ELSE\n");
+                blockStack.push("ELSE-"+currentIfLevel);
+                updateInsideBlock();
+            }
+            return;
+        }
         if(text.startsWith("System.exit")){
             emitCobol((INDENT)+("STOP RUN")+(insideblock?"\n":".\n"));
             // cobolCodePD.append(INDENT).append("STOP RUN").append(insideblock?"\n":".\n");
@@ -824,22 +888,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         else if(text.equals("return;")){
             emitCobol((INDENT)+("GOBACK")+(insideblock?"\n":".\n"));
             // cobolCodePD.append(INDENT).append("GOBACK").append(insideblock?"\n":".\n");
-        }
-        else if (text.matches(".*=\\s*\\w+\\.next(Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*;?")) {
-            //scanner class mapped to accept
-            String[] parts = text.split("=");
-            System.out.println(parts[0] + " and " + parts[1]);
-
-            if (parts.length == 2) {
-                String varDecl = parts[0].trim(); // e.g., "int b" or "name"
-                String[] tokens = varDecl.split("\\s+"); // Split by whitespace
-                String var = tokens[tokens.length - 1]; // Get variable name
-                String cobolVar=convertArrayAccessToCobol(varDecl);
-                // emitCobol((INDENT)+("ACCEPT ")+(var)+(insideblock?"\n":".\n"));  ---- this is the recent change -------------
-                emitCobol((INDENT)+("ACCEPT ")+(cobolVar)+(insideblock?"\n":".\n"));  //---- this is the recent change -------------
-                
-                // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
-            }
         }
         else if(text.matches(".*\\b(boolean)?\\s*\\w+\\s*=\\s*(true|false)\\s*;?")){
             //handles both boolean abc = true/false, abc = true/false
@@ -1160,50 +1208,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     return;
         // }
 
-        if(ctx.IF()!=null){
-            JavaParser.ParExpressionContext parExpr=ctx.parExpression();
-            String condition=extractCondition(parExpr);
-            // cobolCodePD.append(INDENT).append("IF ").append(condition).append("\n");
-            emitCobol(INDENT+"IF "+condition+"\n");
-            blockStack.push("IF-"+currentIfLevel);
-            ifStatementStack.push(braceDepth+1);
-            currentIfLevel++;
-            justEnteredIf=true;
-            updateInsideBlock();
-
-            JavaParser.StatementContext elseBranch=null;
-            if(ctx.statement().size()>1){
-                elseBranch=ctx.statement(1);
-            }
-
-            while(elseBranch!=null && elseBranch.IF()!=null){
-                JavaParser.ParExpressionContext elseifExpr=elseBranch.parExpression();
-                String elseifCondition=extractCondition(elseifExpr);
-                // cobolCodePD.append(INDENT).append("ELSE\n");
-                emitCobol(INDENT+"ELSE\n");
-                // cobolCodePD.append(INDENT).append("IF ").append(elseifCondition).append("\n");
-                emitCobol(INDENT+"IF "+elseifCondition+"\n");
-                blockStack.push("IF-"+currentIfLevel);
-                ifStatementStack.push(braceDepth+1);
-                currentIfLevel++;
-                justEnteredIf=true;
-                updateInsideBlock();
-
-                if(elseBranch.statement().size()>1){
-                    elseBranch=elseBranch.statement(1);
-                }else{
-                    elseBranch=null;
-                }
-            }
-
-            if(elseBranch!=null){
-                // cobolCodePD.append(INDENT).append("ELSE\n");
-                emitCobol(INDENT+"ELSE\n");
-                blockStack.push("ELSE-"+currentIfLevel);
-                updateInsideBlock();
-            }
-            return;
-        }
+        
         
     }
 

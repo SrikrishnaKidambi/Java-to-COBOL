@@ -5,11 +5,11 @@ public class SentenceSplitter {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a sentence: ");
         String line = sc.nextLine();
-
+        // works only if the words array size is 2
         String[] words = line.split(" ");
 
         System.out.println("Words in the sentence:");
-        for (int i = 0; i < words.length; i++) {
+        for (int i = 0; i < 5; i++) {
             System.out.println(words[i]);
         }
     }

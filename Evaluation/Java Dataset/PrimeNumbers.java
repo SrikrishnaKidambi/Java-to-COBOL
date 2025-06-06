@@ -9,7 +9,8 @@ public class PrimeNumbers {
         for (int i = 2; i <= n; i++) {
             boolean isPrime = true;
             for (int j = 2; j <= i / 2; j++) {
-                if (i % j == 0) {
+                int rem = i % j;
+                if (rem == 0) {
                     isPrime = false;
                     break;
                 }
