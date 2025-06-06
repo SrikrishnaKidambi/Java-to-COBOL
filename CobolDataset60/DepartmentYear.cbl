@@ -18,9 +18,10 @@
 
        MAIN-PARA.
       * Input from ODT is enabled
-       DISPLAY "Enter department code (1: CSE, 2: ECE): "
+       DISPLAY "Enter department code (1: CSE, 2: ECE): " 
+       WITH NO ADVANCING
        ACCEPT dept
-       DISPLAY "Enter year (1/2/3/4): "
+       DISPLAY "Enter year (1/2/3/4): " WITH NO ADVANCING
        ACCEPT year
        EVALUATE dept
        WHEN 1

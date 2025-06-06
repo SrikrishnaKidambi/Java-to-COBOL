@@ -15,13 +15,19 @@
 
 
        MAIN-PARA.
-       MOVE 50 TO value
-       IF value  <  100
-       DISPLAY "small"
-       ELSE
-       DISPLAY "HI"
-       DISPLAY "small"
-       DISPLAY "HI"
+      * Input from ODT is enabled
+       DISPLAY "Enter number: " WITH NO ADVANCING
+       ACCEPT num
+       MOVE 0 TO count
+       PERFORM WITH TEST BEFORE
+       ADD 1 TO count
+       DIVIDE num BY 10 GIVING num
+       UNTIL NOT (num  NOT =  0).
+       PERFORM UNTIL NOT (num  NOT =  0)
+       ADD 1 TO count
+       DIVIDE num BY 10 GIVING num
+       END-PERFORM
+       DISPLAY "Number of digits: "   count
        EXIT.
        STOP RUN.
 

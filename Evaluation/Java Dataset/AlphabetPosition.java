@@ -1,4 +1,4 @@
-// successful ✅
+// done ✅
 import java.util.Scanner;
 
 public class AlphabetPosition {
