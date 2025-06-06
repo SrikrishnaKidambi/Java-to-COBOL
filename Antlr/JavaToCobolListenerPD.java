@@ -553,6 +553,44 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // System.out.println("Only for" + text.split("=")[0].trim().split("\\s+")[text.split("=")[0].trim().split("\\s+").length-1]);
         // System.out.println("For text "+text+" vals "+text.matches(".*=\\s*(\"[^\"]*\"|'[^']*'|\\w+)(\\s*\\+\\s*(\"[^\"]*\"|'[^']*'|\\w+))*\\s*;?")+" and "+stringVars.contains(text.split("=")[0].trim().split("\\s+")[text.split("=")[0].trim().split("\\s+").length-1]) );
 
+
+        ParseTree parent = ctx.getParent();
+        if (parent instanceof JavaParser.StatementContext) {
+            JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
+            if (parentStmt.IF() != null
+                && parentStmt.statement().size() > 1
+                && parentStmt.statement(1) == ctx) {
+                // Only emit ELSE if this is not an 'else if'
+                if (ctx.IF() == null) {
+                    emitCobol(INDENT + "ELSE\n");
+                    updateInsideBlock();
+                }
+            }
+        }
+
+        if (ctx.IF() != null) {
+            // Check if this IF is a direct child of another IF's else branch
+            // ParseTree parent = ctx.getParent();
+            if (parent instanceof JavaParser.StatementContext) {
+                JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
+                if (parentStmt.IF() != null
+                    && parentStmt.statement().size() > 1
+                    && parentStmt.statement(1) == ctx) {
+                    // We are an else or else-if branch: emit ELSE
+                    emitCobol(INDENT + "ELSE\n");
+                    updateInsideBlock();
+                }
+            }
+            // Now emit the IF as usual
+            String condition = extractCondition(ctx.parExpression());
+            emitCobol(INDENT + "IF " + condition + "\n");
+            blockStack.push("IF-" + currentIfLevel);
+            currentIfLevel++;
+            updateInsideBlock();
+            justEnteredIf = true;
+            return;
+        }
+
         // Handling for loop statements
         
             if (ctx.FOR() != null) {
@@ -879,88 +917,74 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     return;
         // }
 
-        if (ctx.IF() != null) {
-            JavaParser.StatementContext current = ctx;
-            boolean first = true;
-            // Traverse chained if-else-if
-            while (current != null && current.IF() != null) {
-                JavaParser.ParExpressionContext parExpr = current.parExpression();
-                String condition = extractCondition(parExpr);
-                if (first) {
-                    emitCobol(INDENT + "IF " + condition + "\n");
-                    blockStack.push("IF-" + currentIfLevel);
-                    ifStatementStack.push(braceDepth + 1);
-                    currentIfLevel++;
-                    justEnteredIf = true;
-                    updateInsideBlock();
-                    first = false;
-                } else {
-                    emitCobol(INDENT + "ELSE\n");
-                    emitCobol(INDENT + "IF " + condition + "\n");
-                    blockStack.push("IF-" + currentIfLevel);
-                    ifStatementStack.push(braceDepth + 1);
-                    currentIfLevel++;
-                    justEnteredIf = true;
-                    updateInsideBlock();
-                }
-                // Emit only the THEN branch for this if/else-if
-                if (current.statement().size() > 0) {
-                    JavaParser.StatementContext thenBranch = current.statement(0);
-                    if (!(thenBranch.getText().equals("{}") || thenBranch.getChildCount() == 0)) {
-                        if (thenBranch.block() != null) {
-                            for (JavaParser.BlockStatementContext blockStmt : thenBranch.block().blockStatement()) {
-                                if (blockStmt.statement() != null) {
-                                    enterStatement(blockStmt.statement());
-                                    // processStatementDirectly(blockStmt.statement());
-                                }
-                            }
-                        } else {
-                            // Only emit the THEN branch, do not recursively call enterStatement on the else branch
-                            enterStatement(thenBranch);
-                            // processStatementDirectly(thenBranch);
-                        }
-                    }
-                }
-                // If the else branch is another if (else-if), continue; else, break to handle final else
-                if (current.statement().size() > 1 && current.statement(1).IF() != null) {
-                    current = current.statement(1);
-                } else {
-                    break;
-                }
-            }
-            // Handle the final ELSE branch (if present and not an else-if)
-            if (current != null && current.statement().size() > 1 && current.statement(1).IF() == null) {
-                emitCobol(INDENT + "ELSE\n");
-                blockStack.push("ELSE-" + currentIfLevel);
-                updateInsideBlock();
-                JavaParser.StatementContext elseBranch = current.statement(1);
-                if (!(elseBranch.getText().equals("{}") || elseBranch.getChildCount() == 0)) {
-                    if (elseBranch.block() != null) {
-                        for (JavaParser.BlockStatementContext blockStmt : elseBranch.block().blockStatement()) {
-                            if (blockStmt.statement() != null) {
-                                enterStatement(blockStmt.statement());
-                                // processStatementDirectly(blockStmt.statement());
-                            }
-                        }
-                    } else {
-                        // Only emit the ELSE branch statements, do not recursively call enterStatement on the else branch itself
-                        String elseText = tokens.getText(elseBranch).trim();
-                        if (!elseText.isEmpty() && !elseText.equals("{}")) {
-                            // Directly emit the statement if it's a simple statement
-                            // enterStatement(elseBranch);
-                            // processStatementDirectly(elseBranch);
-                            for (int i = 0; i < elseBranch.getChildCount(); i++) {
-                                ParseTree child = elseBranch.getChild(i);
-                                if (child instanceof JavaParser.StatementContext) {
-                                    enterStatement((JavaParser.StatementContext) child);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return;
-        }
+        // if (ctx.IF() != null) {
+        //     // handle the main IF/ELSE chain
+        //     JavaParser.StatementContext curIf = ctx;
+        //     boolean first = true;
+        //     List<JavaParser.StatementContext> openBlocks = new ArrayList<>();
+
+        //     while (curIf != null && curIf.IF() != null) {
+        //         JavaParser.ParExpressionContext parExpr = curIf.parExpression();
+        //         String condition = extractCondition(parExpr);
+
+        //         if (first) {
+        //             emitCobol(INDENT + "IF " + condition + "\n");
+        //             blockStack.push("IF-" + currentIfLevel);
+        //             currentIfLevel++;
+        //             updateInsideBlock();
+        //             first = false;
+        //         } else {
+        //             emitCobol(INDENT + "ELSE\n");
+        //             emitCobol(INDENT + "IF " + condition + "\n");
+        //             blockStack.push("IF-" + currentIfLevel);
+        //             currentIfLevel++;
+        //             updateInsideBlock();
+        //         }
+        //         // Only process the THEN branch
+        //         if (curIf.statement().size() > 0) {
+        //             JavaParser.StatementContext thenBranch = curIf.statement(0);
+        //             if (thenBranch != null && !(thenBranch.getText().equals("{}") || thenBranch.getChildCount() == 0)) {
+        //                 if (thenBranch.block() != null) {
+        //                     for (JavaParser.BlockStatementContext blockStmt : thenBranch.block().blockStatement()) {
+        //                         if (blockStmt.statement() != null) {
+        //                             enterStatement(blockStmt.statement());
+        //                         }
+        //                     }
+        //                 } else {
+        //                     enterStatement(thenBranch);
+        //                 }
+        //             }
+        //         }
+        //         // If the else branch is another if (else-if), continue the chain
+        //         if (curIf.statement().size() > 1 && curIf.statement(1).IF() != null) {
+        //             curIf = curIf.statement(1);
+        //         } else {
+        //             break;
+        //         }
+        //     }
+
+        //     // Handle the final ELSE branch (if present and not an else-if)
+        //     if (curIf != null && curIf.statement().size() > 1 && curIf.statement(1).IF() == null) {
+        //         emitCobol(INDENT + "ELSE\n");
+        //         blockStack.push("ELSE-" + currentIfLevel);
+        //         currentIfLevel++;
+        //         updateInsideBlock();
+        //         JavaParser.StatementContext elseBranch = curIf.statement(1);
+        //         if (elseBranch != null && !(elseBranch.getText().equals("{}") || elseBranch.getChildCount() == 0)) {
+        //             if (elseBranch.block() != null) {
+        //                 for (JavaParser.BlockStatementContext blockStmt : elseBranch.block().blockStatement()) {
+        //                     if (blockStmt.statement() != null) {
+        //                         enterStatement(blockStmt.statement());
+        //                     }
+        //                 }
+        //             } else {
+        //                 enterStatement(elseBranch);
+        //             }
+        //         }
+        //     }
+        //     return;
+        // }
+
         if(text.startsWith("System.exit")){
             emitCobol((INDENT)+("STOP RUN")+(insideblock?"\n":".\n"));
             // cobolCodePD.append(INDENT).append("STOP RUN").append(insideblock?"\n":".\n");
@@ -1360,51 +1384,67 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
         }
 
-        // Count closing braces in this statement
-        int closingBraces = 0;
-        for (char c : text.toCharArray()) {
-            if (c == '}') {
-                closingBraces++;
-                braceDepth--;
-            }
-        }
+        // int closingBraces = 0;
+        // for (char c : text.toCharArray()) {
+        //     if (c == '}') {
+        //         closingBraces++;
+        //         braceDepth--;
+        //     }
+        // }
 
-        // Loop as long as we have closing braces and if-blocks to close
-        while (closingBraces > 0 && !blockStack.isEmpty() && blockStack.peek().startsWith("IF")) {
-            // Look ahead to find if an 'else' is coming up right after this block
-            String nextText = getNextNonWhitespaceText(ctx);
-            boolean hasElseNext = nextText != null && nextText.trim().startsWith("else") && !nextText.contains("else if");
+        // while (closingBraces > 0 && !blockStack.isEmpty()) {
+        //     // Only pop IF/ELSE blocks for closure
+        //     if (blockStack.peek().startsWith("IF") || blockStack.peek().startsWith("ELSE")) {
+        //         emitCobol(INDENT + "END-IF");
+        //         boolean isOutermost = (blockStack.size() == 1);
+        //         blockStack.pop();
+        //         if (isOutermost && (blockStack.isEmpty() || !(blockStack.peek().startsWith("IF") || blockStack.peek().startsWith("ELSE")))) {
+        //             emitCobol(".");
+        //         }
+        //         emitCobol("\n");
+        //         currentIfLevel--;
+        //         updateInsideBlock();
+        //     }
+        //     closingBraces--;
+        // }
 
-            if (hasElseNext && !inElseBlock) {
-                // Instead of closing the IF block, emit ELSE and exit this loop iteration
-                // cobolCodePD.append(INDENT).append("ELSE\n");
-                emitCobol(INDENT+"ELSE\n");
-                inElseBlock = true;
-                updateInsideBlock();
-                // Do not decrement closingBraces, as the else block is still part of this IF
-                return;
-            } else {
-                // We are finishing an IF or an ELSE block
-                ifStatementStack.pop();
-                if (!elseExpectedStack.isEmpty()) {
-                    elseExpectedStack.pop();
-                }
-                // cobolCodePD.append(INDENT).append("END-IF");
-                emitCobol(INDENT+"END-IF");
-                boolean isOutermost = (blockStack.size() == 1);
+        // if (ctx.IF() != null) {
+        //     // Check for ELSE/ELSE-IF
+        //     if (ctx.statement().size() > 1) {
+        //         JavaParser.StatementContext elseBranch = ctx.statement(1);
+        //         if (elseBranch.IF() != null) {
+        //             // else if
+        //             emitCobol(INDENT + "ELSE\n");
+        //             // Don't push new blockStack for ELSE-IF; it's another IF, will be handled by its own enter/exit
+        //         } else {
+        //             // plain else
+        //             emitCobol(INDENT + "ELSE\n");
+        //             blockStack.push("ELSE-" + currentIfLevel);
+        //             currentIfLevel++;
+        //             updateInsideBlock();
+        //         }
+        //     }
+        //     // Always close the opened IF (and possible ELSE)
+        //     while (!blockStack.isEmpty() &&
+        //         (blockStack.peek().startsWith("IF") || blockStack.peek().startsWith("ELSE"))) {
+        //         emitCobol(INDENT + "END-IF\n");
+        //         blockStack.pop();
+        //         currentIfLevel--;
+        //         updateInsideBlock();
+        //     }
+        //     return;
+        // }
+
+        if (ctx.IF() != null) {
+            // Only close the IF we opened for this node
+            if (!blockStack.isEmpty() && blockStack.peek().startsWith("IF")) {
+                emitCobol(INDENT + "END-IF\n");
                 blockStack.pop();
-                if (isOutermost && (blockStack.isEmpty() || !blockStack.peek().startsWith("IF"))) {
-                    // cobolCodePD.append(".");
-                    emitCobol(".");
-                }
-                // cobolCodePD.append("\n");
-                emitCobol("\n");
-
                 currentIfLevel--;
-                inElseBlock = false;
                 updateInsideBlock();
-                closingBraces--;
             }
+            // Do NOT emit ELSE or try to pop/close ELSE here!
+            return;
         }
 
         // Handle SWITCH block termination
@@ -1890,15 +1930,15 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     private String translateCondition(String javaCondition) {
         String cobolCondition = javaCondition
-            .replaceAll("==", " = ")
-            .replaceAll("!=", " NOT = ")
-            .replaceAll("<=", " <= ")
-            .replaceAll(">=", " >= ")
-            .replaceAll("<", " < ")
-            .replaceAll(">", " > ")
-            .replaceAll("&&", " AND ")
-            .replaceAll("\\|\\|", " OR ")
-            .replaceAll("!", " NOT ")
+            .replaceAll("==", "=")
+            .replaceAll("!=", "NOT=")
+            .replaceAll("<=", "<=")
+            .replaceAll(">=", ">=")
+            .replaceAll("<", "<")
+            .replaceAll(">", ">")
+            .replaceAll("&&", "AND")
+            .replaceAll("\\|\\|", "OR")
+            .replaceAll("!", "NOT")
             .replaceAll("\\(", "")
             .replaceAll("\\)", "");
         return cobolCondition.trim();
