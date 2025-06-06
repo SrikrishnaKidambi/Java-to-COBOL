@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private static final String INDENT="       ";
@@ -910,11 +911,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                             for (JavaParser.BlockStatementContext blockStmt : thenBranch.block().blockStatement()) {
                                 if (blockStmt.statement() != null) {
                                     enterStatement(blockStmt.statement());
+                                    // processStatementDirectly(blockStmt.statement());
                                 }
                             }
                         } else {
                             // Only emit the THEN branch, do not recursively call enterStatement on the else branch
                             enterStatement(thenBranch);
+                            // processStatementDirectly(thenBranch);
                         }
                     }
                 }
@@ -935,8 +938,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     if (elseBranch.block() != null) {
                         for (JavaParser.BlockStatementContext blockStmt : elseBranch.block().blockStatement()) {
                             if (blockStmt.statement() != null) {
-                                // enterStatement(blockStmt.statement());
-                                processStatementDirectly(blockStmt.statement());
+                                enterStatement(blockStmt.statement());
+                                // processStatementDirectly(blockStmt.statement());
                             }
                         }
                     } else {
@@ -945,7 +948,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                         if (!elseText.isEmpty() && !elseText.equals("{}")) {
                             // Directly emit the statement if it's a simple statement
                             // enterStatement(elseBranch);
-                            processStatementDirectly(blockStmt.statement());
+                            // processStatementDirectly(elseBranch);
+                            for (int i = 0; i < elseBranch.getChildCount(); i++) {
+                                ParseTree child = elseBranch.getChild(i);
+                                if (child instanceof JavaParser.StatementContext) {
+                                    enterStatement((JavaParser.StatementContext) child);
+                                }
+                            }
                         }
                     }
                 }
@@ -1460,19 +1469,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         return false;
     }
 
-    private void processStatementDirectly(JavaParser.StatementContext ctx) {
-        if (ctx.expressionStatement() != null) {
-            // Handle expression statements directly
-            JavaParser.ExpressionContext expr = ctx.expressionStatement().expression();
-            if (expr != null) {
-                processExpression(expr);  // Your existing expression processing
-            }
-        } else if (ctx.localVariableDeclarationStatement() != null) {
-            // Handle variable declarations directly
-            processVariableDeclaration(ctx.localVariableDeclarationStatement());
-        }
-        // Add other statement types as needed, but avoid re-processing IF statements
-    }
+    // private void processStatementDirectly(JavaParser.StatementContext ctx) {
+    //     if (ctx.expressionStatement() != null) {
+    //         // Handle expression statements directly
+    //         JavaParser.ExpressionContext expr = ctx.expressionStatement().expression();
+    //         if (expr != null) {
+    //             processExpression(expr);  // Your existing expression processing
+    //         }
+    //     } else if (ctx.localVariableDeclarationStatement() != null) {
+    //         // Handle variable declarations directly
+    //         processVariableDeclaration(ctx.localVariableDeclarationStatement());
+    //     }
+    //     // Add other statement types as needed, but avoid re-processing IF statements
+    // }
 
     private String getFullStatementText(JavaParser.StatementContext ctx) {
         try {
