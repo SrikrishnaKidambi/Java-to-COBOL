@@ -10,7 +10,7 @@ public class Test5 {
         for (int i = 0; i < 5; i++) {
             sum += arr[i];
         }
-        system.out.println(sum);
+        System.out.println(sum);
         scanner.close();
     }
 }

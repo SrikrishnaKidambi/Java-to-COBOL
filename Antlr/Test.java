@@ -1,16 +1,10 @@
-import java.util.Scanner;
-
 public class Test {
-    public static void main(String[] args){
-        int[] arr=new int[5];
-        Scanner scanner=new Scanner(System.in);
-        for(int i=0;i<5;i++){
-            arr[i]=scanner.nextInt();
+    public static void main(String[] args) {
+        int value = 50;
+        if (value < 100) {
+            System.out.println("small");
+        } else {
+            // do nothing
         }
-        System.out.println("The contents of the array are:");
-        for(int i=0;i<5;i++){
-            System.out.println(arr[i]);
-        }
-        scanner.close();
     }
 }

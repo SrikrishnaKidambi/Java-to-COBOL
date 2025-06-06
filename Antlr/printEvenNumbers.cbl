@@ -1,12 +1,10 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. calc.
+       PROGRAM-ID. printEvenNumbers.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Method:calc
-           05  a            PIC S9(5).
-           05  b            PIC S9(5).
-           05  sum          PIC S9(5).
+      * Variables for Method:printEvenNumbers
+           05  i            PIC S9(5).
        01  ARGS_[SIZE=[]]-ARRAY.
            05  args         PIC X(10) OCCURS 100 TIMES

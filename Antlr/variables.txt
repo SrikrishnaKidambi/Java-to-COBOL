@@ -4,11 +4,5 @@ Scope:Method:main->Class:Test->GLOBAL
 
 Scope:Block->Method:main->Class:Test->GLOBAL
   Type:int
-    arr [size=[5]]
-  Type:Scanner
-    scanner
-
-Scope:For->Block->Method:main->Class:Test->GLOBAL
-  Type:int
-    i
+    value
 
