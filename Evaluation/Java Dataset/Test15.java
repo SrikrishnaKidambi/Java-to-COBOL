@@ -4,7 +4,7 @@ public class Test15 {
         if (value < 100) {
             System.out.println("small");
         } else {
-            // do nothing
+            System.out.println("HI");
         }
     }
 }

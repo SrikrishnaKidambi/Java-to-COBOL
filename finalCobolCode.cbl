@@ -25,6 +25,10 @@
        ADD 1 TO count
        DIVIDE num BY 10 GIVING num
        UNTIL NOT (num  NOT =  0).
+       PERFORM UNTIL NOT (num  NOT =  0)
+       ADD 1 TO count
+       DIVIDE num BY 10 GIVING num
+       END-PERFORM
        DISPLAY "Number of digits: "   count
        EXIT.
        STOP RUN.
