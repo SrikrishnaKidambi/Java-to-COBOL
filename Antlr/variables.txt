@@ -4,9 +4,5 @@ Scope:Method:main->Class:Test->GLOBAL
 
 Scope:Block->Method:main->Class:Test->GLOBAL
   Type:int
-    value
-
-Scope:For->Block->Method:main->Class:Test->GLOBAL
-  Type:int
     i
 

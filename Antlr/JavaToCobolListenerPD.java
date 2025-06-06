@@ -1930,15 +1930,15 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     private String translateCondition(String javaCondition) {
         String cobolCondition = javaCondition
-            .replaceAll("==", " = ")
-            .replaceAll("!=", " NOT = ")
-            .replaceAll("<=", " <= ")
-            .replaceAll(">=", " >= ")
-            .replaceAll("<", " < ")
-            .replaceAll(">", " > ")
-            .replaceAll("&&", " AND ")
-            .replaceAll("\\|\\|", " OR ")
-            .replaceAll("!", " NOT ")
+            .replaceAll("==", "=")
+            .replaceAll("!=", "NOT=")
+            .replaceAll("<=", "<=")
+            .replaceAll(">=", ">=")
+            .replaceAll("<", "<")
+            .replaceAll(">", ">")
+            .replaceAll("&&", "AND")
+            .replaceAll("\\|\\|", "OR")
+            .replaceAll("!", "NOT")
             .replaceAll("\\(", "")
             .replaceAll("\\)", "");
         return cobolCondition.trim();
