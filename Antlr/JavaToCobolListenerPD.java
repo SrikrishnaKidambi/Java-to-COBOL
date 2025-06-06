@@ -639,7 +639,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             String untilCondition="NOT ("+condition+")";
 
             // cobolCodePD.append(INDENT).append("PERFORM WITH TEST BEFORE\n");
-            emitCobol(INDENT+"PERFORM WITH TEST BEFORE\n");
+            emitCobol(INDENT+"PERFORM UNTIL "+untilCondition+"\n");
             // blockStack.push("WHILE");
             blockStack.push("WHILE:"+untilCondition);
             updateInsideBlock();
@@ -833,47 +833,122 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
         }
         
-        if(ctx.IF()!=null){
-            JavaParser.ParExpressionContext parExpr=ctx.parExpression();
-            String condition=extractCondition(parExpr);
-            // cobolCodePD.append(INDENT).append("IF ").append(condition).append("\n");
-            emitCobol(INDENT+"IF "+condition+"\n");
-            blockStack.push("IF-"+currentIfLevel);
-            ifStatementStack.push(braceDepth+1);
-            currentIfLevel++;
-            justEnteredIf=true;
-            updateInsideBlock();
+        // if(ctx.IF()!=null){
+        //     JavaParser.ParExpressionContext parExpr=ctx.parExpression();
+        //     String condition=extractCondition(parExpr);
+        //     // cobolCodePD.append(INDENT).append("IF ").append(condition).append("\n");
+        //     emitCobol(INDENT+"IF "+condition+"\n");
+        //     blockStack.push("IF-"+currentIfLevel);
+        //     ifStatementStack.push(braceDepth+1);
+        //     currentIfLevel++;
+        //     justEnteredIf=true;
+        //     updateInsideBlock();
 
-            JavaParser.StatementContext elseBranch=null;
-            if(ctx.statement().size()>1){
-                elseBranch=ctx.statement(1);
-            }
+        //     JavaParser.StatementContext elseBranch=null;
+        //     if(ctx.statement().size()>1){
+        //         elseBranch=ctx.statement(1);
+        //     }
 
-            while(elseBranch!=null && elseBranch.IF()!=null){
-                JavaParser.ParExpressionContext elseifExpr=elseBranch.parExpression();
-                String elseifCondition=extractCondition(elseifExpr);
-                // cobolCodePD.append(INDENT).append("ELSE\n");
-                emitCobol(INDENT+"ELSE\n");
-                // cobolCodePD.append(INDENT).append("IF ").append(elseifCondition).append("\n");
-                emitCobol(INDENT+"IF "+elseifCondition+"\n");
-                blockStack.push("IF-"+currentIfLevel);
-                ifStatementStack.push(braceDepth+1);
-                currentIfLevel++;
-                justEnteredIf=true;
-                updateInsideBlock();
+        //     while(elseBranch!=null && elseBranch.IF()!=null){
+        //         JavaParser.ParExpressionContext elseifExpr=elseBranch.parExpression();
+        //         String elseifCondition=extractCondition(elseifExpr);
+        //         // cobolCodePD.append(INDENT).append("ELSE\n");
+        //         emitCobol(INDENT+"ELSE\n");
+        //         // cobolCodePD.append(INDENT).append("IF ").append(elseifCondition).append("\n");
+        //         emitCobol(INDENT+"IF "+elseifCondition+"\n");
+        //         blockStack.push("IF-"+currentIfLevel);
+        //         ifStatementStack.push(braceDepth+1);
+        //         currentIfLevel++;
+        //         justEnteredIf=true;
+        //         updateInsideBlock();
 
-                if(elseBranch.statement().size()>1){
-                    elseBranch=elseBranch.statement(1);
-                }else{
-                    elseBranch=null;
+        //         if(elseBranch.statement().size()>1){
+        //             elseBranch=elseBranch.statement(1);
+        //         }else{
+        //             elseBranch=null;
+        //         }
+        //     }
+
+        //     if(elseBranch!=null){
+        //         // cobolCodePD.append(INDENT).append("ELSE\n");
+        //         emitCobol(INDENT+"ELSE\n");
+        //         blockStack.push("ELSE-"+currentIfLevel);
+        //         updateInsideBlock();
+        //     }
+        //     return;
+        // }
+
+        if (ctx.IF() != null) {
+            JavaParser.StatementContext current = ctx;
+            boolean first = true;
+            // Traverse chained if-else-if
+            while (current != null && current.IF() != null) {
+                JavaParser.ParExpressionContext parExpr = current.parExpression();
+                String condition = extractCondition(parExpr);
+                if (first) {
+                    emitCobol(INDENT + "IF " + condition + "\n");
+                    blockStack.push("IF-" + currentIfLevel);
+                    ifStatementStack.push(braceDepth + 1);
+                    currentIfLevel++;
+                    justEnteredIf = true;
+                    updateInsideBlock();
+                    first = false;
+                } else {
+                    emitCobol(INDENT + "ELSE\n");
+                    emitCobol(INDENT + "IF " + condition + "\n");
+                    blockStack.push("IF-" + currentIfLevel);
+                    ifStatementStack.push(braceDepth + 1);
+                    currentIfLevel++;
+                    justEnteredIf = true;
+                    updateInsideBlock();
+                }
+                // Emit only the THEN branch for this if/else-if
+                if (current.statement().size() > 0) {
+                    JavaParser.StatementContext thenBranch = current.statement(0);
+                    if (!(thenBranch.getText().equals("{}") || thenBranch.getChildCount() == 0)) {
+                        if (thenBranch.block() != null) {
+                            for (JavaParser.BlockStatementContext blockStmt : thenBranch.block().blockStatement()) {
+                                if (blockStmt.statement() != null) {
+                                    enterStatement(blockStmt.statement());
+                                }
+                            }
+                        } else {
+                            // Only emit the THEN branch, do not recursively call enterStatement on the else branch
+                            enterStatement(thenBranch);
+                        }
+                    }
+                }
+                // If the else branch is another if (else-if), continue; else, break to handle final else
+                if (current.statement().size() > 1 && current.statement(1).IF() != null) {
+                    current = current.statement(1);
+                } else {
+                    break;
                 }
             }
-
-            if(elseBranch!=null){
-                // cobolCodePD.append(INDENT).append("ELSE\n");
-                emitCobol(INDENT+"ELSE\n");
-                blockStack.push("ELSE-"+currentIfLevel);
+            // Handle the final ELSE branch (if present and not an else-if)
+            if (current != null && current.statement().size() > 1 && current.statement(1).IF() == null) {
+                emitCobol(INDENT + "ELSE\n");
+                blockStack.push("ELSE-" + currentIfLevel);
                 updateInsideBlock();
+                JavaParser.StatementContext elseBranch = current.statement(1);
+                if (!(elseBranch.getText().equals("{}") || elseBranch.getChildCount() == 0)) {
+                    if (elseBranch.block() != null) {
+                        for (JavaParser.BlockStatementContext blockStmt : elseBranch.block().blockStatement()) {
+                            if (blockStmt.statement() != null) {
+                                // enterStatement(blockStmt.statement());
+                                processStatementDirectly(blockStmt.statement());
+                            }
+                        }
+                    } else {
+                        // Only emit the ELSE branch statements, do not recursively call enterStatement on the else branch itself
+                        String elseText = tokens.getText(elseBranch).trim();
+                        if (!elseText.isEmpty() && !elseText.equals("{}")) {
+                            // Directly emit the statement if it's a simple statement
+                            // enterStatement(elseBranch);
+                            processStatementDirectly(blockStmt.statement());
+                        }
+                    }
+                }
             }
             return;
         }
@@ -1262,15 +1337,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String whileEntry=blockStack.pop();
                 String untilCondition=whileEntry.substring(6);
                 // cobolCodePD.append(INDENT).append("UNTIL ").append(untilCondition);
-                emitCobol(INDENT+"UNTIL "+untilCondition);
+                // emitCobol(INDENT+"UNTIL "+untilCondition);
+                emitCobol(INDENT+"END-PERFORM\n");
 
-                if(blockStack.isEmpty()){
-                    // cobolCodePD.append(".");
-                    emitCobol(".");
-                }
+                // if(blockStack.isEmpty()){
+                //     // cobolCodePD.append(".");
+                //     emitCobol(".");
+                // }
 
                 // cobolCodePD.append("\n");
-                emitCobol("\n");
+                // emitCobol("\n");
                 updateInsideBlock();
             }
         }
@@ -1382,6 +1458,20 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             parent=parent.getParent();
         }
         return false;
+    }
+
+    private void processStatementDirectly(JavaParser.StatementContext ctx) {
+        if (ctx.expressionStatement() != null) {
+            // Handle expression statements directly
+            JavaParser.ExpressionContext expr = ctx.expressionStatement().expression();
+            if (expr != null) {
+                processExpression(expr);  // Your existing expression processing
+            }
+        } else if (ctx.localVariableDeclarationStatement() != null) {
+            // Handle variable declarations directly
+            processVariableDeclaration(ctx.localVariableDeclarationStatement());
+        }
+        // Add other statement types as needed, but avoid re-processing IF statements
     }
 
     private String getFullStatementText(JavaParser.StatementContext ctx) {

@@ -6,8 +6,6 @@ Scope:Block->Method:main->Class:Test->GLOBAL
   Type:Scanner
     sc
   Type:int
-    a
-    b
-  Type:char
-    op
+    num
+    count
 
