@@ -1,10 +1,14 @@
 public class Test {
     public static void main(String[] args) {
-        int value = 50;
-        if (value < 100) {
-            System.out.println("small");
-        } else {
-            System.out.println("HI");
+        printMultiplesOf3();
+    }
+
+    static void printMultiplesOf3() {
+        int i = 3;
+        System.out.println("Multiples of 3 upto 30 are: ");
+        while (i <= 30) {
+            System.out.println(i);
+            i = i + 3;
         }
     }
 }

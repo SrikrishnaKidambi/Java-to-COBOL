@@ -654,7 +654,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // String text=tokens.getText(ctx).trim();
 
         if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$") && !text.contains("=")){
-            String methodName=text.substring(0,text.indexOf('(')).trim().toUpperCase()+"-PARA";
+            String methodName=text.substring(0,text.indexOf('(')).trim()+"-PARA";
             emitCobol(INDENT+"PERFORM "+methodName+"\n");
             return;
         }

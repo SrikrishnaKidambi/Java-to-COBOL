@@ -2,7 +2,7 @@ Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args [size=[]]
 
-Scope:Block->Method:main->Class:Test->GLOBAL
+Scope:Block->Method:printMultiplesOf3->Class:Test->GLOBAL
   Type:int
-    value
+    i
 

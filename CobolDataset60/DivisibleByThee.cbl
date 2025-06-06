@@ -21,7 +21,7 @@
        printMultiplesOf3-PARA.
        MOVE 3 TO i
        DISPLAY "Multiples of 3 upto 30 are: "
-       PERFORM UNTIL NOT (i   < =  30)
+       PERFORM UNTIL NOT (i   <=  30)
        DISPLAY i
        ADD i TO 3 GIVING i
        END-PERFORM
