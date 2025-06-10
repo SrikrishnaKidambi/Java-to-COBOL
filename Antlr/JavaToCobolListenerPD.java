@@ -121,7 +121,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
        
         String text=tokens.getText(ctx);
-        intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
+        text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
@@ -485,7 +485,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 // cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if(text.matches("(int|float|double|long|short|var|char)?\\s*\\w+\\s*=\\s*[^;]*[+\\-*/%][^;]*;?")){
+        else if(text.matches("(int|float|double|long|short|var|char)?\\s*\\w+\\s*=\\s*[^;]*(?:FUNCTION\\s+\\w+\\([^)]*\\)|[+\\-*/%])[^;]*;?")){
             String[] parts=text.split("=", 2);
             if(parts.length==2){
                 String lhs=parts[0].trim();
@@ -560,6 +560,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     public void enterStatement(JavaParser.StatementContext ctx){
         addLeadingComments(ctx);
         String text=tokens.getText(ctx);
+        text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         //array conversion
         text = convertArrayAccessToCobol(text);
@@ -1203,7 +1204,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 // cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if(text.matches("\\s*((?:\\w+|\\w+\\s*\\(.*?\\)))\\s*([+\\-*/%]=)\\s*[^;]+;?")){
+        else if(text.matches("\\s*((?:\\w+|\\w+\\s*\\(.*?\\)))\\s*([+\\-*/%]=)\\s*(?:[^;]*(?:FUNCTION\\s+[\\w-]+\\([^)]*\\)|[+\\-*/%])[^;]*|[^;]+);?")){
             // for the arithmetic expressions mapped to compute, this is for a+=arithmetic expression.
             String operator=text.contains("+=") ? "+" :
                             text.contains("-=") ? "-" :

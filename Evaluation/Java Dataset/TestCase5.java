@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Test {
+public class TestCase5 {
     public static void main(String[] args) {
         char maxChar = Collections.max(Arrays.asList('A', 'b', 'Z', 'x'));
         char minChar = Collections.min(Arrays.asList('A', 'b', 'Z', 'x'));

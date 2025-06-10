@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. TestCase5.
+       PROGRAM-ID. TestCase2.
 
 
        DATA DIVISION.
@@ -8,20 +8,19 @@
        01  ARGS_-ARRAY    .
            05  args         PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TEST_GLOBAL
-       01  maxChar         PIC X(1).
-       01  minChar         PIC X(1).
+       01  rand            PIC S9(5)V9(2).
+       01  sqrtVal         PIC S9(5)V9(2).
 
 
        PROCEDURE DIVISION.
 
 
        MAIN-PARA.
-       MOVE FUNCTION CHAR(FUNCTION ORD-MAX("A" "b" "Z" "x")) TO maxChar
-       MOVE FUNCTION CHAR(FUNCTION ORD-MIN("A" "b" "Z" "x")) TO minChar
-       DISPLAY "Max char: "   maxChar
-      * x
-      * x
-       DISPLAY "Min char: "   minChar
+       COMPUTE sqrtVal = FUNCTION SQRT(25)
+       DISPLAY "Random: "   rand
+       IF sqrtVal = 5
+       DISPLAY "Sqrt works correctly!"
+       END-IF
        EXIT.
        STOP RUN.
 

@@ -299,7 +299,7 @@ public class IntrinsicFunctionConverter {
         IntrinsicFunctionConverter converter = new IntrinsicFunctionConverter();
         //Character.codePointAt(\"A\",0)+Character.codePointAt(\"A\",i)+ Character.codePointAt(myString,1)+Character.codePointAt(myString,i)++ Character.codePointAt(\"A\", 0) + Character.codePointAt(myString, 1)
         // String javaLine = "int a = Arrays.stream(numbers).sum() + \"Hello\".toUpperCase().reverse()+ name.reverse().toUpperCase()+ \"Hello\".reverse() +name.toUpperCase()+Integer.signum(-4) + Math.sin(Math.min(2,Math.random())) + Math.min(3, Double.valueOf(str)) + Math.sqrt(val);";
-        String javaLine = "char ch = Collections.max(Arrays.asList(char1, char2, char3));";
+        String javaLine = "int minVal = Math.min(a, b);";
         String cobolLine = converter.accomodateIntrinsicFunctions(javaLine);
 
         System.out.println("Original: " + javaLine);
