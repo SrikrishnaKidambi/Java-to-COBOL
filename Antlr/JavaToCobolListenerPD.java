@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class JavaToCobolListenerPD extends JavaParserBaseListener{
+    private IntrinsicFunctionConverter intrinsicFunctionConverter;
     private static final String INDENT="       ";
     private static final String INDENT_COMMENT="      ";
     private final TokenStream tokens;
@@ -103,6 +104,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     Set<String> charVariables = new HashSet<>();
     public JavaToCobolListenerPD(TokenStream tokens){
         this.tokens = tokens;
+        intrinsicFunctionConverter= new IntrinsicFunctionConverter();
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
     }
     public String getCobolCodePD(){
@@ -117,8 +119,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if(insideForLoopHeader){
             return;
         }
-
+       
         String text=tokens.getText(ctx);
+        intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
@@ -1815,11 +1818,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // System.out.println("While returning the expCompAssign: "+text);
         return text;
     }
-
-    // //------------------INTRINSIC FUNTIONS--------------------------
-    // public String accomodateIntrinsicFunctions(String text){
-        
-    // }
 
 
     // helper functions for handling the if conditional statements
