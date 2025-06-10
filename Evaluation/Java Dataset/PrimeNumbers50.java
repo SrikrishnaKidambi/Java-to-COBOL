@@ -1,3 +1,4 @@
+//done ✅
 public class PrimeNumbers50 {
     public static void main(String[] args) {
         int num = 2;
@@ -6,7 +7,8 @@ public class PrimeNumbers50 {
             boolean isPrime = true;
             int i = 2;
             while (i <= num / 2) {
-                if ((num / i) * i == num) { // avoid using %
+                int rem = num % i;
+                if (rem == 0) { // avoid using %
                     isPrime = false;
                     break;
                 }

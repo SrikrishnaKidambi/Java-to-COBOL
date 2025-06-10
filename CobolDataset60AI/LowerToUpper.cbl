@@ -1,0 +1,21 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. LowerToUpper.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 CH1         PIC X VALUE SPACE.
+       01 ASCII-VAL  PIC 9(3) VALUE 0.
+       01 UPPER-VAL  PIC 9(3) VALUE 0.
+       01 UPPER-CHAR PIC X.
+
+       PROCEDURE DIVISION.
+           DISPLAY "Enter a lowercase letter: " WITH NO ADVANCING.
+           ACCEPT CH1.
+
+           COMPUTE ASCII-VAL = FUNCTION ORD(CH1).
+           COMPUTE UPPER-VAL = ASCII-VAL - 32.
+           COMPUTE UPPER-CHAR = FUNCTION CHAR(UPPER-VAL).
+
+           DISPLAY "Uppercase: " UPPER-CHAR.
+
+           STOP RUN.

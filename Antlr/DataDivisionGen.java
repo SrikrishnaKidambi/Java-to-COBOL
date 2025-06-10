@@ -14,7 +14,7 @@ public class DataDivisionGen {
         } else if (javaType.contains("boolean")) {
             return "PIC X(1).";
         } else {
-            return "PIC X(10).";
+            return "PIC X(100).";
         }
     }
 

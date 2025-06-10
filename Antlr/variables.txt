@@ -11,4 +11,7 @@ Scope:Block->Method:main->Class:Test->GLOBAL
   Type:int
     a
     b
+  Type:char
+    maxChar
+    minChar
 

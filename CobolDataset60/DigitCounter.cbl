@@ -21,10 +21,10 @@
        DISPLAY "Enter number: " WITH NO ADVANCING
        ACCEPT num
        MOVE 0 TO count1
-       PERFORM WITH TEST BEFORE
+       PERFORM UNTIL NOT (num  NOT =  0)
        ADD 1 TO count1
        DIVIDE num BY 10 GIVING num
-       UNTIL NOT (num  NOT =  0).
+       END-PERFORM
        DISPLAY "Number of digits: "   count1
        EXIT.
        STOP RUN.

@@ -1,3 +1,4 @@
+//done ✅
 import java.util.Scanner;
 
 public class MultiplicationTable {
@@ -7,7 +8,8 @@ public class MultiplicationTable {
         int num = sc.nextInt();
 
         for (int i = 1; i <= 10; i++) {
-            System.out.println(num + " x " + i + " = " + (num * i));
+            int val = num * i;
+            System.out.println(num + " x " + i + " = " + val);
         }
     }
 }

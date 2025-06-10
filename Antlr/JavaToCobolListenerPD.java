@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class JavaToCobolListenerPD extends JavaParserBaseListener{
+    private IntrinsicFunctionConverter intrinsicFunctionConverter;
     private static final String INDENT="       ";
     private static final String INDENT_COMMENT="      ";
     private final TokenStream tokens;
@@ -119,6 +120,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     Set<String> charVariables = new HashSet<>();
     public JavaToCobolListenerPD(TokenStream tokens){
         this.tokens = tokens;
+        intrinsicFunctionConverter= new IntrinsicFunctionConverter();
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
     }
     public String getCobolCodePD(){
@@ -133,8 +135,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if(insideForLoopHeader){
             return;
         }
-
+       
         String text=tokens.getText(ctx);
+        text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
@@ -205,7 +208,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
 
                 String rhs = parts[1].replace(";", "").trim();
-
+                if(rhs.equals("true")){
+                    rhs="'Y'";
+                }
+                else if(rhs.equals("false")){
+                    rhs="'N'";
+                }
                 // Match string/char literals or simple variables/literals
                 if (rhs.matches("\"[^\"]*\"|'[^']*'|\\w+(\\([^)]*\\))?|[\\w\\d_]+")) {
                     emitCobol((INDENT)+
@@ -291,12 +299,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                         //     cobolCodePD.append(INDENT).append(rhsOperands[i]).append("\n");
                         // }
                         // else
-                        emitCobol((INDENT)+(rhsOperands[i])+(" DELIMITED BY SPACE \n"));
+                        String delimiter = ((rhsOperands[i].startsWith("\"") && rhsOperands[i].endsWith("\"") || 
+                                                    rhsOperands[i].startsWith("'") && rhsOperands[i].endsWith("'"))) 
+                                        ? " DELIMITED BY SIZE \n" : " DELIMITED BY SPACE \n";
+                        emitCobol((INDENT)+(rhsOperands[i])+(delimiter));
                         // cobolCodePD.append(INDENT).append(rhsOperands[i]).append(" DELIMITED BY SPACE \n");
                     }
-                    emitCobol((INDENT)+(rhsOperands[rhsOperands.length-1])+(" "));
+                    String lastDelimiter = ((rhsOperands[rhsOperands.length-1].startsWith("\"") && rhsOperands[rhsOperands.length-1].endsWith("\"") || 
+                                                    rhsOperands[rhsOperands.length-1].startsWith("'") && rhsOperands[rhsOperands.length-1].endsWith("'"))) 
+                                        ? " DELIMITED BY SIZE INTO " : " DELIMITED BY SPACE INTO ";
+                    emitCobol((INDENT)+(rhsOperands[rhsOperands.length-1])+(lastDelimiter)+(targetVar)+(insideblock?"\n":".\n"));
                     // cobolCodePD.append(INDENT).append(rhsOperands[rhsOperands.length-1]).append(" ");
-                    emitCobol((" DELIMITED BY SPACE INTO ")+(targetVar)+(insideblock?"\n":".\n"));
+                    // emitCobol((" DELIMITED BY SPACE INTO ")+(targetVar)+(insideblock?"\n":".\n"));
                     // cobolCodePD.append(" DELIMITED BY SPACE INTO ").append(targetVar).append(insideblock?"\n":".\n");
                 }
             }
@@ -306,6 +320,20 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = expandCompoundAssignments(text);
         text = convertCharExpressions(text);
         System.out.println("Text after char conversion: " + text);
+        System.out.println(text.matches("^\\s*char\\s+[a-zA-Z_]\\w*\\s*=\\s*FUNCTION\\s+CHAR\\s*\\(.*\\)\\s*;?\\s*$"));
+        if (text.matches("^\\s*char\\s+[a-zA-Z_]\\w*\\s*=\\s*FUNCTION\\s+CHAR\\s*\\(.*\\)\\s*;?\\s*$")) {
+            String[] parts = text.split("=", 2); // Split only at the first '='
+            if (parts.length == 2) {
+                String lhsFull = parts[0].trim();
+                String[] lhsTokens = lhsFull.split("\\s+");
+                String lhs = lhsTokens[lhsTokens.length - 1];  // Extract only the variable name
+
+                String rhs = parts[1].replaceAll(";$", "").trim(); // Remove trailing semicolon if any
+
+                emitCobol(INDENT + "MOVE " + rhs + " TO " + lhs + (insideblock ? "\n" : ".\n"));
+                return;
+            }
+        }
 
         
         if(text.matches(".*\\b(boolean)?\\s*\\w+\\s*=\\s*(true|false)\\s*;?")){
@@ -473,7 +501,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 // cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if(text.matches("(int|float|double|long|short|var|char)?\\s*\\w+\\s*=\\s*[^;]*[+\\-*/%][^;]*;?")){
+        else if(text.matches("(int|float|double|long|short|var|char)?\\s*\\w+\\s*=\\s*[^;]*(?:FUNCTION\\s+\\w+\\([^)]*\\)|[+\\-*/%])[^;]*;?")){
             String[] parts=text.split("=", 2);
             if(parts.length==2){
                 String lhs=parts[0].trim();
@@ -548,6 +576,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     public void enterStatement(JavaParser.StatementContext ctx){
         addLeadingComments(ctx);
         String text=tokens.getText(ctx);
+        text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         //array conversion
         text = convertArrayAccessToCobol(text);
@@ -749,6 +778,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             if(displayedContent!=null){
                 // emitCobol(INDENT + "DISPLAY " + displayedContent + (insideblock?"\n":".\n"));
                 String cobolContent=replaceVarsWithCobolNames(displayedContent);
+                if(cobolContent.equals("")){
+                    cobolContent="\"\"";
+                }
                 emitCobol(INDENT+"DISPLAY "+cobolContent+(insideblock?"\n":".\n"));
             }
             return;
@@ -787,7 +819,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 String targetVar = lhsTokens[lhsTokens.length - 1]; // get variable name
 
                 String rhs = parts[1].replace(";", "").trim();
-
+                if(rhs.equals("true")){
+                    rhs="'Y'";
+                }
+                else if(rhs.equals("false")){
+                    rhs="'N'";
+                }
                 // Match string/char literals or simple variables/literals
                 if (rhs.matches("\"[^\"]*\"|'[^']*'|\\w+(\\([^)]*\\))?|[\\w\\d_]+")) {
                     emitCobol((INDENT)
@@ -869,12 +906,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     //     cobolCodePD.append(INDENT).append(rhsOperands[i]).append("\n");
                     // }
                     // else
-                    emitCobol((INDENT)+(rhsOperands[i])+(" DELIMITED BY SPACE \n"));
+                    String delimiter = ((rhsOperands[i].startsWith("\"") && rhsOperands[i].endsWith("\"") || 
+                                                rhsOperands[i].startsWith("'") && rhsOperands[i].endsWith("'"))) 
+                                    ? " DELIMITED BY SIZE \n" : " DELIMITED BY SPACE \n";
+                    emitCobol((INDENT)+(rhsOperands[i])+(delimiter));
                     // cobolCodePD.append(INDENT).append(rhsOperands[i]).append(" DELIMITED BY SPACE \n");
                 }
-                emitCobol((INDENT)+(rhsOperands[rhsOperands.length-1])+(" "));
-                // cobolCodePD.append(INDENT).append(rhsOperands[rhsOperands.length-1]).append(" ");
-                emitCobol((" DELIMITED BY SPACE INTO ")+(targetVar)+(insideblock?"\n":".\n"));
+                String lastDelimiter = ((rhsOperands[rhsOperands.length-1].startsWith("\"") && rhsOperands[rhsOperands.length-1].endsWith("\"") || 
+                                                rhsOperands[rhsOperands.length-1].startsWith("'") && rhsOperands[rhsOperands.length-1].endsWith("'"))) 
+                                    ? " DELIMITED BY SIZE INTO " : " DELIMITED BY SPACE INTO ";
+                emitCobol((INDENT)+(rhsOperands[rhsOperands.length-1])+(lastDelimiter)+(targetVar)+(insideblock?"\n":".\n"));
                 // cobolCodePD.append(" DELIMITED BY SPACE INTO ").append(targetVar).append(insideblock?"\n":".\n");
             }
             return;
@@ -1190,7 +1231,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 // cobolCodePD.append(INDENT).append("MOVE ").append(rhs).append(" TO ").append(lhs).append(insideblock?"\n":".\n");
             }
         }
-        else if(text.matches("\\s*((?:\\w+|\\w+\\s*\\(.*?\\)))\\s*([+\\-*/%]=)\\s*[^;]+;?")){
+        else if(text.matches("\\s*((?:\\w+|\\w+\\s*\\(.*?\\)))\\s*([+\\-*/%]=)\\s*(?:[^;]*(?:FUNCTION\\s+[\\w-]+\\([^)]*\\)|[+\\-*/%])[^;]*|[^;]+);?")){
             // for the arithmetic expressions mapped to compute, this is for a+=arithmetic expression.
             String operator=text.contains("+=") ? "+" :
                             text.contains("-=") ? "-" :
@@ -1837,11 +1878,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // System.out.println("While returning the expCompAssign: "+text);
         return text;
     }
-
-    // //------------------INTRINSIC FUNTIONS--------------------------
-    // public String accomodateIntrinsicFunctions(String text){
-        
-    // }
 
 
     // helper functions for handling the if conditional statements

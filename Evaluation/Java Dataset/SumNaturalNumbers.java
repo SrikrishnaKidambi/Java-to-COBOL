@@ -1,3 +1,4 @@
+//done ✅
 public class SumNaturalNumbers {
     public static void main(String[] args) {
         sumFirst10();

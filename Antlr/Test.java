@@ -1,11 +1,10 @@
-public class Test {
-    private static void calc(int x,int y) {
-        System.out.println("The values of x and y are:"+x+y);
-    }
+import java.util.*;
 
+public class Test {
     public static void main(String[] args) {
-	int a=10;
-	int b=9;
-        calc(a,b);
+        char maxChar = Collections.max(Arrays.asList('A', 'b', 'Z', 'x'));
+        char minChar = Collections.min(Arrays.asList('A', 'b', 'Z', 'x'));
+        System.out.println("Max char: " + maxChar);  // x
+        System.out.println("Min char: " + minChar);  // A
     }
 }
