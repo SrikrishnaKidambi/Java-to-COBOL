@@ -1,8 +1,11 @@
 public class Test {
-    public static void main(String[] args){
-        int i=10;
-    	while(i<=0){
-	        i--;
-        }
-	}
+    private static void calc(int x,int y) {
+        System.out.println("The values of x and y are:"+x+y);
+    }
+
+    public static void main(String[] args) {
+	int a=10;
+	int b=9;
+        calc(a,b);
+    }
 }

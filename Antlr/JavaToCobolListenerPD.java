@@ -4,6 +4,7 @@ import java.net.IDN;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.undo.StateEdit;
 
@@ -42,6 +43,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private final Map<String,Map<String,String>>methodVarNameMap=new HashMap<>();
     private final Map<String,String>globalVarNameMap=new HashMap<>();
     private String currentMethod=null;
+    private Map<String,List<String>>methodParameters=new HashMap<>();
+
 
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
@@ -54,6 +57,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         inMethod=true;
         methodVarNameMap.putIfAbsent(currentMethod, new HashMap<>());
         updateInsideBlock();
+
+        // collect the name of the parameters
+        List<String>parameters=new ArrayList<>();
+        Map<String,String>parameterMap=new HashMap<>();
+        if(ctx.formalParameters()!=null && ctx.formalParameters().formalParameterList()!=null){
+            for(JavaParser.FormalParameterContext fp:ctx.formalParameters().formalParameterList().formalParameter()){
+                String paramName=fp.variableDeclaratorId().getText();
+                parameters.add(paramName);
+                parameterMap.put(paramName, paramName+"_"+methodName);
+            }
+        }
+        methodParameters.put(methodName, parameters);
+        methodVarNameMap.put(methodName, parameterMap);
     }
 
     @Override
@@ -692,7 +708,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // String text=tokens.getText(ctx).trim();
 
         if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$") && !text.contains("=")){
-            String methodName=text.substring(0,text.indexOf('(')).trim().toUpperCase()+"-PARA";
+            String call=text.substring(0,text.indexOf('(')).trim();
+            String methodName=call.toUpperCase()+"-PARA";
+            String argList=text.substring(text.indexOf('(')+1,text.lastIndexOf(')'));
+
+            List<String> argValues = Arrays.stream(argList.split(","))
+            .map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+
+            List<String>paramNames=methodParameters.getOrDefault(call, new ArrayList<>());
+            int count=Math.min(paramNames.size(), argValues.size());
+            for(int i=0;i<count;i++){
+                emitCobol(INDENT+"MOVE "+argValues.get(i)+" TO "+paramNames.get(i)+"\n");
+            }
             emitCobol(INDENT+"PERFORM "+methodName+"\n");
             return;
         }
@@ -1435,17 +1462,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     return;
         // }
 
-        if (ctx.IF() != null) {
-            // Only close the IF we opened for this node
-            if (!blockStack.isEmpty() && blockStack.peek().startsWith("IF")) {
-                emitCobol(INDENT + "END-IF\n");
-                blockStack.pop();
-                currentIfLevel--;
-                updateInsideBlock();
-            }
-            // Do NOT emit ELSE or try to pop/close ELSE here!
-            return;
-        }
+
+        
+        // i// ------------ Currently commenting but this is a part of working code for future reference ------------f (ctx.IF() != null) {
+        //     // Only close the IF we opened for this node
+        //     if (!blockStack.isEmpty() && blockStack.peek().startsWith("IF")) {
+        //         emitCobol(INDENT + "END-IF\n");
+        //         blockStack.pop();
+        //         currentIfLevel--;
+        //         updateInsideBlock();
+        //     }
+        //     // Do NOT emit ELSE or try to pop/close ELSE here!
+        //     return;
+        // }
 
         // Handle SWITCH block termination
         if (ctx.SWITCH() != null) {
@@ -1459,18 +1488,48 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
 
         // handling for statements
-
-        if (!blockStack.isEmpty() && blockStack.peek().equals("FOR")) {
-            if (text.endsWith("}")) {
-                // cobolCodePD.append(INDENT).append("END-PERFORM.\n");
-                emitCobol(INDENT+"END-PERFORM.\n");
-                blockStack.pop();
-                updateInsideBlock();
-                insideblock = !blockStack.isEmpty();
-                forLoopInitVars.clear();
-            }
-        }
+// ------------ Currently commenting but this is a part of working code for future reference ------------
+        // if (!blockStack.isEmpty() && blockStack.peek().equals("FOR")) {
+        //     if (text.endsWith("}")) {
+        //         // cobolCodePD.append(INDENT).append("END-PERFORM.\n");
+        //         emitCobol(INDENT+"END-PERFORM.\n");
+        //         blockStack.pop();
+        //         updateInsideBlock();
+        //         insideblock = !blockStack.isEmpty();
+        //         forLoopInitVars.clear();
+        //     }
+        // }
         // forLoopInitVars.clear();    // clear the loop initialised variables to ensure proper reuse of the set declared.
+
+        // int closingBraces = 0;
+        // for (char c : text.toCharArray()) {
+        //     if (c == '}') {
+        //         closingBraces++;
+        //         // braceDepth--;
+        //     }
+        // }
+        // while(closingBraces>0 && !blockStack.isEmpty()){
+        //     String blockType=blockStack.pop();
+        //     if(blockType.startsWith("IF")){
+        //         emitCobol(INDENT+"END-IF\n");
+        //         currentIfLevel--;
+        //     }else if(blockType.startsWith("FOR")){
+        //         emitCobol(INDENT+"END-PERFORM\n");
+        //         forLoopInitVars.clear();
+        //     }
+        //     updateInsideBlock();
+        //     closingBraces--;    
+        // }
+            if (ctx.IF() != null && !blockStack.isEmpty() && blockStack.peek().contains("IF")) {
+                emitCobol(INDENT + "END-IF.\n");
+                blockStack.pop();
+                return;
+            }
+            if (ctx.FOR() != null && !blockStack.isEmpty() && blockStack.peek().equals("FOR")) {
+                emitCobol(INDENT + "END-PERFORM.\n");
+                blockStack.pop();
+                return;
+            }
     }
 
     // @Override

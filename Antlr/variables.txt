@@ -1,8 +1,14 @@
+Scope:Method:calc->Class:Test->GLOBAL
+  Type:int
+    x_calc
+    y_calc
+
 Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args [size=[]]
 
 Scope:Block->Method:main->Class:Test->GLOBAL
   Type:int
-    i
+    a
+    b
 
