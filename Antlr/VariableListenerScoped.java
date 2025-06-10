@@ -226,9 +226,11 @@ public class VariableListenerScoped extends JavaParserBaseListener{
         }
         
         String annotatedName=name;
-        if(currentMethod!=null && !"main".equals(currentMethod)){
-            annotatedName=name+"_"+currentMethod;
-        }
+
+        // --------- uncomment this when required. This is working fo just data division part properly
+        // if(currentMethod!=null && !"main".equals(currentMethod)){
+        //     annotatedName=name+"_"+currentMethod;
+        // }
 
         // Create final variable for lambda
         final String finalArraySize = arraySize;
