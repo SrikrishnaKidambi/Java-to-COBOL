@@ -5,47 +5,88 @@ public class IntrinsicFunctionConverter {
 
     
     public String accomodateIntrinsicFunctions(String text) {
-        // Regex for matching function calls like Math.pow(a, b) or Character.toUpperCase(c)
-        Pattern pattern = Pattern.compile("(\\w+\\.\\w+)\\(([^()]*)\\)");
-        Matcher matcher = pattern.matcher(text);
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (i < text.length()) {
+            int funcStart = findFunctionStart(text, i);
+            if (funcStart == -1) {
+                result.append(text.substring(i));
+                break;
+            }
 
-        while (matcher.find()) {
-            String fullFuncCall = matcher.group(0);       // e.g., Math.pow(a, 2)
-            String replacement = findIntrinsicFunction(fullFuncCall);
-            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+            // Append before function
+            result.append(text.substring(i, funcStart));
+
+            int parenStart = text.indexOf('(', funcStart);
+            int parenEnd = findMatchingParen(text, parenStart);
+            if (parenStart == -1 || parenEnd == -1) break;
+
+            String fullFuncCall = text.substring(funcStart, parenEnd + 1);
+            String converted = findIntrinsicFunction(fullFuncCall);
+            result.append(converted);
+
+            i = parenEnd + 1;
         }
-        matcher.appendTail(result);
         return result.toString();
     }
 
+    // Helper to find start of function like "Math.min"
+    private int findFunctionStart(String text, int fromIndex) {
+        Pattern functionPattern = Pattern.compile("\\b\\w+\\.\\w+\\b");
+        Matcher matcher = functionPattern.matcher(text);
+        if (matcher.find(fromIndex)) {
+            int nextChar = matcher.end();
+            if (nextChar < text.length() && text.charAt(nextChar) == '(') {
+                return matcher.start();
+            } else {
+                return findFunctionStart(text, nextChar);
+            }
+        }
+        return -1;
+    }
+
+    // Find the position of the matching closing parenthesis
+    private int findMatchingParen(String text, int openIndex) {
+        int count = 0;
+        for (int i = openIndex; i < text.length(); i++) {
+            if (text.charAt(i) == '(') count++;
+            else if (text.charAt(i) == ')') count--;
+            if (count == 0) return i;
+        }
+        return -1;
+    }
+
+
+
 
     public String findIntrinsicFunction(String text) {
-        // Examples:
-        // Math.pow(a, 2)
-        // Character.toUpperCase(ch)
-        // Integer.parseInt("123")
-        // this will handle above type of intrinsic functions
-
-        if(text.contains("Math.sin")){
+        if (text.startsWith("Math.sin")) {
             int start = text.indexOf('(');
-            int end = text.indexOf(')');
-            if(start!=-1 && end!=-1 && end>start){
-                String arg = text.substring( start+1, end);
-                return "FUNCTION SIN (" + arg + ")";
+            int end = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String arg = accomodateIntrinsicFunctions(text.substring(start + 1, end));
+                return "FUNCTION SIN(" + arg + ")";
             }
         }
 
-        
+        if (text.startsWith("Math.min")) {
+            int start = text.indexOf('(');
+            int end = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String args = accomodateIntrinsicFunctions(text.substring(start + 1, end));
+                args = args.replace(",", " ");
+                return "FUNCTION MIN(" + args + ")";
+            }
+        }
 
-        // Default: return as is if no match
         return text;
     }
+
 
     public static void main(String[] args) {
         IntrinsicFunctionConverter converter = new IntrinsicFunctionConverter();
 
-        String javaLine = "int a = Math.pow(x, 2) + Math.sin(30);";
+        String javaLine = "int a = Math.min(3, 2) + Math.sin(Math.min(2,Math.sin(60))) + Math.min(3, Math.min(4,5));";
         String cobolLine = converter.accomodateIntrinsicFunctions(javaLine);
 
         System.out.println("Original: " + javaLine);

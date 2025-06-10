@@ -1,0 +1,7 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. AlphabetPosition.
+
+       PROCEDURE DIVISION.
+
+       DISPLAY FUNCTION MIN(2 FUNCTION MIN(3 5)).
+       STOP RUN.
