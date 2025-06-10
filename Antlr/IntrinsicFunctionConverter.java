@@ -294,6 +294,7 @@ public class IntrinsicFunctionConverter {
         
         return result.toString();
     }
+    //main is just for testing
     public static void main(String[] args) {
         IntrinsicFunctionConverter converter = new IntrinsicFunctionConverter();
         //Character.codePointAt(\"A\",0)+Character.codePointAt(\"A\",i)+ Character.codePointAt(myString,1)+Character.codePointAt(myString,i)++ Character.codePointAt(\"A\", 0) + Character.codePointAt(myString, 1)
