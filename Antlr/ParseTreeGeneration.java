@@ -18,7 +18,7 @@ public class ParseTreeGeneration {
     private static String idDdDivisions;
     private static String pdDivision;
     public static void main(String[] args) throws Exception {
-        String code = Files.readString(Paths.get("Test.java"));  // input Java code
+        String code = Files.readString(Paths.get("TestScoped.java"));  // input Java code
         String className = args[0];
         CharStream input = CharStreams.fromString(code);
         JavaLexer lexer = new JavaLexer(input);

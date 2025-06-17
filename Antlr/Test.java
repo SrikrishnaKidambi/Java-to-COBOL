@@ -1,13 +1,12 @@
+import java.util.Scanner;
+
 public class Test {
-
-    private static void calc(int x_calc, int y_calc) {
-        int z_calc = x_calc + y_calc;
-    }
-
-    public static void main(String[] args_main) {
-        int x_main = 1;
-        int y_main = 2;
-        calc(x_main, y_main);
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a lowercase letter: ");
+        char ch = sc.next().charAt(0);
+        
+        int position = ch - 'a' + 1;
+        System.out.println("Position in alphabet: " + position);
     }
 }
-
