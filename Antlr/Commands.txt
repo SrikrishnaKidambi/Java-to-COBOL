@@ -1,4 +1,4 @@
 java -Xmx500M -cp "antlr-4.13.2-complete.jar" org.antlr.v4.Tool JavaLexer.g4 JavaParser.g4
-javac -cp ".;antlr-4.13.2-complete.jar" *.java
+javac -cp ".;antlr-4.13.2-complete.jar;javaparser-core-3.25.8.jar" *.java
 javac -cp ".;antlr-4.13.2-complete.jar" ParseTreeGeneration.java
 java -cp ".;antlr-4.13.2-complete.jar" ParseTreeGeneration
