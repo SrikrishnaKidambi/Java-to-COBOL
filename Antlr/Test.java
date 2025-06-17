@@ -1,10 +1,13 @@
-import java.util.*;
-
 public class Test {
-    public static void main(String[] args) {
-        char maxChar = Collections.max(Arrays.asList('A', 'b', 'Z', 'x'));
-        char minChar = Collections.min(Arrays.asList('A', 'b', 'Z', 'x'));
-        System.out.println("Max char: " + maxChar);  // x
-        System.out.println("Min char: " + minChar);  // A
+
+    private static void calc(int x_calc, int y_calc) {
+        int z_calc = x_calc + y_calc;
+    }
+
+    public static void main(String[] args_main) {
+        int x_main = 1;
+        int y_main = 2;
+        calc(x_main, y_main);
     }
 }
+

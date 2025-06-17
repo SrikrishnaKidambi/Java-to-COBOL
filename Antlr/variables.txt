@@ -1,9 +1,18 @@
+Scope:Method:calc->Class:Test->GLOBAL
+  Type:int
+    x_calc
+    y_calc
+
+Scope:Block->Method:calc->Class:Test->GLOBAL
+  Type:int
+    z_calc
+
 Scope:Method:main->Class:Test->GLOBAL
   Type:String
-    args [size=[]]
+    args_main [size=[]]
 
 Scope:Block->Method:main->Class:Test->GLOBAL
-  Type:char
-    maxChar
-    minChar
+  Type:int
+    x_main
+    y_main
 

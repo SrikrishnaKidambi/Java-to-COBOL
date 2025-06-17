@@ -226,6 +226,8 @@ public class VariableListenerScoped extends JavaParserBaseListener{
         }
         
         String annotatedName=name;
+
+        // --------- uncomment this when required. This is working fo just data division part properly
         // if(currentMethod!=null && !"main".equals(currentMethod)){
         //     annotatedName=name+"_"+currentMethod;
         // }
