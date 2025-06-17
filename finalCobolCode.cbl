@@ -1,35 +1,47 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. TestScoped.
+       PROGRAM-ID. Test.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Scope:METHOD_CALC_CLASS_TEST_GLOBAL
-       01  x_calc          PIC S9(5).
-       01  y_calc          PIC S9(5).
-      * Variables for Scope:BLOCK_METHOD_CALC_CLASS_TEST_GLOBAL
-       01  z_calc          PIC S9(5).
       * Variables for Scope:METHOD_MAIN_CLASS_TEST_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
-      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TEST_GLOBAL
-       01  x_main          PIC S9(5).
-       01  y_main          PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_TEST_GLOBAL
+       01  i_main          PIC S9(5).
+      * Variables for Scope:BLOCK_FOR_BLOCK_METHOD_MAIN_CLASS_TEST_GLOBAL
+       01  j_main          PIC S9(5).
 
 
        PROCEDURE DIVISION.
 
 
-       calc-PARA.
-       ADD x_calc TO y_calc GIVING z_calc
-       EXIT.
-
        MAIN-PARA.
-       MOVE 1 TO x_main
-       MOVE 2 TO y_main
-       MOVE x_main TO x_calc
-       MOVE y_main TO y_calc
-       PERFORM CALC-PARA
+       PERFORM VARYING i_main FROM 0 BY 1 UNTIL NOT (i_main < 9)
+       MOVE i_main TO j_main
+       PERFORM UNTIL NOT (j_main > 0)
+       IF i_main = 0
+       DISPLAY "Hello"
+       IF j_main = 0
+       DISPLAY "WOW"
+       ELSE
+       IF i_main = 1
+       DISPLAY "Nice"
+       IF i_main % 2 = 0
+       DISPLAY "I am batman"
+       END-IF.
+       END-IF.
+       END-IF.
+       END-IF.
+       EVALUATE j_main
+       WHEN 1
+       DISPLAY "this is 1"
+       WHEN 2
+       DISPLAY "This is 2"
+       WHEN OTHER
+       END-EVALUATE
+       END-PERFORM
+       END-PERFORM.
        EXIT.
        STOP RUN.
 

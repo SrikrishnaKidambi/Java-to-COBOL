@@ -7,13 +7,18 @@ import com.github.javaparser.ast.visitor.*;
 import java.io.*;
 import java.util.*;
 
+// import org.w3c.dom.Node;
+
 public class TestJavaVariableScoping {
     public static void main(String[] args) throws Exception {
         File inputFile = new File(args[0]);
         CompilationUnit cu = StaticJavaParser.parse(inputFile);
         cu.accept(new RenameVariableVisitor(), null);
 
-        System.out.println(cu.toString());
+        // Write to file explicitly
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream("TestScoped.java"), java.nio.charset.StandardCharsets.UTF_8)) {
+            writer.write(cu.toString());
+        }
     }
 
     static class RenameVariableVisitor extends ModifierVisitor<Void> {

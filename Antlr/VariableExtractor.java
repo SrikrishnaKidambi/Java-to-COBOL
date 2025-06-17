@@ -7,7 +7,7 @@ import java.util.*;
 
 public class VariableExtractor {
     public static void variableExtractor(String className) throws Exception{
-        CharStream codeStream = CharStreams.fromFileName("Test.java");
+        CharStream codeStream = CharStreams.fromFileName("TestScoped.java");
         String codeTxt = codeStream.toString();
         
         JavaLexer lexer = new JavaLexer(codeStream);    // initialising lexer
