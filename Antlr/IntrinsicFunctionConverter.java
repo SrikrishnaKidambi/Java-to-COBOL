@@ -5,6 +5,30 @@ public class IntrinsicFunctionConverter {
 
     
     public String accomodateIntrinsicFunctions(String text) {
+
+        // identifying the pattern for casting to int
+
+        Pattern integerCastPattern=Pattern.compile("\\(int\\)\\s*([\\w\\.\\(\\)]+)");
+        Matcher integerCastMatcher=integerCastPattern.matcher(text);
+        StringBuffer sb=new StringBuffer();
+        while(integerCastMatcher.find()){
+            String arg=integerCastMatcher.group(1);
+            integerCastMatcher.appendReplacement(sb, "FUNCTION INTEGER("+arg+")");
+        }
+        integerCastMatcher.appendTail(sb);
+        text=sb.toString();
+
+        Pattern firstOnePattern = Pattern.compile("Integer\\.numberOfLeadingZeros\\s*\\(([^)]*)\\)\\s*\\+\\s*1");
+        Matcher firstOneMatcher=firstOnePattern.matcher(text);
+        StringBuffer firstOneBuffer=new StringBuffer();
+        while(firstOneMatcher.find()){
+            String expr=firstOneMatcher.group(1).trim();
+            firstOneMatcher.appendReplacement(firstOneBuffer, "FUNCTION FIRSTONE("+expr+")");
+        }
+
+        firstOneMatcher.appendTail(firstOneBuffer);
+        text=firstOneBuffer.toString();
+
         StringBuilder result = new StringBuilder();
         int i = 0;
         while (i < text.length()) {
@@ -98,6 +122,15 @@ public class IntrinsicFunctionConverter {
                 return "FUNCTION MIN(" + args + ")";
             }
         }
+        else if (text.startsWith("Math.max")) {
+            int start = text.indexOf('(');
+            int end = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String args = accomodateIntrinsicFunctions(text.substring(start + 1, end));
+                args = args.replace(",", " ");
+                return "FUNCTION MAX(" + args + ")";
+            }
+        }
         else if(text.startsWith("Math.floorMod")){
             int start = text.indexOf('(');
             int end = text.lastIndexOf(')');
@@ -188,10 +221,84 @@ public class IntrinsicFunctionConverter {
                 return "FUNCTION RANDOM";
             }
         }
+        else if(text.startsWith("Math.abs") || text.startsWith("Integer.abs") || text.startsWith("Double.abs") || text.startsWith("Float.abs") || text.startsWith("Long.abs") || text.startsWith("Short.abs")){
+            int start=text.indexOf('(');
+            int end=text.lastIndexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION ABS("+arg+")";
+            }
+        }else if(text.startsWith("Math.acos")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION ACOS("+arg+")";
+            }
+        }else if(text.startsWith("Math.asin")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION ASIN("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.atan")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION ATAN("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.exp")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION EXP("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.floor")){
+            int start=text.indexOf('(');
+            int end=text.lastIndexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1,end));
+                return "FUNCTION INTEGER("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.acos")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION ACOS("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.log")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION LOG("+arg+")";
+            }
+        }
+        else if(text.startsWith("Math.log10")){
+            int start=text.indexOf('(');
+            int end=text.indexOf(')');
+            if(start!=-1 && end!=-1){
+                String arg=accomodateIntrinsicFunctions(text.substring(start+1, end));
+                return "FUNCTION LOG10("+arg+")";
+            }
+        }
         if (text.endsWith(".toUpperCase()")) {
             String stringArg = text.substring(0, text.length() - ".toUpperCase()".length());
             stringArg = accomodateIntrinsicFunctions(stringArg);
             return "FUNCTION UPPER-CASE(" + stringArg + ")";
+        }else if (text.endsWith(".toLowerCase()")) {
+            String stringArg = text.substring(0, text.length() - ".toLowerCase()".length());
+            stringArg = accomodateIntrinsicFunctions(stringArg);
+            return "FUNCTION LOWER-CASE(" + stringArg + ")";
         }
         // REVERSE function mapping (handles chaining)
         else if (text.endsWith(".reverse()")) {
@@ -299,7 +406,7 @@ public class IntrinsicFunctionConverter {
         IntrinsicFunctionConverter converter = new IntrinsicFunctionConverter();
         //Character.codePointAt(\"A\",0)+Character.codePointAt(\"A\",i)+ Character.codePointAt(myString,1)+Character.codePointAt(myString,i)++ Character.codePointAt(\"A\", 0) + Character.codePointAt(myString, 1)
         // String javaLine = "int a = Arrays.stream(numbers).sum() + \"Hello\".toUpperCase().reverse()+ name.reverse().toUpperCase()+ \"Hello\".reverse() +name.toUpperCase()+Integer.signum(-4) + Math.sin(Math.min(2,Math.random())) + Math.min(3, Double.valueOf(str)) + Math.sqrt(val);";
-        String javaLine = "int minVal = Math.min(a, b);";
+        String javaLine = "int x=Integer.numberOfLeadingZeros(mask)+1+Math.acos(1.45)+(int)x";
         String cobolLine = converter.accomodateIntrinsicFunctions(javaLine);
 
         System.out.println("Original: " + javaLine);
