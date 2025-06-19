@@ -45,8 +45,8 @@ We have currently implemented rule based mapping for arithmetic expressions (inc
     ``` git clone https://github.com/SrikrishnaKidambi/Java-to-COBOL.git ```
 - Navigate to the tool repository using the command : ``` cd Java-to-COBOL  ```
 - Navigate to ```cd Antlr``` and then compile the java code to set up the tool using the command 
-    - For Windows : ``` javac -cp ".;antlr-4.13.2-complete.jar" *.java ```
-    - For Linux/Mac : ``` javac -cp ".:antlr-4.13.2-complete.jar" *.java ```
+    - For Windows : ``` javac -cp ".;antlr-4.13.2-complete.jar;javaparser-core-3.25.8.jar" *.java ```
+    - For Linux/Mac : ``` javac -cp ".:antlr-4.13.2-complete.jar:javaparser-core-3.25.8.jar" *.java ```
 - Navigate back to the root directory of the tool repository : ``` cd .. ```
 - Compile the GUI files for Java : ``` javac ToolGUI.java```
 - Use the command ``` java ToolGUI ``` to run the tool.
