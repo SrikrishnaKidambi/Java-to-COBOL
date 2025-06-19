@@ -2,3 +2,25 @@ Scope:Method:main->Class:Test->GLOBAL
   Type:String
     args_main [size=[]]
 
+Scope:Block->Method:main->Class:Test->GLOBAL
+  Type:Scanner
+    sc_main
+  Type:int
+    n_main
+
+Scope:For->Block->Method:main->Class:Test->GLOBAL
+  Type:int
+    i_main
+
+Scope:Block->For->Block->Method:main->Class:Test->GLOBAL
+  Type:boolean
+    isPrime_main
+
+Scope:For->Block->For->Block->Method:main->Class:Test->GLOBAL
+  Type:int
+    j_main
+
+Scope:Block->For->Block->For->Block->Method:main->Class:Test->GLOBAL
+  Type:int
+    rem_main
+
