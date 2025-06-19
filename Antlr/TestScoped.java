@@ -1,24 +1,23 @@
-//done ✅
-import java.util.Scanner;
-
 public class Test {
 
-    public static void main(String[] args_main) {
-        Scanner sc_main = new Scanner(System.in);
-        System.out.print("Find primes up to: ");
-        int n_main = sc_main.nextInt();
-        for (int i_main = 2; i_main <= n_main; i_main++) {
-            boolean isPrime_main = true;
-            for (int j_main = 2; j_main <= i_main / 2; j_main++) {
-                int rem_main = i_main % j_main;
-                if (rem_main == 0) {
-                    isPrime_main = false;
-                    break;
-                }
-            }
-            if (isPrime_main) {
-                System.out.println(i_main + " is prime");
-            }
+    public static void displayMinimumCategory() {
+        int a_displayMinimumCategory = 15;
+        int b_displayMinimumCategory = 20;
+        int min_displayMinimumCategory = Math.min_displayMinimumCategory(a_displayMinimumCategory, b_displayMinimumCategory);
+        switch(min_displayMinimumCategory) {
+            case 15:
+                System.out.println("Minimum is 15");
+                break;
+            case 20:
+                System.out.println("Minimum is 20");
+                break;
+            default:
+                System.out.println("Unexpected minimum");
         }
+        return;
+    }
+
+    public static void main(String[] args_main) {
+        displayMinimumCategory();
     }
 }

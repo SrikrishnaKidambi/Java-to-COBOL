@@ -1,4 +1,5 @@
-public class Test {
+//done ✅
+public class TestCase20 {
     public static void displayMinimumCategory() {
         int a = 15;
         int b = 20;

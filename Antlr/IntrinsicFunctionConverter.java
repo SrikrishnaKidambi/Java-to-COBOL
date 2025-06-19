@@ -301,7 +301,7 @@ public class IntrinsicFunctionConverter {
             return "FUNCTION LOWER-CASE(" + stringArg + ")";
         }
         // REVERSE function mapping (handles chaining)
-        else if (text.endsWith(".reverse()")) {
+        else if (text.endsWith(".reverse().toString()")) {
             String stringArg = text.substring(0, text.length() - ".reverse()".length());
             stringArg = accomodateIntrinsicFunctions(stringArg);
             return "FUNCTION REVERSE(" + stringArg + ")";
