@@ -19,7 +19,8 @@
        displayMinimumCategory-PARA.
        MOVE 15 TO a_displayMinimumCategory
        MOVE 20 TO b_displayMinimumCategory
-       COMPUTE min_displayMinimumCategory = FUNCTION MIN(a_displayMinimumCategory  b_displayMinimumCategory)
+       COMPUTE min_displayMinimumCategory = 
+       FUNCTION MIN(a_displayMinimumCategory  b_displayMinimumCategory)
        EVALUATE min_displayMinimumCategory
        WHEN 15
        DISPLAY "Minimum is 15"

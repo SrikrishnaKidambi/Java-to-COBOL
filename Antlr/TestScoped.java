@@ -1,4 +1,4 @@
-public class Test {
+public class TestScoped {
 
     private static void add(int x_add, int y_add) {
         int z_add = x_add + y_add;

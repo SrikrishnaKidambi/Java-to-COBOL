@@ -1,0 +1,14 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. TESTCASE13.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 NAME            PIC X(10) VALUE "COBOL".
+       01 LOWER-NAME      PIC X(10).
+
+       PROCEDURE DIVISION.
+           MOVE FUNCTION LOWER-CASE(NAME) TO LOWER-NAME
+
+           DISPLAY "Lowercase version: " LOWER-NAME
+
+           STOP RUN.
