@@ -1,12 +1,10 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. .
+       PROGRAM-ID. add.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Method:
-           05  a_chainCondition PIC S9(5).
-           05  b_chainCondition PIC S9(5).
-           05  c_chainCondition PIC S9(5).
+      * Variables for Method:add
+           05  z_add        PIC S9(5).
        01  ARGS_MAIN_[SIZE=[]]-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES

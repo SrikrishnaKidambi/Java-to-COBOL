@@ -1,10 +1,10 @@
-Scope:Block->Method:displayMinimumCategory->Class:Test->GLOBAL
+Scope:Method:chainCondition->Class:TestScoped->GLOBAL
   Type:int
-    a_displayMinimumCategory
-    b_displayMinimumCategory
-    min_displayMinimumCategory
+    a_chainCondition
+    b_chainCondition
+    c_chainCondition
 
-Scope:Method:main->Class:Test->GLOBAL
+Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
 

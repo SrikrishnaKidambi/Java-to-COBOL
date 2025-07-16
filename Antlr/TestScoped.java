@@ -1,13 +1,18 @@
 public class TestScoped {
 
-    private static void add(int x_add, int y_add) {
-        int z_add = x_add + y_add;
-        System.out.println("The addition is :" + z_add);
+    public static void chainCondition(int a_chainCondition, int b_chainCondition, int c_chainCondition) {
+        if (a_chainCondition > b_chainCondition)
+            if (a_chainCondition > c_chainCondition)
+                System.out.println("a is largest");
+            else
+                System.out.println("c is largest");
+        else if (b_chainCondition > c_chainCondition)
+            System.out.println("b is largest");
+        else
+            System.out.println("c is largest");
     }
 
     public static void main(String[] args_main) {
-        int x_main = 0;
-        int u_main = 1;
-        add(x_main, u_main);
+        chainCondition(3, 4, 5);
     }
 }

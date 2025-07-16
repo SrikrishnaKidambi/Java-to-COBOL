@@ -266,8 +266,10 @@ public class ToolGUI {
                 String shellFlag = (choice == 0) ? "/c" : "-c";
                 String command = "cd Antlr && "
                         + "java -cp \"."
+                        + separator + "antlr-4.13.2-complete.jar"
                         + separator + "javaparser-core-3.25.8.jar\" TestJavaVariableScoping Test.java"
                         + " && java -cp \"."
+                        + separator + "javaparser-core-3.25.8.jar"
                         + separator + "antlr-4.13.2-complete.jar\" ParseTreeGeneration " + classname[0];
 
                 ProcessBuilder builder = new ProcessBuilder(shell, shellFlag, command);

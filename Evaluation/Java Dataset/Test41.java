@@ -1,4 +1,4 @@
-public class Test {
+public class Test41 {
     public static void chainCondition(int a, int b, int c) {
         if (a > b)
             if (a > c)

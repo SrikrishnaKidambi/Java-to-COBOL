@@ -1,12 +1,11 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. .
+       PROGRAM-ID. sumArray.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Method:
-           05  a_chainCondition PIC S9(5).
-           05  b_chainCondition PIC S9(5).
-           05  c_chainCondition PIC S9(5).
+      * Variables for Method:sumArray
+           05  sum_sumArray PIC S9(5).
+           05  i_sumArray   PIC S9(5).
        01  ARGS_MAIN_[SIZE=[]]-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES
