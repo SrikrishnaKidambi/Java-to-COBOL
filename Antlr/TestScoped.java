@@ -1,13 +1,13 @@
-public class TestScoped {
+// done ✅
+import java.util.Scanner;
 
-    private static void add(int x_add, int y_add) {
-        int z_add = x_add + y_add;
-        System.out.println("The addition is :" + z_add);
-    }
+public class Test {
 
     public static void main(String[] args_main) {
-        int x_main = 0;
-        int u_main = 1;
-        add(x_main, u_main);
+        Scanner sc_main = new Scanner(System.in);
+        System.out.print("Enter a lowercase letter: ");
+        char ch_main = sc_main.next().charAt(0);
+        int position_main = ch_main - 'a' + 1;
+        System.out.println("Position in alphabet: " + position_main);
     }
 }
