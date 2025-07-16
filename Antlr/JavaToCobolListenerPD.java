@@ -45,7 +45,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private final Map<String,String>globalVarNameMap=new HashMap<>();
     private String currentMethod=null;
     private Map<String,List<String>>methodParameters=new HashMap<>();
-    LinkedHashMap<String,StringBuilder>methodCodeMap=new LinkedHashMap<>(null);
+    LinkedHashMap<String,StringBuilder>methodCodeMap=new LinkedHashMap<>();
 
 
 
@@ -134,6 +134,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
     }
     public String getCobolCodePD(){
+        cobolCodePD.setLength(0); // Clear previous content!
         if(methodCodeMap.containsKey("main")){
             cobolCodePD.append(methodCodeMap.get("main").toString());
         }
@@ -141,6 +142,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         for(Map.Entry<String,StringBuilder>entry:methodCodeMap.entrySet()){
             if(!entry.getKey().equals("main")){
                 cobolCodePD.append(entry.getValue().toString());
+                cobolCodePD.append(INDENT).append("EXIT.").append("\n");
             }
         }
         cobolCodePD.append(INDENT).append("STOP RUN.\n");

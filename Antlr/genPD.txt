@@ -1,0 +1,14 @@
+
+       MAIN-PARA.
+       MOVE 9 TO a_nestedLoop
+       MOVE 8 TO b_nestedLoop
+       PERFORM NESTEDLOOP-PARA
+
+       nestedLoop-PARA.
+       PERFORM VARYING i_nestedLoop FROM 0 BY 1 UNTIL NOT (i_nestedLoop < a_nestedLoop)
+       PERFORM VARYING j_nestedLoop FROM 0 BY 1 UNTIL NOT (j_nestedLoop < b_nestedLoop)
+       DISPLAY i_nestedLoop   ","   j_nestedLoop
+       END-PERFORM.
+       END-PERFORM.
+       EXIT.
+       STOP RUN.

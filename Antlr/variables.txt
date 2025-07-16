@@ -6,7 +6,15 @@ Scope:Block->If->Block->Method:displayAcos->Class:Test->GLOBAL
   Type:double
     val_displayAcos
 
-Scope:Method:main->Class:Test->GLOBAL
+Scope:For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
+  Type:int
+    i_nestedLoop
+
+Scope:For->Block->For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
+  Type:int
+    j_nestedLoop
+
+Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
 

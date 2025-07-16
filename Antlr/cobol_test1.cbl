@@ -1,13 +1,16 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. TestCase19.
+       PROGRAM-ID. Test39.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Scope:BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
-       01  x_displayAcos   PIC S9(5)V9(2).
-      * Variables for Scope:BLOCK_IF_BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
-       01  val_displayAcos PIC S9(5)V9(2).
-      * Variables for Scope:METHOD_MAIN_CLASS_TEST_GLOBAL
+      * Variables for Scope:METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  a_nestedLoop    PIC S9(5).
+       01  b_nestedLoop    PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  i_nestedLoop    PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  j_nestedLoop    PIC S9(5).
+      * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.

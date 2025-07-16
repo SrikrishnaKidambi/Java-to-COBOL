@@ -18,6 +18,7 @@ public class ParseTreeGeneration {
     private static String idDdDivisions;
     private static String pdDivision;
     public static void main(String[] args) throws Exception {
+        System.out.println("Executing ParseTree Generation class");
         String code = Files.readString(Paths.get("TestScoped.java"));  // input Java code
         String className = args[0];
         CharStream input = CharStreams.fromString(code);
@@ -33,8 +34,11 @@ public class ParseTreeGeneration {
         ParseTreeWalker walker = new ParseTreeWalker();
         JavaToCobolListenerPD pdListener = new JavaToCobolListenerPD(tokens);
         walker.walk(pdListener, tree);
-        // System.out.println("Generated COBOL:\n" + pdListener.getCobolCodePD());
+        System.out.println("Generated COBOL:\n" + pdListener.getCobolCodePD());
         pdDivision = pdListener.getCobolCodePD();
+        Path pdOutputPath = Paths.get("genPD.txt");
+        Files.writeString(pdOutputPath, pdDivision, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        System.out.println("Procedure division written to genPD.txt");
         VariableExtractor idDdListener = new VariableExtractor();
         VariableExtractor.variableExtractor(className);
         idDdDivisions = idDdListener.getIdentificationDataDivisions();
