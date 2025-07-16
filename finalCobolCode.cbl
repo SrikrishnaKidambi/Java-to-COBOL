@@ -1,13 +1,13 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. TestCase20.
+       PROGRAM-ID. TestCase19.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Scope:BLOCK_METHOD_DISPLAYMINIMUMCATEGORY_CLASS_TEST_GLOBAL
-       01  a_displayMinimumCategory PIC S9(5).
-       01  b_displayMinimumCategory PIC S9(5).
-       01  min_displayMinimumCategory PIC S9(5).
+      * Variables for Scope:BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
+       01  x_displayAcos   PIC S9(5)V9(2).
+      * Variables for Scope:BLOCK_IF_BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
+       01  val_displayAcos PIC S9(5)V9(2).
       * Variables for Scope:METHOD_MAIN_CLASS_TEST_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
@@ -16,23 +16,18 @@
        PROCEDURE DIVISION.
 
 
-       displayMinimumCategory-PARA.
-       MOVE 15 TO a_displayMinimumCategory
-       MOVE 20 TO b_displayMinimumCategory
-       COMPUTE min_displayMinimumCategory = FUNCTION MIN(a_displayMinimumCategory  b_displayMinimumCategory)
-       EVALUATE min_displayMinimumCategory
-       WHEN 15
-       DISPLAY "Minimum is 15"
-       WHEN 20
-       DISPLAY "Minimum is 20"
-       WHEN OTHER
-       DISPLAY "Unexpected minimum"
-       END-EVALUATE
+       displayAcos-PARA.
+       IF x_displayAcos >= -1 AND x_displayAcos <= 1
+       COMPUTE val_displayAcos = FUNCTION ACOS(x_displayAcos)
+       DISPLAY "acos(" + x_displayAcos + ") = "   val_displayAcos
+       ELSE
+       DISPLAY "Input out of range for acos"
+       END-IF.
        GOBACK
        EXIT.
 
        MAIN-PARA.
-       PERFORM DISPLAYMINIMUMCATEGORY-PARA
+       PERFORM DISPLAYACOS-PARA
        EXIT.
        STOP RUN.
 

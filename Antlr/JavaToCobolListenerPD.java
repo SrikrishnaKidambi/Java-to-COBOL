@@ -757,7 +757,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         for (char c : text.toCharArray()) {
             if (c == '{') braceDepth++;
         }
-        addLeadingComments(ctx);
+        
         
         // Check for else block - handle various else patterns
         // if (text.contains("else") && !text.contains("else if")) {

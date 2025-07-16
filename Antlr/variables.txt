@@ -1,8 +1,10 @@
-Scope:Block->Method:displayMinimumCategory->Class:Test->GLOBAL
-  Type:int
-    a_displayMinimumCategory
-    b_displayMinimumCategory
-    min_displayMinimumCategory
+Scope:Block->Method:displayAcos->Class:Test->GLOBAL
+  Type:double
+    x_displayAcos
+
+Scope:Block->If->Block->Method:displayAcos->Class:Test->GLOBAL
+  Type:double
+    val_displayAcos
 
 Scope:Method:main->Class:Test->GLOBAL
   Type:String

@@ -1,23 +1,17 @@
+//done ✅
 public class Test {
-    public static void displayMinimumCategory() {
-        int a = 15;
-        int b = 20;
-        int min = Math.min(a, b);
-
-        switch (min) {
-            case 15:
-                System.out.println("Minimum is 15");
-                break;
-            case 20:
-                System.out.println("Minimum is 20");
-                break;
-            default:
-                System.out.println("Unexpected minimum");
+    public static void displayAcos() {
+        double x = 0.5;
+        if (x >= -1 && x <= 1) {
+            double val = Math.acos(x);
+            System.out.println("acos(" + x + ") = " + val);
+        } else {
+            System.out.println("Input out of range for acos");
         }
         return;
     }
 
     public static void main(String[] args) {
-        displayMinimumCategory();
+        displayAcos();
     }
 }
