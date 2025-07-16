@@ -1,13 +1,16 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. Test41.
+       PROGRAM-ID. Test39.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Scope:METHOD_CHAINCONDITION_CLASS_TESTSCOPED_GLOBAL
-       01  a_chainCondition PIC S9(5).
-       01  b_chainCondition PIC S9(5).
-       01  c_chainCondition PIC S9(5).
+      * Variables for Scope:METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  a_nestedLoop    PIC S9(5).
+       01  b_nestedLoop    PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  i_nestedLoop    PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
+       01  j_nestedLoop    PIC S9(5).
       * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
@@ -15,25 +18,16 @@
 
 
        MAIN-PARA.
-       MOVE 3 TO a_chainCondition
-       MOVE 4 TO b_chainCondition
-       MOVE 5 TO c_chainCondition
-       PERFORM CHAINCONDITION-PARA
+       MOVE 9 TO a_nestedLoop
+       MOVE 8 TO b_nestedLoop
+       PERFORM NESTEDLOOP-PARA
 
-       chainCondition-PARA.
-       IF a_chainCondition > b_chainCondition
-       IF a_chainCondition > c_chainCondition
-       DISPLAY "a is largest"
-       ELSE
-       DISPLAY "c is largest"
-       END-IF.
-       ELSE
-       IF b_chainCondition > c_chainCondition
-       DISPLAY "b is largest"
-       ELSE
-       DISPLAY "c is largest"
-       END-IF.
-       END-IF.
+       nestedLoop-PARA.
+       PERFORM VARYING i_nestedLoop FROM 0 BY 1 UNTIL NOT (i_nestedLoop < a_nestedLoop)
+       PERFORM VARYING j_nestedLoop FROM 0 BY 1 UNTIL NOT (j_nestedLoop < b_nestedLoop)
+       DISPLAY i_nestedLoop   ","   j_nestedLoop
+       END-PERFORM.
+       END-PERFORM.
        EXIT.
        STOP RUN.
 

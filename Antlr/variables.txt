@@ -1,8 +1,15 @@
-Scope:Method:chainCondition->Class:TestScoped->GLOBAL
+Scope:Method:nestedLoop->Class:TestScoped->GLOBAL
   Type:int
-    a_chainCondition
-    b_chainCondition
-    c_chainCondition
+    a_nestedLoop
+    b_nestedLoop
+
+Scope:For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
+  Type:int
+    i_nestedLoop
+
+Scope:For->Block->For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
+  Type:int
+    j_nestedLoop
 
 Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String

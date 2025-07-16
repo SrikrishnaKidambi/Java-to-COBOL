@@ -1,18 +1,14 @@
 public class TestScoped {
 
-    public static void chainCondition(int a_chainCondition, int b_chainCondition, int c_chainCondition) {
-        if (a_chainCondition > b_chainCondition)
-            if (a_chainCondition > c_chainCondition)
-                System.out.println("a is largest");
-            else
-                System.out.println("c is largest");
-        else if (b_chainCondition > c_chainCondition)
-            System.out.println("b is largest");
-        else
-            System.out.println("c is largest");
+    public static void nestedLoop(int a_nestedLoop, int b_nestedLoop) {
+        for (int i_nestedLoop = 0; i_nestedLoop < a_nestedLoop; i_nestedLoop++) {
+            for (int j_nestedLoop = 0; j_nestedLoop < b_nestedLoop; j_nestedLoop++) {
+                System.out.println(i_nestedLoop + "," + j_nestedLoop);
+            }
+        }
     }
 
     public static void main(String[] args_main) {
-        chainCondition(3, 4, 5);
+        nestedLoop(9, 8);
     }
 }
