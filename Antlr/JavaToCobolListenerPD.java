@@ -45,6 +45,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private final Map<String,String>globalVarNameMap=new HashMap<>();
     private String currentMethod=null;
     private Map<String,List<String>>methodParameters=new HashMap<>();
+    LinkedHashMap<String,StringBuilder>methodCodeMap=new LinkedHashMap<>(null);
+
 
 
     @Override
@@ -54,6 +56,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         currentMethod=methodName;
         String methodPara=methodName.equals("main")?INDENT+"MAIN-PARA.":INDENT+methodName+"-PARA.";
         methodBuffer=new StringBuilder();
+        methodBuffer.append('\n').append(methodPara).append('\n');
+        methodCodeMap.put(methodName, methodBuffer);
         currentMethodPara=methodPara;
         inMethod=true;
         methodVarNameMap.putIfAbsent(currentMethod, new HashMap<>());
@@ -75,13 +79,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     @Override
     public void exitMethodDeclaration(JavaParser.MethodDeclarationContext ctx){
-        if(inMethod && methodBuffer!=null && currentMethodPara!=null){
-            cobolCodePD.append('\n').append(currentMethodPara).append("\n").append(methodBuffer).append(INDENT).append("EXIT.\n");
-            methodBuffer=null;
-            currentMethodPara=null;
-            inMethod=false;
-            updateInsideBlock();
-        }
+        // if(inMethod && methodBuffer!=null && currentMethodPara!=null){
+        //     cobolCodePD.append('\n').append(currentMethodPara).append("\n").append(methodBuffer).append(INDENT).append("EXIT.\n");
+        //     methodBuffer=null;
+        //     currentMethodPara=null;
+        //     inMethod=false;
+        //     updateInsideBlock();
+        // }
+        // currentMethod=null;
+
+        methodBuffer=null;
+        currentMethodPara=null;
+        inMethod=false;
+        updateInsideBlock();
         currentMethod=null;
     }
 
@@ -124,6 +134,15 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
     }
     public String getCobolCodePD(){
+        if(methodCodeMap.containsKey("main")){
+            cobolCodePD.append(methodCodeMap.get("main").toString());
+        }
+
+        for(Map.Entry<String,StringBuilder>entry:methodCodeMap.entrySet()){
+            if(!entry.getKey().equals("main")){
+                cobolCodePD.append(entry.getValue().toString());
+            }
+        }
         cobolCodePD.append(INDENT).append("STOP RUN.\n");
         return cobolCodePD.toString();
     }

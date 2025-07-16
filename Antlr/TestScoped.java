@@ -1,18 +1,13 @@
-//done ✅
-public class Test {
+public class TestScoped {
 
-    public static void displayAcos() {
-        double x_displayAcos = 0.5;
-        if (x_displayAcos >= -1 && x_displayAcos <= 1) {
-            double val_displayAcos = Math.acos(x_displayAcos);
-            System.out.println("acos(" + x_displayAcos + ") = " + val_displayAcos);
-        } else {
-            System.out.println("Input out of range for acos");
-        }
-        return;
+    private static void add(int x_add, int y_add) {
+        int z_add = x_add + y_add;
+        System.out.println("The addition is :" + z_add);
     }
 
     public static void main(String[] args_main) {
-        displayAcos();
+        int x_main = 0;
+        int u_main = 1;
+        add(x_main, u_main);
     }
 }
