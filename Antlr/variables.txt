@@ -1,7 +1,10 @@
-Scope:Method:nestedLoop->Class:TestScoped->GLOBAL
-  Type:int
-    a_nestedLoop
-    b_nestedLoop
+Scope:Block->Method:displayAcos->Class:Test->GLOBAL
+  Type:double
+    x_displayAcos
+
+Scope:Block->If->Block->Method:displayAcos->Class:Test->GLOBAL
+  Type:double
+    val_displayAcos
 
 Scope:For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
   Type:int

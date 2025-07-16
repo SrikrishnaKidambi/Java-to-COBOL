@@ -1,33 +1,33 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. Test39.
+       PROGRAM-ID. TestCase19.
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
-      * Variables for Scope:METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
-       01  a_nestedLoop    PIC S9(5).
-       01  b_nestedLoop    PIC S9(5).
-      * Variables for Scope:FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
-       01  i_nestedLoop    PIC S9(5).
-      * Variables for Scope:FOR_BLOCK_FOR_BLOCK_METHOD_NESTEDLOOP_CLASS_TESTSCOPED_GLOBAL
-       01  j_nestedLoop    PIC S9(5).
-      * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
+      * Variables for Scope:BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
+       01  x_displayAcos   PIC S9(5)V9(2).
+      * Variables for Scope:BLOCK_IF_BLOCK_METHOD_DISPLAYACOS_CLASS_TEST_GLOBAL
+       01  val_displayAcos PIC S9(5)V9(2).
+      * Variables for Scope:METHOD_MAIN_CLASS_TEST_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
 
 
+       PROCEDURE DIVISION.
+
+
+       displayAcos-PARA.
+       IF x_displayAcos >= -1 AND x_displayAcos <= 1
+       COMPUTE val_displayAcos = FUNCTION ACOS(x_displayAcos)
+       DISPLAY "acos(" + x_displayAcos + ") = "   val_displayAcos
+       ELSE
+       DISPLAY "Input out of range for acos"
+       END-IF.
+       GOBACK
+       EXIT.
 
        MAIN-PARA.
-       MOVE 9 TO a_nestedLoop
-       MOVE 8 TO b_nestedLoop
-       PERFORM NESTEDLOOP-PARA
-
-       nestedLoop-PARA.
-       PERFORM VARYING i_nestedLoop FROM 0 BY 1 UNTIL NOT (i_nestedLoop < a_nestedLoop)
-       PERFORM VARYING j_nestedLoop FROM 0 BY 1 UNTIL NOT (j_nestedLoop < b_nestedLoop)
-       DISPLAY i_nestedLoop   ","   j_nestedLoop
-       END-PERFORM.
-       END-PERFORM.
+       PERFORM DISPLAYACOS-PARA
        EXIT.
        STOP RUN.
 
