@@ -1,4 +1,17 @@
-       IDENTIFICATION DIVISION.
+import express from "express";
+import cors from "cors";
+
+const app = express();
+const port = 3000;
+
+app.use(express.json());
+app.use(cors()); //Allows all origins to use the api
+
+async function getCobolCode(javaCode){
+    //Saiman write your code here.
+
+    //the below return is for testing purpose
+    const cobolCode = `       IDENTIFICATION DIVISION.
        PROGRAM-ID. TestCase1.
 
        DATA DIVISION.
@@ -29,4 +42,23 @@
       * 2
        DISPLAY "Sign: "   signVal
        EXIT.
-       STOP RUN.
+       STOP RUN.`;
+    return cobolCode;
+}
+
+
+app.post("/convert",async (req,res)=>{
+    const javaCode = req.body.javaCode;
+    const cobolCode = await getCobolCode();
+    res.json({
+        cobolCode: cobolCode,
+    })
+});
+
+app.get("/",(req,res)=>{
+    res.send("API is working");
+});
+
+app.listen(port,()=>{
+    console.log(`listening on the port ${port}`);
+});

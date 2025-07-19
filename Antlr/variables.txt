@@ -1,20 +1,14 @@
-Scope:Block->Method:displayAcos->Class:Test->GLOBAL
-  Type:double
-    x_displayAcos
-
-Scope:Block->If->Block->Method:displayAcos->Class:Test->GLOBAL
-  Type:double
-    val_displayAcos
-
-Scope:For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
-  Type:int
-    i_nestedLoop
-
-Scope:For->Block->For->Block->Method:nestedLoop->Class:TestScoped->GLOBAL
-  Type:int
-    j_nestedLoop
-
 Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
+
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
+  Type:Scanner
+    sc_main
+  Type:int
+    a_main
+    b_main
+    res_main
+  Type:char
+    op_main
 

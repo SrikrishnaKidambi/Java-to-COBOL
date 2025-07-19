@@ -1,14 +1,35 @@
 
        MAIN-PARA.
-       MOVE 9 TO a_nestedLoop
-       MOVE 8 TO b_nestedLoop
-       PERFORM NESTEDLOOP-PARA
-
-       nestedLoop-PARA.
-       PERFORM VARYING i_nestedLoop FROM 0 BY 1 UNTIL NOT (i_nestedLoop < a_nestedLoop)
-       PERFORM VARYING j_nestedLoop FROM 0 BY 1 UNTIL NOT (j_nestedLoop < b_nestedLoop)
-       DISPLAY i_nestedLoop   ","   j_nestedLoop
-       END-PERFORM.
-       END-PERFORM.
-       EXIT.
+      * Input from ODT is enabled
+       DISPLAY "Enter first number: " WITH NO ADVANCING
+       ACCEPT a_main
+       DISPLAY "Enter second number: " WITH NO ADVANCING
+       ACCEPT b_main
+       DISPLAY "Enter operation (+, -, *, /): " WITH NO ADVANCING
+       ACCEPT op_main
+       IF op_main = '+'
+       ADD a_main TO b_main GIVING res_main
+       DISPLAY "Sum: "   res_main
+       ELSE
+       IF op_main = '-'
+       SUBTRACT b_main FROM a_main GIVING res_main
+       DISPLAY "Difference: "   res_main
+       ELSE
+       IF op_main = '*'
+       MULTIPLY a_main BY b_main GIVING res_main
+       DISPLAY "Product: "   res_main
+       ELSE
+       IF op_main = '/'
+       IF b_main NOT= 0
+       DIVIDE a_main BY b_main GIVING res_main
+       DISPLAY "Quotient: "   res_main
+       ELSE
+       DISPLAY "Cannot divide by zero"
+       END-IF.
+       ELSE
+       DISPLAY "Invalid operation"
+       END-IF.
+       END-IF.
+       END-IF.
+       END-IF.
        STOP RUN.
