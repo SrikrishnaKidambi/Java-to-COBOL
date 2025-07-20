@@ -1,35 +1,7 @@
 
        MAIN-PARA.
-      * Input from ODT is enabled
-       DISPLAY "Enter first number: " WITH NO ADVANCING
-       ACCEPT a_main
-       DISPLAY "Enter second number: " WITH NO ADVANCING
-       ACCEPT b_main
-       DISPLAY "Enter operation (+, -, *, /): " WITH NO ADVANCING
-       ACCEPT op_main
-       IF op_main = '+'
-       ADD a_main TO b_main GIVING res_main
-       DISPLAY "Sum: "   res_main
-       ELSE
-       IF op_main = '-'
-       SUBTRACT b_main FROM a_main GIVING res_main
-       DISPLAY "Difference: "   res_main
-       ELSE
-       IF op_main = '*'
-       MULTIPLY a_main BY b_main GIVING res_main
-       DISPLAY "Product: "   res_main
-       ELSE
-       IF op_main = '/'
-       IF b_main NOT= 0
-       DIVIDE a_main BY b_main GIVING res_main
-       DISPLAY "Quotient: "   res_main
-       ELSE
-       DISPLAY "Cannot divide by zero"
-       END-IF.
-       ELSE
-       DISPLAY "Invalid operation"
-       END-IF.
-       END-IF.
-       END-IF.
-       END-IF.
+       MOVE 10 TO a_main
+       MOVE 20 TO b_main
+       ADD a_main TO b_main GIVING sum_main
+       DISPLAY "The sum is: "   sum_main
        STOP RUN.
