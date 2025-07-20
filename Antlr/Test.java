@@ -1,8 +1,13 @@
+// done ✅
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
-        int a = 10;
-        int b = 20;
-        int sum = a + b;
-        System.out.println("The sum is: " + sum);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a lowercase letter: ");
+        char ch = sc.next().charAt(0);
+        
+        int position = ch - 'a' + 1;
+        System.out.println("Position in alphabet: " + position);
     }
 }

@@ -1,7 +1,8 @@
 
        MAIN-PARA.
-       MOVE 10 TO a_main
-       MOVE 20 TO b_main
-       ADD a_main TO b_main GIVING sum_main
-       DISPLAY "The sum is: "   sum_main
+      * Input from ODT is enabled
+       DISPLAY "Enter a lowercase letter: " WITH NO ADVANCING
+       ACCEPT ch_main
+       COMPUTE position_main = FUNCTION ORD(ch_main) - FUNCTION ORD('a') + 1
+       DISPLAY "Position in alphabet: "   position_main
        STOP RUN.

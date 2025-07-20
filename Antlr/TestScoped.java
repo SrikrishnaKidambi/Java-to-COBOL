@@ -1,9 +1,13 @@
+// done ✅
+import java.util.Scanner;
+
 public class TestScoped {
 
     public static void main(String[] args_main) {
-        int a_main = 10;
-        int b_main = 20;
-        int sum_main = a_main + b_main;
-        System.out.println("The sum is: " + sum_main);
+        Scanner sc_main = new Scanner(System.in);
+        System.out.print("Enter a lowercase letter: ");
+        char ch_main = sc_main.next().charAt(0);
+        int position_main = ch_main - 'a' + 1;
+        System.out.println("Position in alphabet: " + position_main);
     }
 }

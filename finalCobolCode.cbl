@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. MyFirstTest.
+       PROGRAM-ID. AlphabetPosition.
 
 
        DATA DIVISION.
@@ -8,16 +8,17 @@
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
-       01  a_main          PIC S9(5).
-       01  b_main          PIC S9(5).
-       01  sum_main        PIC S9(5).
+       01  sc_main         PIC X(100).
+       01  ch_main         PIC X(1).
+       01  position_main   PIC S9(5).
 
 
 
        MAIN-PARA.
-       MOVE 10 TO a_main
-       MOVE 20 TO b_main
-       ADD a_main TO b_main GIVING sum_main
-       DISPLAY "The sum is: "   sum_main
+      * Input from ODT is enabled
+       DISPLAY "Enter a lowercase letter: " WITH NO ADVANCING
+       ACCEPT ch_main
+       COMPUTE position_main = FUNCTION ORD(ch_main) - FUNCTION ORD('a') + 1
+       DISPLAY "Position in alphabet: "   position_main
        STOP RUN.
 

@@ -3,8 +3,10 @@ Scope:Method:main->Class:TestScoped->GLOBAL
     args_main [size=[]]
 
 Scope:Block->Method:main->Class:TestScoped->GLOBAL
+  Type:Scanner
+    sc_main
+  Type:char
+    ch_main
   Type:int
-    a_main
-    b_main
-    sum_main
+    position_main
 
