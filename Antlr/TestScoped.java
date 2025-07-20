@@ -1,13 +1,17 @@
-// done ✅
+//done ✅
 import java.util.Scanner;
 
 public class TestScoped {
 
     public static void main(String[] args_main) {
         Scanner sc_main = new Scanner(System.in);
-        System.out.print("Enter a lowercase letter: ");
-        char ch_main = sc_main.next().charAt(0);
-        int position_main = ch_main - 'a' + 1;
-        System.out.println("Position in alphabet: " + position_main);
+        System.out.print("Enter number: ");
+        int num_main = sc_main.nextInt();
+        int count_main = 0;
+        while (num_main != 0) {
+            count_main++;
+            num_main = num_main / 10;
+        }
+        System.out.println("Number of digits: " + count_main);
     }
 }
