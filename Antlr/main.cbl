@@ -5,6 +5,8 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
       * Variables for Method:main
-       01  arr_main-ARRAY .
-           05  arr_main     PIC S9(5) OCCURS 10 TIMES
-           05  i_main       PIC S9(5).
+           05  sc_main      PIC X(100).
+           05  a_main       PIC S9(5).
+           05  b_main       PIC S9(5).
+           05  res_main     PIC S9(5).
+           05  op_main      PIC X(1).
