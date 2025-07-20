@@ -1,8 +1,18 @@
+//done ✅
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
-        int a = 10;
-        int b = 20;
-        int sum = a + b;
-        System.out.println("The sum is: " + sum);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number: ");
+        int num = sc.nextInt();
+
+        int count = 0;
+        while (num != 0) {
+            count++;
+            num = num / 10;
+        }
+
+        System.out.println("Number of digits: " + count);
     }
 }

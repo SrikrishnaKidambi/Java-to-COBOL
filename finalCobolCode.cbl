@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. MyFirstTest.
+       PROGRAM-ID. DigitCounter.
 
 
        DATA DIVISION.
@@ -8,16 +8,21 @@
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
-       01  a_main          PIC S9(5).
-       01  b_main          PIC S9(5).
-       01  sum_main        PIC S9(5).
+       01  sc_main         PIC X(100).
+       01  num_main        PIC S9(5).
+       01  count_main      PIC S9(5).
 
 
 
        MAIN-PARA.
-       MOVE 10 TO a_main
-       MOVE 20 TO b_main
-       ADD a_main TO b_main GIVING sum_main
-       DISPLAY "The sum is: "   sum_main
+      * Input from ODT is enabled
+       DISPLAY "Enter number: " WITH NO ADVANCING
+       ACCEPT num_main
+       MOVE 0 TO count_main
+       PERFORM UNTIL NOT (num_main NOT= 0)
+       ADD 1 TO count_main
+       DIVIDE num_main BY 10 GIVING num_main
+       END-PERFORM
+       DISPLAY "Number of digits: "   count_main
        STOP RUN.
 
