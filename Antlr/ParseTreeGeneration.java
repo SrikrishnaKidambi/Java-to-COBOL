@@ -53,19 +53,19 @@ public class ParseTreeGeneration {
 
         System.out.println("COBOL code successfully written to ../finalCobolCode.cbl");
 
-        TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
-        viewer.setScale(0.75); // Optional: zoom in a bit
+        // TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
+        // viewer.setScale(0.75); // Optional: zoom in a bit
 
-        // Wrap viewer in JScrollPane for both scroll directions
-        JScrollPane scrollPane = new JScrollPane(viewer);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        // // Wrap viewer in JScrollPane for both scroll directions
+        // JScrollPane scrollPane = new JScrollPane(viewer);
+        // scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        // Show in JFrame
-        JFrame frame = new JFrame("Parse Tree Viewer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(scrollPane); // Add scrollPane, not frame
-        frame.setSize(800, 600);
-        frame.setVisible(true);
+        // // Show in JFrame
+        // JFrame frame = new JFrame("Parse Tree Viewer");
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.getContentPane().add(scrollPane); // Add scrollPane, not frame
+        // frame.setSize(800, 600);
+        // frame.setVisible(true);
     }
 }
