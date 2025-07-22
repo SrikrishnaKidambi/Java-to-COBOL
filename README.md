@@ -4,18 +4,22 @@
 ## About the tool :
 - This project is a tool that converts a given Java Program into COBOL program. The convertion from Java to cobol is done using Rule-based method using the Java 14 grammar. We used the grammar files that are provided by ANTLR grammar repository. The conversion is being done from the Java program to an eqivalent COBOL 85 program.
 
-- This tool can be used for generating a datasets for the cobol programs using the datasets that are present for the Java programs. Using these datasets, it is possible to train LLMs that are based on COBOL, they can be used for building LLMs that are based on COBOL.
-
 - One of the limitation we are having in this current version of the project is - It is not possible to map all the Java constructs to equivalent COBOL constructs. For example, Java's Object Oriented Programming paradigm cannot be accurately mapped to an equivalent COBOL 85 constructs as the COBOL 85 does not have Object Oriented Programming paradigm.
 
-- Future work of the tool includes extending the tool for suporting extended number of java constructs and also using the tool for cobol dataset generation.  
+- Future work of the tool includes extending the tool for suporting extended number of java constructs.  
 
 ## Features of the tool :
 - **Parse Tree generation:** For the given java source code using the java grammar it constructs the parse tree.
 - **Code translation:** Translates the java code into equivalent cobol code using the rule based translation approach. We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods.
 - **Graphical User Interface:** Our tool has a GUI that has options to upload the java code for translation and also options to copy and save the translated cobol code.
 ## Uses/Goals of the tool :
-- JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code. So our tool helps the developers to write code in java and convert it to cobol and use it for maintainance purposes. Also using this tool we can create datasets for COBOL and these datasets can be used to develop other tools as well as to train the LLMs and making LLMs capable to fix bugs in cobol codes, understand and generate good COBOL codes.
+- JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code. So our tool helps the developers to write code in java and convert it to cobol and use it for maintainance purposes.
+- An API was built and hosted on cloud platform (Render) that accepts a POST request. It takes Java code in the request and returns the converted COBOL code. For the tool to be made available for users without getting Java installed on their system, we made a docker container that maintains the environment required for the tool to convert the input Java code.
+- A website was built with backend being the API built for this project. The website is hosted at the following link : [ Website link](https://java2cob-rishalab.onrender.com/). Following are the features of the website :
+      - User will be able to upload a Java file for which the conversion will be made and the generated COBOL code will be displayed on website.
+      - User will be able to write the Java code on the website and get the conversion done.
+      - User will be able to copy the generated COBOL code or will be able to save the generated COBOL code.
+  Images of the website : 
 ## Working of tool :
 ![image](https://github.com/user-attachments/assets/1a3877a7-b285-41f2-8f47-3486d94fcb49)
 **Key phases in the tool:**
