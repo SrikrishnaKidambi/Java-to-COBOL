@@ -21,7 +21,7 @@
       - User will be able to copy the generated COBOL code or will be able to save the generated COBOL code.
   Images of the website : 
 ## Working of tool :
-![image](https://github.com/user-attachments/assets/1a3877a7-b285-41f2-8f47-3486d94fcb49)
+<img width="820" height="335" alt="Tool_Architecture_Java2COB drawio (2)" src="https://github.com/user-attachments/assets/a311b01d-8960-48c2-9e6a-e785a763b71d" />
 **Key phases in the tool:**
 
 **1)** **Initial set up for the tool:**
