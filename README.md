@@ -38,8 +38,11 @@ When the java source code is given to the tool firstly it is tokenized by the le
 **3) Workflow of the code translation:**
 We have analysed the data division and procedure division of the code seperately. So one parse tree walker walks through the nodes and returns the identification and data division of the cobol code and the other parse tree walker walks through the nodes and returns procedure division of the code.
 
-**4) Contructs our tool supports:**
-We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods.
+**4) Evaluation of code translation:**
+Once the cobol code is generate using GNU cobol we compiled and executed the code and similarly used java compiler for java code and compared the output to test the correctness of the tool.
+
+**5) Contructs our tool supports:**
+We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods and some intrinsic(library) functions available in cobol.
 
 ## Contents in the tool Repository :
 - The repo contains a folder called Antlr which has the antlr4 jar, java parser , java lexer and java parser listener classes.
