@@ -22,6 +22,7 @@
   Images of the website : 
 ## Working of tool :
 <img width="820" height="335" alt="Tool_Architecture_Java2COB drawio (2)" src="https://github.com/user-attachments/assets/a311b01d-8960-48c2-9e6a-e785a763b71d" />
+<br/>
 **Key phases in the tool:**
 
 **1)** **Initial set up for the tool:**
