@@ -1,12 +1,19 @@
 
        MAIN-PARA.
-      * Input from ODT is enabled
-       DISPLAY "Enter number: " WITH NO ADVANCING
-       ACCEPT num_main
-       MOVE 0 TO count_main
-       PERFORM UNTIL NOT (num_main NOT= 0)
-       ADD 1 TO count_main
-       DIVIDE num_main BY 10 GIVING num_main
-       END-PERFORM
-       DISPLAY "Number of digits: "   count_main
+       PERFORM CHECKSIGN-PARA
+
+       checkSign-PARA.
+       COMPUTE num_checkSign = -25
+       COMPUTE sign_checkSign = FUNCTION SIGN(num_checkSign)
+       IF sign_checkSign > 0
+       DISPLAY "Number is positive"
+       ELSE
+       IF sign_checkSign < 0
+       DISPLAY "Number is negative"
+       ELSE
+       DISPLAY "Number is zero"
+       END-IF.
+       END-IF.
+       GOBACK
+       EXIT.
        STOP RUN.

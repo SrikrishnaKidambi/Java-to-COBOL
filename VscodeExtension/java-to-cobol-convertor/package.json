@@ -1,0 +1,49 @@
+{
+  "name": "java-to-cobol-convertor",
+  "publisher": "SaiKrishnaBrahmajosyula",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SrikrishnaKidambi/Java-to-COBOL.git"
+  },
+  "displayName": "java-to-cobol-convertor",
+  "description": "Given a file, when the user runs the extension on the file then if the file is a java file, then it extracts the code from it and then generates an equivalent COBOL code for it. This can be one of the ways to comprehend or write and maintain cobol code via Java.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "java-to-cobol-convertor.convert",
+        "title": "Convert Java to COBOL"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.102.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.10.0"
+  }
+}
