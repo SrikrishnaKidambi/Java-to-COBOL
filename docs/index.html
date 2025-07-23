@@ -65,7 +65,7 @@
                                 <h3 class="block-title">Tool Description</h3>
                                 <div class="section-block">
                                     <p>
-                                        JAVA2COB is a open-source tool that performs the rule based translation of Java code to COBOL.
+                                        JAVA2COB is a open-source tool that performs the rule based translation of Java code to COBOL. Our tool helps users to comprehend COBOL through Java.
                                     </p>
                                     <a href="https://github.com/SrikrishnaKidambi/Java-to-COBOL.git" target="_blank">JAVA2COB Github Repository</a>
 <!--                                     <p style="color: red;">
@@ -135,7 +135,7 @@
                                     <h2 class="section-title">Usage</h2>
                                     <div class="section-block">
                                         <p>
-                                            <b>The tool has a GUI and this can be accessed by following the steps below:</b>
+                                            <b>The tool has a GUI and this can be accessed through command line by following the steps below:</b>
                                         </p>
                                         <ol>
                                                 <li>Clone the GitHub repository by running the following command:
@@ -195,11 +195,19 @@
 
                                                 <li>Enjoy the extension!: Run the extension on the main page of any public GitHub repository to see the assessment results</li> -->
 
+                                                <p>
+                                                    <b>We have also buit a website and an extension to access the tool at greater ease and can be found at the links below:</b>
+                                                    <ol>
+                                                        <li>Website: <a href="https://java2cob-rishalab.onrender.com/" target="_blank">https://java2cob-rishalab.onrender.com/</a></li>
+                                                        <li>Extension: <a href="https://marketplace.visualstudio.com/items?itemName=SaiKrishnaBrahmajosyula.java-to-cobol-convertor" target="_blank">https://marketplace.visualstudio.com/items?itemName=SaiKrishnaBrahmajosyula.java-to-cobol-convertor</a></li>
+                                                    </ol>
+                                                </p>
+                                            </div>
                                 </section>
       
                             
                             <section id="feature-section" class="doc-section">
-                                <h2 class="section-title">GUI Usage screenshots</h2>
+                                <h2 class="section-title">Tool Usage screenshots</h2>
                                 <div class="section-block">
 
                                     <ul style="list-style: none;">
@@ -241,6 +249,12 @@
                                             <br><br>
                                         </li>
                                     </ul>
+
+                                    <h3>Website:</h3>
+                                    <img class="img-fluid" src="assets/images/demo/website.png" alt="elegant icons" width="1200" height="1600"/>
+
+                                    <h3>Extension:</h3>
+                                    <img class="img-fluid" src="assets/images/demo/Extension.png" alt="elegant icons" width="1200" height="1600"/>
                                 </div>
                                 
                             </section>
@@ -250,7 +264,7 @@
                                 <h2 class="section-title">Approach diagram</h2>
                                 <div class="section-block">
                                             
-                                            <img class="img-fluid" src="assets/images/demo/java2cob_approach_diagram.png" alt="approach" />
+                                            <img class="img-fluid" src="assets/images/demo/Tool_Architecture_Java2COB.png" alt="approach" />
                                             <br>
                                             <br>
                                 <b>Key phases in the tool:</b>
@@ -264,17 +278,18 @@
                                     <p>When the java source code is given to the tool firstly it is tokenized by the lexer which is called as <b>lexical analysis</b> which converts the code into tokens and those tokens are given to the java parser and it creates the parse tree. An instance of parse tree walker can be created and we can pass the parse tree and custom listener to it to walk the nodes of the parse tree and convert the java constructs into cobol constructs thereby we get the translated cobol code.</p>
                                     <h3>3) Workflow of the code translation: </h3>
                                     <p>We have analysed the data division and procedure division of the code seperately. So one parse tree walker walks through the nodes and returns the identification and data division of the cobol code and the other parse tree walker walks through the nodes and returns procedure division of the code.</p>
-                                    <h3>4) Contructs our tool supports: </h3>
-                                    <p>We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods.</p>
+                                    <h3>4) Evaluation of code translation: </h3>
+                                    <p>Once the cobol code is generate using GNU cobol we compiled and executed the code and similarly used java compiler for java code and compared the output to test the correctness of the tool.</p>
+                                    <h3>5) Contructs our tool supports: </h3>
+                                    <p>We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods and some intrinsic(library) functions available in cobol.</p>
                                 </ol>
                                 
                             </section>
                             <section id="uses-section" class="doc-section">
                                 <h2 class="section-title">Goal</h2>
                                 <div class="section-block">
-                                    JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code.
-                                        So our tool helps the developers to write code in java and convert it to cobol and use it for maintainance purposes. Also using this tool we can create datasets for COBOL and these datasets can be used to develop other tools as well as to train the LLMs and making LLMs capable to fix bugs in cobol codes, understand and generate 
-                                        good COBOL codes.
+                                    JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and the performance of LLMs is not satisfactory in all the cases (which we mentioned in the tool paper in Evaluation section)
+                                    So our tool aims to support the users to comprehend COBOL through Java. We picked Java as it stands to be one of the popular languages and also there are lot of java resources available.
                                 </div>
                                 
                             </section>
@@ -306,7 +321,7 @@
 			<section id="result-section" class="doc-section">
                                 <h2 class="section-title">Results</h2>
                                 <div class="section-block">
-                                    <p>We created a Java Dataset of 61 programs using Gpt 4'o to test our tool and we calculated the accuracy of mapping each construct we implemented and then found the weighted average to calculate the tool accuracy and it is found to be <b>98.5%</b> reflecting the tool's strong performance in code translation from Java to COBOL.</p>
+                                    <p>We created a Java Dataset of 101 programs partially with the help of Gpt 4'o to test our tool and we calculated the accuracy of mapping each construct we implemented and then found the weighted average to calculate the tool accuracy and it is found to be <b>98.3%</b> reflecting the tool's strong performance in code translation from Java to COBOL. Detailed breakdown of accuracy per each construct is provided in the tool paper.</p>
                                     
                                     
                                 </div>
