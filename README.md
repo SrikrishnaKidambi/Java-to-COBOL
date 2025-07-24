@@ -83,7 +83,7 @@ We have currently implemented rule based mapping for arithmetic expressions (inc
 
 ## Tool Demonstration Video:
 
-[Watch on YouTube]([https://www.youtube.com/watch?v=_93LDvXTkT0](https://www.youtube.com/watch?v=_93LDvXTkT0))
+[Watch on Youtube](https://www.youtube.com/watch?v=_93LDvXTkT0)
 
 ## Contributors :
 - Sai Krishna Brahmajosyula
