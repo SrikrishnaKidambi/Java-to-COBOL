@@ -20,12 +20,13 @@
       - User will be able to write the Java code on the website and get the conversion done.
       - User will be able to copy the generated COBOL code or will be able to save the generated COBOL code.
   Image of the website :
-   ![image](https://github.com/user-attachments/assets/e0da3b7c-8eb4-4df8-a3cc-23f5f9376b14)
+  <img width="1919" height="909" alt="image" src="https://github.com/user-attachments/assets/0e3a5a7f-74ce-4909-83fe-eebb202f12e1" />
+
 - A vs code extension was also built using the API built using this tool. The extension has been published in the VS code market place with the name : java-to-cobol-convertor. It can be downloaded from the link : [Extension Link](https://marketplace.visualstudio.com/items?itemName=SaiKrishnaBrahmajosyula.java-to-cobol-convertor).
 
 ## Working of tool :
-<img width="820" height="335" alt="Tool_Architecture_Java2COB drawio (2)" src="https://github.com/user-attachments/assets/a311b01d-8960-48c2-9e6a-e785a763b71d" />
-<br/>
+<img width="1248" height="561" alt="image" src="https://github.com/user-attachments/assets/3c0fed40-7c35-4162-8fcc-4fe6cbf0e9e6" />
+
 
 **Key phases in the tool:**
 
