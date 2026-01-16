@@ -1,10 +1,24 @@
-Scope:Block->Method:checkSign->Class:TestScoped->GLOBAL
+Scope:Method:sumArray->Class:TestScoped->GLOBAL
   Type:int
-    num_checkSign
-  Type:float
-    sign_checkSign
+    arr_sumArray [size=[]]
+
+Scope:Block->Method:sumArray->Class:TestScoped->GLOBAL
+  Type:int
+    sum_sumArray
+
+Scope:For->Block->Method:sumArray->Class:TestScoped->GLOBAL
+  Type:int
+    i_sumArray
 
 Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
+
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
+  Type:int
+    arr_main [size=[10]]
+
+Scope:For->Block->Method:main->Class:TestScoped->GLOBAL
+  Type:int
+    i_main
 

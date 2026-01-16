@@ -1,19 +1,15 @@
 
        MAIN-PARA.
-       PERFORM CHECKSIGN-PARA
+       PERFORM VARYING i_main FROM 0 BY 1 UNTIL NOT (i_main < 10)
+       COMPUTE arr_main(i_main + 1) = 0
+       END-PERFORM.
+       MOVE arr_main TO arr_sumArray
+       PERFORM SUMARRAY-PARA
 
-       checkSign-PARA.
-       COMPUTE num_checkSign = -25
-       COMPUTE sign_checkSign = FUNCTION SIGN(num_checkSign)
-       IF sign_checkSign > 0
-       DISPLAY "Number is positive"
-       ELSE
-       IF sign_checkSign < 0
-       DISPLAY "Number is negative"
-       ELSE
-       DISPLAY "Number is zero"
-       END-IF.
-       END-IF.
-       GOBACK
+       sumArray-PARA.
+       MOVE 0 TO sum_sumArray
+       PERFORM VARYING i_sumArray FROM 0 BY 1 UNTIL NOT (i_sumArray < arr_sumArray.length)
+       COMPUTE sum_sumArray = sum_sumArray + arr_sumArray(i_sumArray + 1)
+       END-PERFORM.
        EXIT.
        STOP RUN.
