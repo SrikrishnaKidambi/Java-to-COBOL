@@ -135,6 +135,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
     public String getCobolCodePD(){
         cobolCodePD.setLength(0); // Clear previous content!
+        // Re-add the PROCEDURE DIVISION header which was initially added in the constructor
+        cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
         if(methodCodeMap.containsKey("main")){
             cobolCodePD.append(methodCodeMap.get("main").toString());
         }

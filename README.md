@@ -82,6 +82,10 @@ We have currently implemented rule based mapping for arithmetic expressions (inc
 - You can copy the code onto the clipboard by clicking the copy button in the right side of GUI.
 - You can also save the code by clicking the save button in the right side of GUI.
 
+## COBOL code running commnads(for testing correctness):
+- `cobc -x TimelineTest15012026.cbl` to compile the code
+- `./TimelineTest15012026` to run the code
+
 ## Tool Demonstration Video:
 
 [Watch on Youtube]([https://www.youtube.com/watch?v=_93LDvXTkT0](https://youtu.be/ZqBmDnVRqtY?si=ZTEUNjIv-BYc1pW8))

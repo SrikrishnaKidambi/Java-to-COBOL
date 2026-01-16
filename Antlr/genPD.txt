@@ -1,19 +1,26 @@
+       PROCEDURE DIVISION.
+
 
        MAIN-PARA.
-       PERFORM CHECKSIGN-PARA
-
-       checkSign-PARA.
-       COMPUTE num_checkSign = -25
-       COMPUTE sign_checkSign = FUNCTION SIGN(num_checkSign)
-       IF sign_checkSign > 0
-       DISPLAY "Number is positive"
-       ELSE
-       IF sign_checkSign < 0
-       DISPLAY "Number is negative"
-       ELSE
-       DISPLAY "Number is zero"
-       END-IF.
-       END-IF.
-       GOBACK
-       EXIT.
+      * Input from ODT is enabled
+       DISPLAY "Enter day number (1-7): " WITH NO ADVANCING
+       ACCEPT day_main
+       EVALUATE day_main
+       WHEN 1
+       DISPLAY "Monday"
+       WHEN 2
+       DISPLAY "Tuesday"
+       WHEN 3
+       DISPLAY "Wednesday"
+       WHEN 4
+       DISPLAY "Thursday"
+       WHEN 5
+       DISPLAY "Friday"
+       WHEN 6
+       DISPLAY "Saturday"
+       WHEN 7
+       DISPLAY "Sunday"
+       WHEN OTHER
+       DISPLAY "Invalid day number"
+       END-EVALUATE
        STOP RUN.

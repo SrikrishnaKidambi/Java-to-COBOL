@@ -1,10 +1,10 @@
-Scope:Block->Method:checkSign->Class:TestScoped->GLOBAL
-  Type:int
-    num_checkSign
-  Type:float
-    sign_checkSign
-
 Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
+
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
+  Type:Scanner
+    sc_main
+  Type:int
+    day_main
 

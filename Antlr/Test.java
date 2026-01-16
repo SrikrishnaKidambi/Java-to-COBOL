@@ -1,20 +1,21 @@
 //done ✅
+import java.util.Scanner;
+
 public class Test {
-    public static void checkSign() {
-        int num = -25;
-        float sign = Math.signum(num);
-
-        if (sign > 0) {
-            System.out.println("Number is positive");
-        } else if (sign < 0) {
-            System.out.println("Number is negative");
-        } else {
-            System.out.println("Number is zero");
-        }
-        return;
-    }
-
     public static void main(String[] args) {
-        checkSign();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter day number (1-7): ");
+        int day = sc.nextInt();
+
+        switch (day) {
+            case 1: System.out.println("Monday"); break;
+            case 2: System.out.println("Tuesday"); break;
+            case 3: System.out.println("Wednesday"); break;
+            case 4: System.out.println("Thursday"); break;
+            case 5: System.out.println("Friday"); break;
+            case 6: System.out.println("Saturday"); break;
+            case 7: System.out.println("Sunday"); break;
+            default: System.out.println("Invalid day number");
+        }
     }
 }

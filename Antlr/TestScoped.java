@@ -1,20 +1,36 @@
 //done ✅
+import java.util.Scanner;
+
 public class TestScoped {
 
-    public static void checkSign() {
-        int num_checkSign = -25;
-        float sign_checkSign = Math.signum(num_checkSign);
-        if (sign_checkSign > 0) {
-            System.out.println("Number is positive");
-        } else if (sign_checkSign < 0) {
-            System.out.println("Number is negative");
-        } else {
-            System.out.println("Number is zero");
-        }
-        return;
-    }
-
     public static void main(String[] args_main) {
-        checkSign();
+        Scanner sc_main = new Scanner(System.in);
+        System.out.print("Enter day number (1-7): ");
+        int day_main = sc_main.nextInt();
+        switch(day_main) {
+            case 1:
+                System.out.println("Monday");
+                break;
+            case 2:
+                System.out.println("Tuesday");
+                break;
+            case 3:
+                System.out.println("Wednesday");
+                break;
+            case 4:
+                System.out.println("Thursday");
+                break;
+            case 5:
+                System.out.println("Friday");
+                break;
+            case 6:
+                System.out.println("Saturday");
+                break;
+            case 7:
+                System.out.println("Sunday");
+                break;
+            default:
+                System.out.println("Invalid day number");
+        }
     }
 }
