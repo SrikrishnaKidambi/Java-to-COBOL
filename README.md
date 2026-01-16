@@ -13,19 +13,20 @@
 - **Code translation:** Translates the java code into equivalent cobol code using the rule based translation approach. We have currently implemented rule based mapping for arithmetic expressions (including int, float, double, long, char, String etc.,), arrays, conditional statements (if-else if-else blocks, switch case), loops, methods.
 - **Graphical User Interface:** Our tool has a GUI that has options to upload the java code for translation and also options to copy and save the translated cobol code.
 ## Uses/Goals of the tool :
-- JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code. So our tool helps the developers to write code in java and convert it to cobol and use it for maintainance purposes.
+- JAVA2COB is a tool that is developed to do the rule based translation of java code to COBOL code, as many developers today are unaware of COBOL language which is used in many legacy systems their maintainance is a challenge and also LLMs perform bad in understanding and fixing bugs in COBOL code. So our tool helps the developers to write code in java and convert it to cobol and use it for extending the existing COBOL systems.
 - An API was built and hosted on cloud platform (Render) that accepts a POST request. It takes Java code in the request and returns the converted COBOL code. For the tool to be made available for users without getting Java installed on their system, we made a docker container that maintains the environment required for the tool to convert the input Java code.
 - A website was built with backend being the API built for this project. The website is hosted at the following link : [ Website link](https://java2cob-rishalab.onrender.com/). Following are the features of the website :
       - User will be able to upload a Java file for which the conversion will be made and the generated COBOL code will be displayed on website.
       - User will be able to write the Java code on the website and get the conversion done.
       - User will be able to copy the generated COBOL code or will be able to save the generated COBOL code.
   Image of the website :
-  <img width="1905" height="900" alt="image" src="https://github.com/user-attachments/assets/e04aacc4-9340-46ef-9c1c-1500857946e0" />
+  <img width="1919" height="909" alt="image" src="https://github.com/user-attachments/assets/0e3a5a7f-74ce-4909-83fe-eebb202f12e1" />
+
 - A vs code extension was also built using the API built using this tool. The extension has been published in the VS code market place with the name : java-to-cobol-convertor. It can be downloaded from the link : [Extension Link](https://marketplace.visualstudio.com/items?itemName=SaiKrishnaBrahmajosyula.java-to-cobol-convertor).
 
 ## Working of tool :
-<img width="820" height="335" alt="Tool_Architecture_Java2COB drawio (2)" src="https://github.com/user-attachments/assets/a311b01d-8960-48c2-9e6a-e785a763b71d" />
-<br/>
+<img width="1248" height="561" alt="image" src="https://github.com/user-attachments/assets/3c0fed40-7c35-4162-8fcc-4fe6cbf0e9e6" />
+
 
 **Key phases in the tool:**
 
@@ -81,7 +82,13 @@ We have currently implemented rule based mapping for arithmetic expressions (inc
 - You can copy the code onto the clipboard by clicking the copy button in the right side of GUI.
 - You can also save the code by clicking the save button in the right side of GUI.
 
-## Tool Demonstration video :
+## COBOL code running commnads(for testing correctness):
+- `cobc -x TimelineTest15012026.cbl` to compile the code
+- `./TimelineTest15012026` to run the code
+
+## Tool Demonstration Video:
+
+[Watch on Youtube]([https://www.youtube.com/watch?v=_93LDvXTkT0](https://youtu.be/ZqBmDnVRqtY?si=ZTEUNjIv-BYc1pW8))
 
 ## Contributors :
 - Sai Krishna Brahmajosyula

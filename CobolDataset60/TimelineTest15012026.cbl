@@ -1,19 +1,21 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. DayOfWeek.
+
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
+       01  ARGS_MAIN_-ARRAY.
+           05  args_main    PIC X(100) OCCURS 100 TIMES.
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
+       01  sc_main         PIC X(100).
+       01  day_main        PIC S9(5).
+
+
        PROCEDURE DIVISION.
 
 
        MAIN-PARA.
-       PERFORM VARYING i_main FROM 0 BY 1 UNTIL NOT (i_main < 10)
-       COMPUTE arr_main(i_main + 1) = 0
-       END-PERFORM.
-       MOVE arr_main TO arr_sumArray
-       PERFORM SUMARRAY-PARA
-
-       sumArray-PARA.
-       MOVE 0 TO sum_sumArray
-       PERFORM VARYING i_sumArray FROM 0 BY 1 UNTIL NOT (i_sumArray < arr_sumArray.length)
-       COMPUTE sum_sumArray = sum_sumArray + arr_sumArray(i_sumArray + 1)
-       END-PERFORM.
-       EXIT.
       * Input from ODT is enabled
        DISPLAY "Enter day number (1-7): " WITH NO ADVANCING
        ACCEPT day_main
@@ -36,3 +38,4 @@
        DISPLAY "Invalid day number"
        END-EVALUATE
        STOP RUN.
+

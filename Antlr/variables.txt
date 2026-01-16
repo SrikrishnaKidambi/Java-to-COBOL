@@ -21,4 +21,8 @@ Scope:Block->Method:main->Class:TestScoped->GLOBAL
 Scope:For->Block->Method:main->Class:TestScoped->GLOBAL
   Type:int
     i_main
+  Type:Scanner
+    sc_main
+  Type:int
+    day_main
 

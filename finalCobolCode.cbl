@@ -4,6 +4,7 @@
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
+<<<<<<< HEAD
       * Variables for Scope:METHOD_SUMARRAY_CLASS_TESTSCOPED_GLOBAL
        01  ARR_SUMARRAY_-ARRAY.
            05  arr_sumArray PIC S9(5) OCCURS 100 TIMES.
@@ -11,6 +12,8 @@
        01  sum_sumArray    PIC S9(5).
       * Variables for Scope:FOR_BLOCK_METHOD_SUMARRAY_CLASS_TESTSCOPED_GLOBAL
        01  i_sumArray      PIC S9(5).
+=======
+>>>>>>> c3913f956c2a9abd6af3157c753d01639fcdf513
       * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
@@ -20,6 +23,8 @@
       * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  i_main          PIC S9(5).
 
+
+       PROCEDURE DIVISION.
 
 
        MAIN-PARA.
