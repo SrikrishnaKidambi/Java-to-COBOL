@@ -137,17 +137,28 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         cobolCodePD.setLength(0); // Clear previous content!
         // Re-add the PROCEDURE DIVISION header which was initially added in the constructor
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
-        if(methodCodeMap.containsKey("main")){
-            cobolCodePD.append(methodCodeMap.get("main").toString());
-        }
 
+        // initially emit the ENTRY-PARA method that will initialise the flow of the program invoking the main method.
+        cobolCodePD.append("\n")
+            .append(INDENT).append("ENTRY-PARA.\n")
+            .append(INDENT).append("    PERFORM MAIN-PARA\n")
+            .append(INDENT).append("    STOP RUN.\n\n");
+
+
+        // emit non-main methods initially
         for(Map.Entry<String,StringBuilder>entry:methodCodeMap.entrySet()){
             if(!entry.getKey().equals("main")){
                 cobolCodePD.append(entry.getValue().toString());
-                cobolCodePD.append(INDENT).append("EXIT.").append("\n");
+                cobolCodePD.append(INDENT).append("EXIT.").append("\n\n");
             }
         }
-        cobolCodePD.append(INDENT).append("STOP RUN.\n");
+
+        // emit the main method at the last
+        if(methodCodeMap.containsKey("main")){
+            cobolCodePD.append(methodCodeMap.get("main").toString());
+            cobolCodePD.append(INDENT).append("EXIT.\n\n");
+        }
+
         return cobolCodePD.toString();
     }
     //-----------Declaration types---------------
@@ -761,7 +772,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
         if(text.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*\\)\\s*;?$") && !text.contains("=")){
             String call=text.substring(0,text.indexOf('(')).trim();
-            String methodName=call.toUpperCase()+"-PARA";
+            // String methodName=call.toUpperCase()+"-PARA";
+            String methodName=call+"-PARA";
             String argList=text.substring(text.indexOf('(')+1,text.lastIndexOf(')'));
 
             List<String> argValues = Arrays.stream(argList.split(","))
@@ -1585,12 +1597,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     closingBraces--;    
         // }
             if (ctx.IF() != null && !blockStack.isEmpty() && blockStack.peek().contains("IF")) {
-                emitCobol(INDENT + "END-IF.\n");
+                emitCobol(INDENT + "END-IF\n");
                 blockStack.pop();
                 return;
             }
             if (ctx.FOR() != null && !blockStack.isEmpty() && blockStack.peek().equals("FOR")) {
-                emitCobol(INDENT + "END-PERFORM.\n");
+                emitCobol(INDENT + "END-PERFORM\n");
                 blockStack.pop();
                 return;
             }

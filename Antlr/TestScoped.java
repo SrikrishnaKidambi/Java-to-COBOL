@@ -1,20 +1,10 @@
-//done ✅
 public class TestScoped {
 
-    public static void checkSign() {
-        int num_checkSign = -25;
-        float sign_checkSign = Math.signum(num_checkSign);
-        if (sign_checkSign > 0) {
-            System.out.println("Number is positive");
-        } else if (sign_checkSign < 0) {
-            System.out.println("Number is negative");
-        } else {
-            System.out.println("Number is zero");
-        }
-        return;
-    }
-
     public static void main(String[] args_main) {
-        checkSign();
+        for (int i_main = 1; i_main <= 3; i_main++) {
+            for (int j_main = 1; j_main <= 3; j_main++) {
+                System.out.println(i_main + " x " + j_main + " = " + (i_main * j_main));
+            }
+        }
     }
 }
