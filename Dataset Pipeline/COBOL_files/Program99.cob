@@ -1,3 +1,22 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. Program99.
+
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * Variables for Scope:METHOD_MAIN_CLASS_PROGRAM99_GLOBAL
+       01  ARGS_MAIN_-ARRAY.
+           05  args_main    PIC X(100) OCCURS 100 TIMES.
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_PROGRAM99_GLOBAL
+       01  a_main          PIC S9(5).
+       01  b_main          PIC S9(5).
+       01  sum_main        PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_PROGRAM99_GLOBAL
+       01  j_main          PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+
+
        PROCEDURE DIVISION.
 
 
@@ -7,15 +26,6 @@
 
 
        MAIN-PARA.
-<<<<<<< HEAD
-       MOVE 84 TO n_main
-       DIVIDE n_main BY 4 GIVING TEMP_0 REMAINDER TEMP_0
-       DIVIDE n_main BY 7 GIVING TEMP_1 REMAINDER TEMP_1
-       IF TEMP_0 = 0  AND  TEMP_1 = 0
-       DISPLAY 1
-       ELSE
-       DISPLAY 0
-=======
        MOVE 3 TO a_main
        MOVE 7 TO b_main
        MOVE 0 TO sum_main
@@ -31,7 +41,7 @@
        ELSE
        DISPLAY "Odd Sum: "
        DISPLAY sum_main
->>>>>>> eaca98582af0ad720b3cad82711b003739512612
        END-IF
        EXIT.
+
 
