@@ -1,11 +1,15 @@
-Scope:Method:main->Class:TestScoped->GLOBAL
-  Type:String
-    args_main [size=[]]
-
-Scope:Block->Method:main->Class:TestScoped->GLOBAL
+Scope:Method:minJumps->Class:Solution->GLOBAL
   Type:int
-    a_main
-    b_main
-    c_main
-    d_main
+    arr_minJumps [size=[]]
+    n_minJumps
+
+Scope:Block->Method:minJumps->Class:Solution->GLOBAL
+  Type:int
+    jumps_minJumps
+    currentEnd_minJumps
+    farthest_minJumps
+
+Scope:For->Block->Method:minJumps->Class:Solution->GLOBAL
+  Type:int
+    i_minJumps
 
