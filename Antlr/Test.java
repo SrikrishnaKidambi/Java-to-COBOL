@@ -3,9 +3,11 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
-       int a = 4;
-	int b = 9;
-	int c=10;
-	int d = (5 % 6) % (3 - 5 % 9);
+        int a = 5;
+	int b = 7;
+	int c = 8;
+	int d = 9;
+	
+	d = a % b + c;
     }
 }

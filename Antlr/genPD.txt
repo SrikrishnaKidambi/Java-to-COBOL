@@ -7,12 +7,12 @@
 
 
        MAIN-PARA.
-       MOVE 4 TO a_main
-       MOVE 9 TO b_main
-       MOVE 10 TO c_main
-       COMPUTE TEMP_0 = 5 % 6
-       COMPUTE TEMP_1 = 3 - 5 % 9
-       DIVIDE TEMP_0 BY TEMP_1 GIVING TEMP_2 REMAINDER TEMP_3
-       COMPUTE d_main = TEMP_3
+       MOVE 5 TO a_main
+       MOVE 7 TO b_main
+       MOVE 8 TO c_main
+       MOVE 9 TO d_main
+       DIVIDE a_main BY b_main GIVING TEMP_0 REMAINDER TEMP_1
+       COMPUTE TEMP_2 = TEMP_1 + c_main
+       COMPUTE d_main = TEMP_2
        EXIT.
 

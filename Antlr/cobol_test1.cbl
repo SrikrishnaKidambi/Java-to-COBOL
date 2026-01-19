@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. DayOfWeek.
+       PROGRAM-ID. Test.
 
 
        DATA DIVISION.

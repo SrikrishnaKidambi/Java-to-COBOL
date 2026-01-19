@@ -591,8 +591,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 rhs = sbPost.toString();
             
                 // 🔥 NEW: HANDLE MODULO HERE
-                rhs = stripRedundantParens(rhs);
-                rhs = handleModulo(rhs);
+                // rhs = stripRedundantParens(rhs);
+                rhs = reduceExpression(rhs);
 
             
                 for(String pre : preOps){
@@ -1204,8 +1204,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 rhs = sbPost.toString();
             
                 // 🔥 NEW: HANDLE MODULO HERE
-                rhs = stripRedundantParens(rhs);
-                rhs = handleModulo(rhs);
+                // rhs = stripRedundantParens(rhs);
+                rhs = reduceExpression(rhs);
             
                 for (String pre : preOps) {
                     emitCobol(INDENT + pre + "\n");
@@ -1228,14 +1228,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             if (parts.length == 2) {
                 String lhs = parts[0].trim();
                 String rhs = parts[1].replace(";", "").trim();
-
-                // LHS can be direct (e.g., x) or an array-style (e.g., arr(i + 1))
+            
                 String targetVar = lhs;
-
+            
                 List<String> preOps = new ArrayList<>();
                 List<String> postOps = new ArrayList<>();
-
-                // Handle pre-increment/decrement (++x / --x)
+            
+                // Pre ++ / --
                 Pattern prePattern = Pattern.compile("(\\+\\+|--)(\\w+(?:\\([^()]*\\))?)");
                 Matcher preMatcher = prePattern.matcher(rhs);
                 StringBuffer sbPre = new StringBuffer();
@@ -1247,8 +1246,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
                 preMatcher.appendTail(sbPre);
                 rhs = sbPre.toString();
-
-                // Handle post-increment/decrement (x++ / x--)
+            
+                // Post ++ / --
                 Pattern postPattern = Pattern.compile("(\\w+(?:\\([^()]*\\))?)(\\+\\+|--)");
                 Matcher postMatcher = postPattern.matcher(rhs);
                 StringBuffer sbPost = new StringBuffer();
@@ -1260,31 +1259,27 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
                 postMatcher.appendTail(sbPost);
                 rhs = sbPost.toString();
-
-                // Emit COBOL code
+            
+                // 🔥 THIS IS THE MISSING LINE
+                rhs = reduceExpression(rhs);
+            
                 for (String pre : preOps) {
-                    emitCobol((INDENT)+(pre)+("\n"));
-                    // cobolCodePD.append(INDENT).append(pre).append("\n");
+                    emitCobol(INDENT + pre + "\n");
                 }
-                emitCobol((INDENT)
-                        +("COMPUTE ")
-                        +(targetVar)
-                        +(" = ")
-                        +(rhs)
-                        +(insideblock ? "\n" : ".\n"));
-                // cobolCodePD.append(INDENT)
-                //         .append("COMPUTE ")
-                //         .append(targetVar)
-                //         .append(" = ")
-                //         .append(rhs)
-                //         .append(insideblock ? "\n" : ".\n");
-
+            
+                emitCobol(INDENT
+                        + "COMPUTE "
+                        + targetVar
+                        + " = "
+                        + rhs
+                        + (insideblock ? "\n" : ".\n"));
+                
                 for (String post : postOps) {
-                    emitCobol((INDENT)+(post)+("\n"));
-                    // cobolCodePD.append(INDENT).append(post).append("\n");
+                    emitCobol(INDENT + post + "\n");
                 }
             }
         }
+        
 
         
         
@@ -2220,72 +2215,140 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     // ------ Helper for COMPUTE to handle % ----------
 
-    private String handleModulo(String rhs) {
+    public String reduceExpression(String expr) {
 
-        // Only allow ATOMIC operands for %
-        // No + - * / % ( )
-        Pattern modPattern = Pattern.compile(
-            "(\\([^()]+\\)|[^+\\-*/%()\\s]+)\\s*%\\s*(\\([^()]+\\)|[^+\\-*/%()\\s]+)"
-        );
-        
+        Stack<String> operands = new Stack<>();
+        Stack<String> operators = new Stack<>();
 
-        Matcher m = modPattern.matcher(rhs);
+        List<String> tokens = tokenize(expr);
 
-        while (true) {
+        for (String tok : tokens) {
 
-            m = modPattern.matcher(rhs);
-            if (!m.find()) break;
+            if (isOperand(tok)) {
+                operands.push(tok);
+            }
+            else if (tok.equals("(")) {
+                operators.push(tok);
+            }
+            else if (tok.equals(")")) {
+                while (!operators.peek().equals("(")) {
+                    reduceTop(operands, operators);
+                }
+                operators.pop(); // remove '('
+            }
+            else { // operator
+                while (!operators.isEmpty()
+                        && !operators.peek().equals("(")
+                        && precedence(operators.peek()) >= precedence(tok)) {
+                    reduceTop(operands, operators);
+                }
+                operators.push(tok);
+            }
+        }
 
-            String left = stripRedundantParens(m.group(1).trim());
-            String right = stripRedundantParens(m.group(2).trim());
+        while (!operators.isEmpty()) {
+            reduceTop(operands, operators);
+        }
 
-            left = reduceArithmeticToTemp(left);
-            right = reduceArithmeticToTemp(right);
+        return operands.pop();
+    }
+
+    private void reduceTop(Stack<String> operands, Stack<String> operators) {
+
+        String op = operators.pop();
+
+        String right = operands.pop();
+        String left  = operands.pop();
+
+        left = reduceArithmeticToTemp(left);
+        right = reduceArithmeticToTemp(right);
+
+        if (op.equals("%")) {
 
             String q = newTemp();
             String r = newTemp();
 
-            emitCobol(INDENT
-                    + "DIVIDE "
-                    + left
-                    + " BY "
-                    + right
-                    + " GIVING "
-                    + q
-                    + " REMAINDER "
-                    + r
-                    + (insideblock ? "\n" : ".\n"));
-            
-            rhs = rhs.substring(0, m.start()) + r + rhs.substring(m.end());
+            emitCobol(
+                INDENT + "DIVIDE " + left + " BY " + right +
+                " GIVING " + q + " REMAINDER " + r +
+                (insideblock ? "\n" : ".\n")
+            );
+
+            operands.push(r);
+        }
+        else {
+            String t = newTemp();
+            emitCobol(
+                INDENT + "COMPUTE " + t + " = " +
+                left + " " + op + " " + right +
+                (insideblock ? "\n" : ".\n")
+            );
+            operands.push(t);
+        }
+    }
+
+    private List<String> tokenize(String expr) {
+
+        List<String> tokens = new ArrayList<>();
+        int i = 0;
+
+        while (i < expr.length()) {
+
+            char c = expr.charAt(i);
+
+            // skip whitespace
+            if (Character.isWhitespace(c)) {
+                i++;
+                continue;
+            }
+
+            // identifier or number
+            if (Character.isLetterOrDigit(c) || c == '_') {
+                StringBuilder sb = new StringBuilder();
+                while (i < expr.length()) {
+                    char ch = expr.charAt(i);
+                    if (Character.isLetterOrDigit(ch) || ch == '_') {
+                        sb.append(ch);
+                        i++;
+                    } else break;
+                }
+                tokens.add(sb.toString());
+                continue;
+            }
+
+            // operators and parentheses
+            if ("+-*/%()".indexOf(c) != -1) {
+                tokens.add(String.valueOf(c));
+                i++;
+                continue;
+            }
+
+            // ignore anything else safely
+            i++;
         }
 
-
-
-        return rhs;
+        return tokens;
     }
-    private String reduceArithmeticToTemp(String expr) {
-        expr = stripRedundantParens(expr);
 
-        if (!hasArithmetic(expr)) {
-            return expr;
-        }
-
-        String t = newTemp();
-        emitCobol(INDENT
-                + "COMPUTE "
-                + t
-                + " = "
-                + expr
-                + (insideblock ? "\n" : ".\n"));
-
-        return t;
+    private boolean isOperand(String s) {
+        return !s.equals("+") && !s.equals("-")
+            && !s.equals("*") && !s.equals("/")
+            && !s.equals("%")
+            && !s.equals("(") && !s.equals(")");
     }
+
+    private int precedence(String op) {
+        if (op.equals("%")) return 2;
+        if (op.equals("*") || op.equals("/")) return 1;
+        if (op.equals("+") || op.equals("-")) return 0;
+        return -1;
+    }
+
     private String stripRedundantParens(String s) {
         s = s.trim();
         while (s.startsWith("(") && s.endsWith(")")) {
             int depth = 0;
             boolean valid = true;
-
             for (int i = 0; i < s.length(); i++) {
                 char c = s.charAt(i);
                 if (c == '(') depth++;
@@ -2295,14 +2358,27 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     break;
                 }
             }
-
             if (!valid) break;
             s = s.substring(1, s.length() - 1).trim();
         }
         return s;
     }
-    private boolean containsModulo(String s) {
-        return s.contains("%");
+
+    private String reduceArithmeticToTemp(String expr) {
+        expr = stripRedundantParens(expr);
+
+        if (!hasArithmetic(expr)) {
+            return expr;
+        }
+
+        String t = newTemp();
+        emitCobol(
+            INDENT + "COMPUTE " + t + " = " + expr +
+            (insideblock ? "\n" : ".\n")
+        );
+
+        return t;
     }
+
 
 }
