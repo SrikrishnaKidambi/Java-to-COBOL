@@ -1,4 +1,6 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 * COBOL code generated from Java files
 
 =======
@@ -53,3 +55,4 @@
 
 >>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
 >>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be

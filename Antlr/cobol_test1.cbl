@@ -1,5 +1,8 @@
        IDENTIFICATION DIVISION.
 <<<<<<< HEAD
+       PROGRAM-ID. Striver-A2Z-DSA-Sheet-Solution-using-JAVA_07_CheckForPrime.
+=======
+<<<<<<< HEAD
        PROGRAM-ID. CodingNinjas_Java_DSA_DecimalToBinary.
 =======
 <<<<<<< HEAD
@@ -8,10 +11,13 @@
        PROGRAM-ID. Striver-A2Z-DSA-Sheet-Solution-using-JAVA_07_CheckForPrime.
 >>>>>>> a32651b2843df9819e4d5dbe30bd79b5f92bf8ac
 >>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
 
 
        DATA DIVISION.
        WORKING-STORAGE SECTION.
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
       * Variables for Scope:METHOD_MAIN_CLASS_DECIMALTOBINARY_GLOBAL
        01  ARGS_MAIN_-ARRAY.
@@ -29,6 +35,7 @@
        01  i_printSubstrings PIC S9(5).
 =======
 <<<<<<< HEAD
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
       * Variables for Scope:METHOD_MINJUMPS_CLASS_SOLUTION_GLOBAL
        01  ARR_MINJUMPS_-ARRAY.
            05  arr_minJumps PIC S9(5) OCCURS 100 TIMES.
@@ -39,6 +46,8 @@
        01  farthest_minJumps PIC S9(5).
       * Variables for Scope:FOR_BLOCK_METHOD_MINJUMPS_CLASS_SOLUTION_GLOBAL
        01  i_minJumps      PIC S9(5).
+<<<<<<< HEAD
+=======
 =======
       * Variables for Scope:METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  ARGS_MAIN_-ARRAY.
@@ -53,3 +62,4 @@
 >>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
 >>>>>>> a32651b2843df9819e4d5dbe30bd79b5f92bf8ac
 >>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be

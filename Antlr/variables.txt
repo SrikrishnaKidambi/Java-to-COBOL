@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+Scope:Method:minJumps->Class:Solution->GLOBAL
+=======
+<<<<<<< HEAD
 Scope:Method:main->Class:DecimalToBinary->GLOBAL
   Type:String
     args_main [size=[]]
@@ -14,14 +17,23 @@ Scope:Method:main->Class:TestScoped->GLOBAL
     args_main [size=[]]
 
 Scope:Block->Method:main->Class:TestScoped->GLOBAL
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
   Type:int
-    a_main
-    b_main
-    i_main
-    n_main
+    arr_minJumps [size=[]]
+    n_minJumps
 
-Scope:For->Block->While->Block->Method:printSubstrings->Class:TestScoped->GLOBAL
+Scope:Block->Method:minJumps->Class:Solution->GLOBAL
   Type:int
+<<<<<<< HEAD
+    jumps_minJumps
+    currentEnd_minJumps
+    farthest_minJumps
+
+Scope:For->Block->Method:minJumps->Class:Solution->GLOBAL
+  Type:int
+    i_minJumps
+=======
     j_main
 >>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
 
