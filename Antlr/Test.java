@@ -1,15 +1,8 @@
 public class Test {
+    // code comes here
+    public static void main(String[] args) {
+    	int a=3,b=5,c=6;    
 
-	public static void printSubstrings(String str){
-        int count=1;
-        while (count<=str.length())
-        {
-            //System.out.println("Printing substring with " + count + " characters");
-            for (int i=0;i+count<=str.length();i++)
-            {
-                System.out.println(str.substring(i,i+count));
-            }
-            count=count+1;
-        }
-	}
+		
+    }
 }
