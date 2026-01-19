@@ -12,8 +12,4 @@ public class Test {
             count=count+1;
         }
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
