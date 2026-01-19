@@ -10,6 +10,11 @@
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_PROGRAM82_GLOBAL
        01  a_main          PIC S9(5).
        01  b_main          PIC S9(5).
+       01  sum_main        PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_PROGRAM82_GLOBAL
+       01  j_main          PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
 
 
        PROCEDURE DIVISION.
@@ -21,14 +26,21 @@
 
 
        MAIN-PARA.
-       MOVE 10 TO a_main
-       MOVE 20 TO b_main
-       IF a_main < b_main
-       DISPLAY "MIN:"
-       DISPLAY a_main
+       MOVE 7 TO a_main
+       MOVE 5 TO b_main
+       MOVE 0 TO sum_main
+       COMPUTE TEMP_0 = a_main + b_main
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_0)
+       ADD sum_main TO j_main GIVING sum_main
+       COMPUTE TEMP_0 = a_main + b_main
+       END-PERFORM
+       DIVIDE sum_main BY 2 GIVING TEMP_1 REMAINDER TEMP_1
+       IF TEMP_1 = 0
+       DISPLAY "Even Sum: "
+       DISPLAY sum_main
        ELSE
-       DISPLAY "MIN:"
-       DISPLAY b_main
+       DISPLAY "Odd Sum: "
+       DISPLAY sum_main
        END-IF
        EXIT.
 

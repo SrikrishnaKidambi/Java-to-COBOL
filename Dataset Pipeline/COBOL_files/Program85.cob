@@ -8,10 +8,11 @@
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_PROGRAM85_GLOBAL
-       01  n_main          PIC S9(5).
-       01  rev_main        PIC S9(5).
-      * Variables for Scope:BLOCK_WHILE_BLOCK_METHOD_MAIN_CLASS_PROGRAM85_GLOBAL
-       01  d_main          PIC S9(5).
+       01  a_main          PIC S9(5).
+       01  b_main          PIC S9(5).
+       01  sum_main        PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_PROGRAM85_GLOBAL
+       01  j_main          PIC S9(5).
        01 TEMP_0 PIC S9(9).
        01 TEMP_1 PIC S9(9).
 
@@ -25,16 +26,22 @@
 
 
        MAIN-PARA.
-       MOVE 1234 TO n_main
-       MOVE 0 TO rev_main
-       PERFORM UNTIL NOT (n_main > 0)
-       DIVIDE n_main BY 10 GIVING d_main REMAINDER d_main
-       COMPUTE TEMP_0 = rev_main * 10
-       COMPUTE TEMP_1 = TEMP_0 + d_main
-       COMPUTE rev_main = TEMP_1
-       DIVIDE n_main BY 10 GIVING n_main
+       MOVE 3 TO a_main
+       MOVE 3 TO b_main
+       MOVE 0 TO sum_main
+       COMPUTE TEMP_0 = a_main + b_main
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_0)
+       ADD sum_main TO j_main GIVING sum_main
+       COMPUTE TEMP_0 = a_main + b_main
        END-PERFORM
-       DISPLAY rev_main
+       DIVIDE sum_main BY 2 GIVING TEMP_1 REMAINDER TEMP_1
+       IF TEMP_1 = 0
+       DISPLAY "Even Sum: "
+       DISPLAY sum_main
+       ELSE
+       DISPLAY "Odd Sum: "
+       DISPLAY sum_main
+       END-IF
        EXIT.
 
 

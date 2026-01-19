@@ -1,9 +1,14 @@
-Scope:Method:main->Class:UpperCaseTest->GLOBAL
+Scope:Method:main->Class:Program99->GLOBAL
   Type:String
     args_main [size=[]]
 
-Scope:Block->Method:main->Class:UpperCaseTest->GLOBAL
-  Type:String
-    s_main
-    t_main
+Scope:Block->Method:main->Class:Program99->GLOBAL
+  Type:int
+    a_main
+    b_main
+    sum_main
+
+Scope:For->Block->Method:main->Class:Program99->GLOBAL
+  Type:int
+    j_main
 
