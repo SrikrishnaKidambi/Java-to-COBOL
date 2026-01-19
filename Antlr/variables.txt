@@ -1,26 +1,10 @@
-Scope:Method:minJumps->Class:Solution->GLOBAL
-  Type:int
-<<<<<<< HEAD
-    arr_minJumps [size=[]]
-    n_minJumps
+Scope:Method:main->Class:DecimalToBinary->GLOBAL
+  Type:String
+    args_main [size=[]]
 
-Scope:Block->Method:minJumps->Class:Solution->GLOBAL
+Scope:Block->Method:main->Class:DecimalToBinary->GLOBAL
+  Type:Scanner
+    scan_main
   Type:int
-    jumps_minJumps
-    currentEnd_minJumps
-    farthest_minJumps
-
-Scope:For->Block->Method:minJumps->Class:Solution->GLOBAL
-  Type:int
-    i_minJumps
-=======
-    a_main
-    b_main
-    i_main
-    n_main
-
-Scope:For->Block->While->Block->Method:main->Class:TestScoped->GLOBAL
-  Type:int
-    j_main
->>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
+    N_main
 
