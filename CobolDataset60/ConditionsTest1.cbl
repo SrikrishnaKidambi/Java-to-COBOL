@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. DayOfWeek.
+       PROGRAM-ID. EvenOdd.
 
 
        DATA DIVISION.
@@ -8,14 +8,10 @@
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
-       01  a_main          PIC S9(5).
-       01  b_main          PIC S9(5).
-       01  c_main          PIC S9(5).
-       01  d_main          PIC S9(5).
+       01  sc_main         PIC X(100).
+       01  num_main        PIC S9(5).
        01 TEMP_0 PIC S9(9).
        01 TEMP_1 PIC S9(9).
-       01 TEMP_2 PIC S9(9).
-       01 TEMP_3 PIC S9(9).
 
 
        PROCEDURE DIVISION.
@@ -27,13 +23,16 @@
 
 
        MAIN-PARA.
-       MOVE 4 TO a_main
-       MOVE 9 TO b_main
-       MOVE 10 TO c_main
-       COMPUTE TEMP_0 = 5 % 6
-       COMPUTE TEMP_1 = 3 - 5 % 9
-       DIVIDE TEMP_0 BY TEMP_1 GIVING TEMP_2 REMAINDER TEMP_3
-       COMPUTE d_main = TEMP_3
+      * Input from ODT is enabled
+       DISPLAY "Enter a number: " WITH NO ADVANCING
+       ACCEPT num_main
+       DIVIDE num_main BY 2 GIVING TEMP_0 REMAINDER TEMP_0
+       COMPUTE TEMP_1 = FUNCTION MIN(2  3) + 2
+       IF TEMP_0 = 0  AND  TEMP_1 >= 3
+       DISPLAY "Even number"
+       ELSE
+       DISPLAY "Odd number"
+       END-IF
        EXIT.
 
 

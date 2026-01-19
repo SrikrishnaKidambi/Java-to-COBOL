@@ -7,10 +7,12 @@
 
 
        MAIN-PARA.
-       PERFORM VARYING i_main FROM 1 BY 1 UNTIL NOT (i_main <= 3)
-       PERFORM VARYING j_main FROM 1 BY 1 UNTIL NOT (j_main <= 3)
-       DISPLAY i_main   " x "   j_main   " = "   (i_main * j_main)
-       END-PERFORM
-       END-PERFORM
+       MOVE 4 TO a_main
+       MOVE 9 TO b_main
+       MOVE 10 TO c_main
+       COMPUTE TEMP_0 = 5 % 6
+       COMPUTE TEMP_1 = 3 - 5 % 9
+       DIVIDE TEMP_0 BY TEMP_1 GIVING TEMP_2 REMAINDER TEMP_3
+       COMPUTE d_main = TEMP_3
        EXIT.
 

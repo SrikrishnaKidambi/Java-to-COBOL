@@ -1,9 +1,11 @@
+//done ✅
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
-        for (int i = 1; i <= 3; i++) {
-            for (int j = 1; j <= 3; j++) {
-                System.out.println(i + " x " + j + " = " + (i * j));
-            }
-        }
+       int a = 4;
+	int b = 9;
+	int c=10;
+	int d = (5 % 6) % (3 - 5 % 9);
     }
 }

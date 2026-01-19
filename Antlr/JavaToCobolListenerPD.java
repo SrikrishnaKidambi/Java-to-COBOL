@@ -46,7 +46,24 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private String currentMethod=null;
     private Map<String,List<String>>methodParameters=new HashMap<>();
     LinkedHashMap<String,StringBuilder>methodCodeMap=new LinkedHashMap<>();
+    private int tempCounter = 0;
 
+
+    private Set<String> tempVars = new HashSet<>();
+
+    private String newTemp(){
+        String t = "TEMP_" + (tempCounter++);
+        tempVars.add(t);
+        return t;
+    }
+
+    private boolean hasArithmetic(String s){
+        return s.matches(".*[+\\-*/%].*");
+    }
+
+    public int getNumberOfTempVars(){
+        return tempCounter;
+    }
 
 
     @Override
@@ -536,57 +553,65 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
         }
         else if(text.matches("(int|float|double|long|short|var|char)?\\s*\\w+\\s*=\\s*[^;]*(?:FUNCTION\\s+\\w+\\([^)]*\\)|[+\\-*/%])[^;]*;?")){
-            String[] parts=text.split("=", 2);
-            if(parts.length==2){
-                String lhs=parts[0].trim();
-                String[] lhsTokens =lhs.split("\\s+");
-                String targetVar = lhsTokens[lhsTokens.length-1];
-
-                String rhs=parts[1].replace(";", "").trim();
-
+            String[] parts = text.split("=", 2);
+            if(parts.length == 2){
+                String lhs = parts[0].trim();
+                String[] lhsTokens = lhs.split("\\s+");
+                String targetVar = lhsTokens[lhsTokens.length - 1];
+            
+                String rhs = parts[1].replace(";", "").trim();
+            
                 List<String> preOps = new ArrayList<>();
                 List<String> postOps = new ArrayList<>();
-
-                // Pre-increment/decrement: ++x / --x
+            
+                // Pre ++ / --
                 Pattern prePattern = Pattern.compile("(\\+\\+|--)(\\w+)");
                 Matcher preMatcher = prePattern.matcher(rhs);
                 StringBuffer sbPre = new StringBuffer();
                 while (preMatcher.find()) {
                     String op = preMatcher.group(1);
                     String var = preMatcher.group(2);
-                    preOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") +  var + ".");
+                    preOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") + var + ".");
                     preMatcher.appendReplacement(sbPre, var);
                 }
                 preMatcher.appendTail(sbPre);
                 rhs = sbPre.toString();
-
-                // Post-increment/decrement: x++ / x--
+            
+                // Post ++ / --
                 Pattern postPattern = Pattern.compile("(\\w+)(\\+\\+|--)");
                 Matcher postMatcher = postPattern.matcher(rhs);
                 StringBuffer sbPost = new StringBuffer();
                 while (postMatcher.find()) {
                     String var = postMatcher.group(1);
                     String op = postMatcher.group(2);
-                    postOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") +  var + ".");
+                    postOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") + var + ".");
                     postMatcher.appendReplacement(sbPost, var);
                 }
                 postMatcher.appendTail(sbPost);
                 rhs = sbPost.toString();
+            
+                // 🔥 NEW: HANDLE MODULO HERE
+                rhs = stripRedundantParens(rhs);
+                rhs = handleModulo(rhs);
 
-                for(String pre:preOps){
-                    System.out.println(pre);
-                    emitCobol((INDENT)+(pre)+("\n"));
-                    // cobolCodePD.append(INDENT).append(pre).append("\n");
+            
+                for(String pre : preOps){
+                    emitCobol(INDENT + pre + "\n");
                 }
-                emitCobol((INDENT)+("COMPUTE ")+(targetVar)+(" = ")+(rhs)+(insideblock?"\n":".\n"));
-                // cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(rhs).append(insideblock?"\n":".\n");
-
-                for(String post:postOps){
-                    emitCobol((INDENT)+(post)+("\n"));
-                    // cobolCodePD.append(INDENT).append(post).append("\n");
+            
+                emitCobol(INDENT
+                        + "COMPUTE "
+                        + targetVar
+                        + " = "
+                        + rhs
+                        + (insideblock ? "\n" : ".\n"));
+                
+                for(String post : postOps){
+                    emitCobol(INDENT + post + "\n");
                 }
             }
         }
+
     }
 
     private String replaceVarsWithCobolNames(String line){
@@ -606,10 +631,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
 
     //-----------------Statement types-------------------
-    @Override
-    public void enterStatement(JavaParser.StatementContext ctx){
-        addLeadingComments(ctx);
-        String text=tokens.getText(ctx);
+    public void statementTranslation(String text){
         text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         //array conversion
@@ -633,136 +655,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // System.out.println("For text "+text+" vals "+text.matches(".*=\\s*(\"[^\"]*\"|'[^']*'|\\w+)(\\s*\\+\\s*(\"[^\"]*\"|'[^']*'|\\w+))*\\s*;?")+" and "+stringVars.contains(text.split("=")[0].trim().split("\\s+")[text.split("=")[0].trim().split("\\s+").length-1]) );
 
 
-        ParseTree parent = ctx.getParent();
-        if (parent instanceof JavaParser.StatementContext) {
-            JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
-            if (parentStmt.IF() != null
-                && parentStmt.statement().size() > 1
-                && parentStmt.statement(1) == ctx) {
-                // Only emit ELSE if this is not an 'else if'
-                if (ctx.IF() == null) {
-                    emitCobol(INDENT + "ELSE\n");
-                    updateInsideBlock();
-                }
-            }
-        }
-
-        if (ctx.IF() != null) {
-            // Check if this IF is a direct child of another IF's else branch
-            // ParseTree parent = ctx.getParent();
-            if (parent instanceof JavaParser.StatementContext) {
-                JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
-                if (parentStmt.IF() != null
-                    && parentStmt.statement().size() > 1
-                    && parentStmt.statement(1) == ctx) {
-                    // We are an else or else-if branch: emit ELSE
-                    emitCobol(INDENT + "ELSE\n");
-                    updateInsideBlock();
-                }
-            }
-            // Now emit the IF as usual
-            String condition = extractCondition(ctx.parExpression());
-            emitCobol(INDENT + "IF " + condition + "\n");
-            blockStack.push("IF-" + currentIfLevel);
-            currentIfLevel++;
-            updateInsideBlock();
-            justEnteredIf = true;
-            return;
-        }
-
-        // Handling for loop statements
         
-            if (ctx.FOR() != null) {
-                // insideForLoopHeader = true;
-
-                JavaParser.ForControlContext forControl = ctx.forControl();
-                String varName = null, fromValue = null, untilCond = "", update = "";
-                int byValue = 1;
-                boolean increment = true;
-
-                if (forControl != null) {
-                    // forInit (may be null)
-                    if (forControl.forInit() != null) {
-                        String init = tokens.getText(forControl.forInit());
-                        Matcher m = Pattern.compile("(?:int|long|short|var)?\\s*(\\w+)\\s*=\\s*([\\w\\d+-]+)").matcher(init);
-                        if (m.find()) {
-                            varName = m.group(1);
-                            fromValue = m.group(2);
-                            forLoopInitVars.add(varName);
-                        }
-                    }
-                    // condition
-                    if (forControl.expression() != null && varName != null) {
-                        String cond = tokens.getText(forControl.expression());
-                        // Matcher cm = Pattern.compile(varName + "\\s*([<>=!]+)\\s*(.+)").matcher(cond);
-                        // if (cm.find()) {
-                        //     String op = cm.group(1), val = cm.group(2);
-                        //     if (op.equals("<")) untilCond = varName + " >= " + val;
-                        //     else if (op.equals("<=")) untilCond = varName + " > " + val;
-                        //     else if (op.equals(">")) untilCond = varName + " <= " + val;
-                        //     else if (op.equals(">=")) untilCond = varName + " < " + val;
-                        //     else if (op.equals("==")) untilCond = varName + " NOT = " + val;
-                        //     else if (op.equals("!=")) untilCond = varName + " = " + val;
-                        // }
-                        String cobolCond=translateCondition(cond);
-                        untilCond="NOT ("+cobolCond+")";
-                    }
-                    // update: get the 5th child if present (structure: forInit ; expr ; update)
-                    if (forControl.getChildCount() >= 5 && varName != null) {
-                        update = forControl.getChild(4).getText();
-                        if (update.contains("++")) {
-                            byValue = 1; increment = true;
-                        } else if (update.contains("--")) {
-                            byValue = 1; increment = false;
-                        } else {
-                            Matcher um = Pattern.compile(varName + "\\s*([+\\-]=)\\s*(\\d+)").matcher(update);
-                            if (um.find()) {
-                                byValue = Integer.parseInt(um.group(2));
-                                increment = um.group(1).equals("+=");
-                            }
-                        }
-                }
-            }
-            if (varName != null && fromValue != null && !untilCond.isEmpty()) {
-                // cobolCodePD.append(INDENT)
-                //     .append("PERFORM VARYING ").append(varName)
-                //     .append(" FROM ").append(fromValue)
-                //     .append(" BY ").append(increment ? byValue : -byValue)
-                //     .append(" UNTIL ").append(untilCond)
-                //     .append("\n");
-                emitCobol(INDENT+"PERFORM VARYING "+varName+" FROM "+fromValue+" BY "+(increment?byValue:-byValue)+" UNTIL "+untilCond+"\n");
-                blockStack.push("FOR");
-                updateInsideBlock();
-                insideblock = true;
-            }
-            insideForLoopHeader = false;
-            return;
-        }
-
-        // Handling DO-WHILE Loop
-
-        if(ctx.DO()!=null){
-            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST AFTER\n");
-            emitCobol(INDENT+"PERFORM WITH TEST AFTER\n");
-            blockStack.push("DOWHILE");
-            updateInsideBlock();
-            return;
-        }
-
-        // Handling WHILE Loop
-
-        if(ctx.WHILE()!=null){
-            JavaParser.ParExpressionContext parExpr=ctx.parExpression();
-            String condition=extractCondition(parExpr);
-            String untilCondition="NOT ("+condition+")";
-
-            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST BEFORE\n");
-            emitCobol(INDENT+"PERFORM UNTIL "+untilCondition+"\n");
-            // blockStack.push("WHILE");
-            blockStack.push("WHILE:"+untilCondition);
-            updateInsideBlock();
-            return;
-        }
 
         // if(!isTopLevelStatement(ctx)){
         //     return;
@@ -808,26 +701,36 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     }
         // }
         
-        if(text.startsWith("System.out.println") || text.startsWith("System.err.println")){
-            String displayedContent=extractDisplayStatement(text);
-            if(displayedContent!=null){
-                // emitCobol(INDENT + "DISPLAY " + displayedContent + (insideblock?"\n":".\n"));
-                String cobolContent=replaceVarsWithCobolNames(displayedContent);
-                if(cobolContent.equals("")){
-                    cobolContent="\"\"";
-                }
-                emitCobol(INDENT+"DISPLAY "+cobolContent+(insideblock?"\n":".\n"));
+        if (text.startsWith("System.out.println") || text.startsWith("System.err.println")) {
+
+            List<String> parts = extractDisplayParts(text);
+            if (parts == null) return;
+
+            for (String p : parts) {
+                String cobolExpr = processDisplayExpression(p);
+                emitCobol(INDENT + "DISPLAY " + cobolExpr +
+                          (insideblock ? "\n" : ".\n"));
             }
             return;
         }
-        else if(text.startsWith("System.out.print") || text.startsWith("System.err.print")){
-            String displayedContent=extractDisplayStatement(text);
-            if(displayedContent!=null){
-                String cobolContent=replaceVarsWithCobolNames(displayedContent);
-                emitCobol(INDENT + "DISPLAY " + cobolContent + " WITH NO ADVANCING" + (insideblock?"\n":".\n"));
+
+        else if (text.startsWith("System.out.print") || text.startsWith("System.err.print")) {
+        
+            List<String> parts = extractDisplayParts(text);
+            if (parts == null) return;
+        
+            for (int i = 0; i < parts.size(); i++) {
+                String cobolExpr = processDisplayExpression(parts.get(i));
+            
+                emitCobol(
+                    INDENT + "DISPLAY " + cobolExpr +
+                    " WITH NO ADVANCING" +
+                    (insideblock ? "\n" : ".\n")
+                );
             }
             return;
         }
+
         else if ((text.matches(".*=\\s*\\w+\\.next(?:Line|Int|Double|Float|Byte|Short|Long|Boolean)?\\s*\\(\\s*\\)\\s*(\\.charAt\\s*\\(\\s*\\d+\\s*\\))?\\s*;?"))) {
             //scanner class mapped to accept
             String[] parts = text.split("=");
@@ -1268,56 +1171,55 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         else if(text.matches("\\s*((?:\\w+|\\w+\\s*\\(.*?\\)))\\s*([+\\-*/%]=)\\s*(?:[^;]*(?:FUNCTION\\s+[\\w-]+\\([^)]*\\)|[+\\-*/%])[^;]*|[^;]+);?")){
             // for the arithmetic expressions mapped to compute, this is for a+=arithmetic expression.
-            String operator=text.contains("+=") ? "+" :
-                            text.contains("-=") ? "-" :
-                            text.contains("*=") ? "*" :
-                            text.contains("/=") ? "/" :
-                            "%";
-            String[] parts = text.split(Pattern.quote(operator+"="),2);
-            if(parts.length==2){
-                String targetVar=parts[0].trim();
-                String rhs=parts[1].replace(";", "").trim();
-
-                //Handle pre and post increment/decrement
-                List<String> preOps=new ArrayList<>();
-                List<String> postOps=new ArrayList<>();
-
-                // Pre-increment/decrement: ++x / --x
+            String[] parts = text.split("=", 2);
+            if (parts.length == 2) {
+                String targetVar = parts[0].trim();
+                String rhs = parts[1].replace(";", "").trim();
+            
+                List<String> preOps = new ArrayList<>();
+                List<String> postOps = new ArrayList<>();
+            
                 Pattern prePattern = Pattern.compile("(\\+\\+|--)(\\w+(?:\\([^()]*\\))?)");
                 Matcher preMatcher = prePattern.matcher(rhs);
                 StringBuffer sbPre = new StringBuffer();
                 while (preMatcher.find()) {
                     String op = preMatcher.group(1);
                     String var = preMatcher.group(2);
-                    preOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") +  var + ".");
+                    preOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") + var + ".");
                     preMatcher.appendReplacement(sbPre, var);
                 }
                 preMatcher.appendTail(sbPre);
                 rhs = sbPre.toString();
-
-                // Post-increment/decrement: x++ / x--
+            
                 Pattern postPattern = Pattern.compile("(\\w+(?:\\([^()]*\\))?)(\\+\\+|--)");
                 Matcher postMatcher = postPattern.matcher(rhs);
                 StringBuffer sbPost = new StringBuffer();
                 while (postMatcher.find()) {
                     String var = postMatcher.group(1);
                     String op = postMatcher.group(2);
-                    postOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") +  var + ".");
+                    postOps.add((op.equals("++") ? "ADD 1 TO " : "SUBTRACT 1 FROM ") + var + ".");
                     postMatcher.appendReplacement(sbPost, var);
                 }
                 postMatcher.appendTail(sbPost);
                 rhs = sbPost.toString();
-
-                for(String pre:preOps){
-                    emitCobol((INDENT)+(pre)+("\n"));
-                    // cobolCodePD.append(INDENT).append(pre).append("\n");
+            
+                // 🔥 NEW: HANDLE MODULO HERE
+                rhs = stripRedundantParens(rhs);
+                rhs = handleModulo(rhs);
+            
+                for (String pre : preOps) {
+                    emitCobol(INDENT + pre + "\n");
                 }
-                emitCobol((INDENT)+("COMPUTE ")+(targetVar)+(" = ")+(targetVar)+(" ")+(operator)+(" ")+(rhs)+(insideblock?"\n":".\n"));
-                // cobolCodePD.append(INDENT).append("COMPUTE ").append(targetVar).append(" = ").append(targetVar).append(" ").append(operator).append(" ").append(rhs).append(insideblock?"\n":".\n");
-
-                for(String post:postOps){
-                    emitCobol((INDENT)+(post)+("\n"));
-                    // cobolCodePD.append(INDENT).append(post).append("\n");
+            
+                emitCobol(INDENT
+                        + "COMPUTE "
+                        + targetVar
+                        + " = "
+                        + rhs
+                        + (insideblock ? "\n" : ".\n"));
+                
+                for (String post : postOps) {
+                    emitCobol(INDENT + post + "\n");
                 }
             }
         }
@@ -1384,13 +1286,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
         }
 
-        else if(ctx.SWITCH()!=null){
-            String switchVar = ctx.getChild(1).getText().replace("(", "").replace(")", "");
-            emitCobol((INDENT)+("EVALUATE ")+(switchVar)+("\n"));
-            // cobolCodePD.append(INDENT).append("EVALUATE ").append(switchVar).append("\n");
-            switchStack.push(true);
-            updateInsideBlock();
-        }
+        
         
         // if(text.trim().startsWith("if(") || text.contains("if(") || text.matches(".*if\\s*\\(.*")) {
         //     String condition = extractConditionFromText(text);
@@ -1418,8 +1314,159 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         //     updateInsideBlock();
         //     return;
         // }
-
+    }
+    @Override
+    public void enterStatement(JavaParser.StatementContext ctx){
+        addLeadingComments(ctx);
+        String text=tokens.getText(ctx);
         
+        ParseTree parent = ctx.getParent();
+        if (parent instanceof JavaParser.StatementContext) {
+            JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
+            if (parentStmt.IF() != null
+                && parentStmt.statement().size() > 1
+                && parentStmt.statement(1) == ctx) {
+                // Only emit ELSE if this is not an 'else if'
+                if (ctx.IF() == null) {
+                    emitCobol(INDENT + "ELSE\n");
+                    updateInsideBlock();
+                }
+            }
+        }
+
+        if (ctx.IF() != null) {
+            // Check if this IF is a direct child of another IF's else branch
+            // ParseTree parent = ctx.getParent();
+            if (parent instanceof JavaParser.StatementContext) {
+                JavaParser.StatementContext parentStmt = (JavaParser.StatementContext) parent;
+                if (parentStmt.IF() != null
+                    && parentStmt.statement().size() > 1
+                    && parentStmt.statement(1) == ctx) {
+                    // We are an else or else-if branch: emit ELSE
+                    emitCobol(INDENT + "ELSE\n");
+                    updateInsideBlock();
+                }
+            }
+            // Now emit the IF as usual
+            String condition = extractCondition(ctx.parExpression());
+            emitCobol(INDENT + "IF " + condition + "\n");
+            blockStack.push("IF-" + currentIfLevel);
+            currentIfLevel++;
+            updateInsideBlock();
+            justEnteredIf = true;
+            return;
+        }
+
+        // Handling for loop statements
+        
+            if (ctx.FOR() != null) {
+                // insideForLoopHeader = true;
+
+                JavaParser.ForControlContext forControl = ctx.forControl();
+                String varName = null, fromValue = null, untilCond = "", update = "";
+                int byValue = 1;
+                boolean increment = true;
+
+                if (forControl != null) {
+                    // forInit (may be null)
+                    if (forControl.forInit() != null) {
+                        String init = tokens.getText(forControl.forInit());
+                        Matcher m = Pattern.compile("(?:int|long|short|var)?\\s*(\\w+)\\s*=\\s*([\\w\\d+-]+)").matcher(init);
+                        if (m.find()) {
+                            varName = m.group(1);
+                            fromValue = m.group(2);
+                            forLoopInitVars.add(varName);
+                        }
+                    }
+                    // condition
+                    if (forControl.expression() != null && varName != null) {
+                        String cond = tokens.getText(forControl.expression());
+                        // Matcher cm = Pattern.compile(varName + "\\s*([<>=!]+)\\s*(.+)").matcher(cond);
+                        // if (cm.find()) {
+                        //     String op = cm.group(1), val = cm.group(2);
+                        //     if (op.equals("<")) untilCond = varName + " >= " + val;
+                        //     else if (op.equals("<=")) untilCond = varName + " > " + val;
+                        //     else if (op.equals(">")) untilCond = varName + " <= " + val;
+                        //     else if (op.equals(">=")) untilCond = varName + " < " + val;
+                        //     else if (op.equals("==")) untilCond = varName + " NOT = " + val;
+                        //     else if (op.equals("!=")) untilCond = varName + " = " + val;
+                        // }
+                        String cobolCond=translateCondition(cond);
+                        untilCond="NOT ("+cobolCond+")";
+                    }
+                    // update: get the 5th child if present (structure: forInit ; expr ; update)
+                    if (forControl.getChildCount() >= 5 && varName != null) {
+                        update = forControl.getChild(4).getText();
+                        if (update.contains("++")) {
+                            byValue = 1; increment = true;
+                        } else if (update.contains("--")) {
+                            byValue = 1; increment = false;
+                        } else {
+                            Matcher um = Pattern.compile(varName + "\\s*([+\\-]=)\\s*(\\d+)").matcher(update);
+                            if (um.find()) {
+                                byValue = Integer.parseInt(um.group(2));
+                                increment = um.group(1).equals("+=");
+                            }
+                        }
+                }
+            }
+            if (varName != null && fromValue != null && !untilCond.isEmpty()) {
+                // cobolCodePD.append(INDENT)
+                //     .append("PERFORM VARYING ").append(varName)
+                //     .append(" FROM ").append(fromValue)
+                //     .append(" BY ").append(increment ? byValue : -byValue)
+                //     .append(" UNTIL ").append(untilCond)
+                //     .append("\n");
+                emitCobol(INDENT+"PERFORM VARYING "+varName+" FROM "+fromValue+" BY "+(increment?byValue:-byValue)+" UNTIL "+untilCond+"\n");
+                blockStack.push("FOR");
+                updateInsideBlock();
+                insideblock = true;
+            }
+            insideForLoopHeader = false;
+            return;
+        }
+
+        // Handling DO-WHILE Loop
+
+        if(ctx.DO()!=null){
+            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST AFTER\n");
+            emitCobol(INDENT+"PERFORM WITH TEST AFTER\n");
+            blockStack.push("DOWHILE");
+            updateInsideBlock();
+            return;
+        }
+
+        // Handling WHILE Loop
+
+        if(ctx.WHILE()!=null){
+            JavaParser.ParExpressionContext parExpr=ctx.parExpression();
+            String condition=extractCondition(parExpr);
+            String untilCondition="NOT ("+condition+")";
+
+            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST BEFORE\n");
+            emitCobol(INDENT+"PERFORM UNTIL "+untilCondition+"\n");
+            // blockStack.push("WHILE");
+            blockStack.push("WHILE:"+untilCondition);
+            updateInsideBlock();
+            return;
+        }
+        
+        statementTranslation(text);
+        if (ctx.SWITCH() != null) {
+
+            String rawExpr = ctx.getChild(1).getText()
+                                .replace("(", "")
+                                .replace(")", "");
+
+            String switchVar = translateSwitchExpression(rawExpr);
+
+            emitCobol(INDENT + "EVALUATE " + switchVar + "\n");
+
+            switchStack.push(true);
+            updateInsideBlock();
+        }
+
+       
         
     }
 
@@ -1760,7 +1807,29 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
     
     //-----------------Helper function for DISPLAY based statements----------------
-    private String extractDisplayStatement(String text) {
+    private String processDisplayExpression(String expr) {
+        expr = expr.trim();
+        
+        // Literal string
+        if (expr.startsWith("\"") && expr.endsWith("\"")) {
+            return expr;
+        }
+    
+        // Variable only
+        if (!hasArithmetic(expr)) {
+            return replaceVarsWithCobolNames(expr);
+        }
+    
+        // Expression → temp
+        String temp = newTemp();
+    
+        // Reuse your existing assignment translation logic
+        statementTranslation(temp + " = " + expr + ";");
+    
+        return temp;
+    }
+    
+    private List<String> extractDisplayParts(String text) {
         int start = text.indexOf('(');
         if (start < 0) return null;
 
@@ -1774,31 +1843,35 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             end++;
         }
 
-        if (count != 0) return null; // Mismatched parentheses
+        if (count != 0) return null;
 
         String inner = text.substring(start + 1, end - 1);
 
-        // Process inner string to replace + with space only at top-level
-        StringBuilder result = new StringBuilder();
+        List<String> parts = new ArrayList<>();
+        StringBuilder curr = new StringBuilder();
         int nested = 0;
 
         for (int i = 0; i < inner.length(); i++) {
             char ch = inner.charAt(i);
-            if (ch == '(') {
-                nested++;
-                result.append(ch);
-            } else if (ch == ')') {
-                nested--;
-                result.append(ch);
-            } else if (ch == '+' && nested == 0) {
-                result.append(' '); // Replace + only at top level
+
+            if (ch == '(') nested++;
+            if (ch == ')') nested--;
+
+            if (ch == '+' && nested == 0) {
+                parts.add(curr.toString().trim());
+                curr.setLength(0);
             } else {
-                result.append(ch);
+                curr.append(ch);
             }
         }
 
-        return result.toString();
+        if (curr.length() > 0) {
+            parts.add(curr.toString().trim());
+        }
+
+        return parts;
     }
+
 
 
     //-------------------Switch case implementation--------------------
@@ -2058,21 +2131,84 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         return -1;
     }
 
-    private String translateCondition(String javaCondition) {
-        String cobolCondition = javaCondition
-            .replaceAll("==", "=")
-            .replaceAll("!=", "NOT=")
-            .replaceAll("<=", "<=")
-            .replaceAll(">=", ">=")
-            .replaceAll("<", "<")
-            .replaceAll(">", ">")
-            .replaceAll("&&", "AND")
-            .replaceAll("\\|\\|", "OR")
-            .replaceAll("!", "NOT")
-            .replaceAll("\\(", "")
-            .replaceAll("\\)", "");
-        return cobolCondition.trim();
+    public String translateCondition(String conditionText) {
+
+        List<String> atomicExprs = extractAtomicExpressions(conditionText);
+        Map<String, String> exprToTemp = new LinkedHashMap<>();
+
+        for (String expr : atomicExprs) {
+
+            // Split:  a+b*c   >=   2
+            Matcher m = Pattern.compile("(.*?)(>=|<=|==|!=|>|<)(.*)").matcher(expr);
+            if (!m.find()) continue;
+
+            String lhsExpr = m.group(1).trim();
+            String operator = m.group(2);
+            String rhsExpr = m.group(3).trim();
+
+            String lhsFinal = lhsExpr;
+
+            // 🔥 ONLY create temp if needed
+            if (hasArithmetic(lhsExpr) || lhsExpr.contains("(")) {
+                String tempVar = newTemp();
+                String assignment = tempVar + " = " + lhsExpr + ";";
+                statementTranslation(assignment);
+                lhsFinal = tempVar;
+            }
+
+            exprToTemp.put(expr, lhsFinal + " " + operator + " " + rhsExpr);
+        }
+
+        // rebuild condition
+        String rewritten = conditionText;
+        for (Map.Entry<String, String> e : exprToTemp.entrySet()) {
+            rewritten = rewritten.replace(e.getKey(), e.getValue());
+        }
+
+        return rewritten
+                .replace("&&", " AND ")
+                .replace("||", " OR ")
+                .replace("==", "=");
     }
+
+    private List<String> extractAtomicExpressions(String cond) {
+        List<String> result = new ArrayList<>();
+        
+        Matcher m = Pattern.compile(
+            "([^&|]+?(>=|<=|==|!=|>|<)[^&|]+)"
+        ).matcher(cond);
+    
+        while (m.find()) {
+            result.add(m.group(1).trim());
+        }
+        return result;
+    }
+    private String extractRHS(String expr) {
+        Matcher m = Pattern.compile("(.*?)(>=|<=|==|!=|>|<)").matcher(expr);
+        if (m.find()) {
+            return m.group(1).trim();
+        }
+        return expr.trim();
+    }
+    private String translateSwitchExpression(String exprText) {
+
+        String finalExpr = exprText;
+
+        // Only lower if expression is non-trivial
+        if (hasArithmetic(exprText) || exprText.contains("(")) {
+
+            String tempVar = newTemp();
+
+            // reuse existing statement logic
+            String assignment = tempVar + " = " + exprText + ";";
+            statementTranslation(assignment);
+
+            finalExpr = tempVar;
+        }
+
+        return finalExpr;
+    }
+
 
     private boolean hasElseClause(JavaParser.StatementContext ctx){
         if(ctx.getParent()!=null){
@@ -2081,4 +2217,92 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         return false;
     }
+
+    // ------ Helper for COMPUTE to handle % ----------
+
+    private String handleModulo(String rhs) {
+
+        // Only allow ATOMIC operands for %
+        // No + - * / % ( )
+        Pattern modPattern = Pattern.compile(
+            "(\\([^()]+\\)|[^+\\-*/%()\\s]+)\\s*%\\s*(\\([^()]+\\)|[^+\\-*/%()\\s]+)"
+        );
+        
+
+        Matcher m = modPattern.matcher(rhs);
+
+        while (true) {
+
+            m = modPattern.matcher(rhs);
+            if (!m.find()) break;
+
+            String left = stripRedundantParens(m.group(1).trim());
+            String right = stripRedundantParens(m.group(2).trim());
+
+            left = reduceArithmeticToTemp(left);
+            right = reduceArithmeticToTemp(right);
+
+            String q = newTemp();
+            String r = newTemp();
+
+            emitCobol(INDENT
+                    + "DIVIDE "
+                    + left
+                    + " BY "
+                    + right
+                    + " GIVING "
+                    + q
+                    + " REMAINDER "
+                    + r
+                    + (insideblock ? "\n" : ".\n"));
+            
+            rhs = rhs.substring(0, m.start()) + r + rhs.substring(m.end());
+        }
+
+
+
+        return rhs;
+    }
+    private String reduceArithmeticToTemp(String expr) {
+        expr = stripRedundantParens(expr);
+
+        if (!hasArithmetic(expr)) {
+            return expr;
+        }
+
+        String t = newTemp();
+        emitCobol(INDENT
+                + "COMPUTE "
+                + t
+                + " = "
+                + expr
+                + (insideblock ? "\n" : ".\n"));
+
+        return t;
+    }
+    private String stripRedundantParens(String s) {
+        s = s.trim();
+        while (s.startsWith("(") && s.endsWith(")")) {
+            int depth = 0;
+            boolean valid = true;
+
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (c == '(') depth++;
+                else if (c == ')') depth--;
+                if (depth == 0 && i < s.length() - 1) {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (!valid) break;
+            s = s.substring(1, s.length() - 1).trim();
+        }
+        return s;
+    }
+    private boolean containsModulo(String s) {
+        return s.contains("%");
+    }
+
 }

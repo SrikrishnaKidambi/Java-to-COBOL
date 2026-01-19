@@ -45,8 +45,19 @@ public class ParseTreeGeneration {
         Path outputPath = Paths.get("../finalCobolCode.cbl");
         // System.out.println("----------------Data division starts-----------------");
         // System.out.println(idDdDivisions);
+        int numTempVars = pdListener.getNumberOfTempVars();
+        StringBuilder tempVarDecls = new StringBuilder();
+
+        for (int i = 0; i < numTempVars; i++) {
+            tempVarDecls.append("       01 TEMP_")
+                        .append(i)
+                        .append(" PIC S9(9).\n");
+        }
+
+        idDdDivisions = idDdDivisions + tempVarDecls.toString();
         List<String> linesToWrite = List.of(idDdDivisions, "", pdDivision); // "" adds a new line
         //Just for testing use below
+
         // List<String> linesToWrite = List.of(pdDivision);
         Files.write(outputPath, linesToWrite, StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

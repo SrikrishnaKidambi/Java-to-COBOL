@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. PrintExprTest.
+       PROGRAM-ID. DayOfWeek.
 
 
        DATA DIVISION.
@@ -10,6 +10,8 @@
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
        01  a_main          PIC S9(5).
        01  b_main          PIC S9(5).
+       01  c_main          PIC S9(5).
+       01 TEMP_0 PIC S9(9).
 
 
        PROCEDURE DIVISION.
@@ -21,12 +23,12 @@
 
 
        MAIN-PARA.
-       MOVE 10 TO a_main
-       MOVE 5 TO b_main
-       DISPLAY a_main   b_main
-       DISPLAY a_main * b_main - 3
-       DISPLAY (a_main + b_main) * (a_main - b_main)
-       DISPLAY a_main / b_main   2 * 3
+       MOVE 4 TO a_main
+       MOVE 9 TO b_main
+       MOVE 10 TO c_main
+       DISPLAY "Result = "
+       COMPUTE TEMP_0 = (a_main + b_main * c_main)
+       DISPLAY TEMP_0
        EXIT.
 
 
