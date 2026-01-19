@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Scope:Method:main->Class:DecimalToBinary->GLOBAL
   Type:String
     args_main [size=[]]
@@ -7,4 +8,20 @@ Scope:Block->Method:main->Class:DecimalToBinary->GLOBAL
     scan_main
   Type:int
     N_main
+=======
+Scope:Method:main->Class:TestScoped->GLOBAL
+  Type:String
+    args_main [size=[]]
+
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
+  Type:int
+    a_main
+    b_main
+    i_main
+    n_main
+
+Scope:For->Block->While->Block->Method:printSubstrings->Class:TestScoped->GLOBAL
+  Type:int
+    j_main
+>>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
 
