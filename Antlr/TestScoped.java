@@ -1,14 +1,6 @@
 // Question Link: https://www.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1
 class Solution {
 
-<<<<<<< HEAD
-    public static void printSubstrings(String str_printSubstrings) {
-        int count_printSubstrings = 1;
-        while (count_printSubstrings <= str_printSubstrings.length()) {
-            //System.out.println("Printing substring with " + count + " characters");
-            for (int i_printSubstrings = 0; i_printSubstrings + count_printSubstrings <= str_printSubstrings.length(); i_printSubstrings++) {
-                System.out.println(str_printSubstrings.substring(i_printSubstrings, i_printSubstrings + count_printSubstrings));
-=======
     // Time Complexity = O(n), Space Complexity = O(1)
     static int minJumps(int[] arr_minJumps, int n_minJumps) {
         // If there's only one element, no jumps are needed
@@ -37,9 +29,7 @@ class Solution {
                 if (currentEnd_minJumps >= n_minJumps - 1) {
                     return jumps_minJumps;
                 }
->>>>>>> a32651b2843df9819e4d5dbe30bd79b5f92bf8ac
             }
-            count_printSubstrings = count_printSubstrings + 1;
         }
         // If the loop ends without reaching the last element
         return -1;

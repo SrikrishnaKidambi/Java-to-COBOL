@@ -1,0 +1,73 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. CodingNinjas_Java_DSA_HalfDiamondPattern.
+
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * Variables for Scope:METHOD_MAIN_CLASS_HALFDIAMONDPATTERN_GLOBAL
+       01  ARGS_MAIN_-ARRAY.
+           05  args_main    PIC X(100) OCCURS 100 TIMES.
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_HALFDIAMONDPATTERN_GLOBAL
+       01  scan_main       PIC X(100).
+       01  N_main          PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_HALFDIAMONDPATTERN_GLOBAL
+       01  i_main          PIC S9(5).
+      * Variables for Scope:BLOCK_FOR_BLOCK_METHOD_MAIN_CLASS_HALFDIAMONDPATTERN_GLOBAL
+       01  val_main        PIC S9(5).
+      * Variables for Scope:FOR_BLOCK_FOR_BLOCK_METHOD_MAIN_CLASS_HALFDIAMONDPATTERN_GLOBAL
+       01  j_main          PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+
+
+       PROCEDURE DIVISION.
+
+
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
+
+
+       MAIN-PARA.
+      * Write your code here
+      * Input from ODT is enabled
+       ACCEPT N_main
+       DISPLAY "*"
+       PERFORM VARYING i_main FROM 1 BY 1 UNTIL NOT (i_main <= N_main)
+       DISPLAY "*" WITH NO ADVANCING
+       MOVE 1 TO val_main
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < i_main)
+       DISPLAY val_main WITH NO ADVANCING
+       ADD 1 TO val_main
+       END-PERFORM
+       SUBTRACT 1 FROM val_main
+       PERFORM VARYING j_main FROM 1 BY 1 UNTIL NOT (j_main < i_main)
+       SUBTRACT 1 FROM val_main
+       DISPLAY val_main WITH NO ADVANCING
+       END-PERFORM
+       DISPLAY "*"
+       END-PERFORM
+       PERFORM VARYING i_main FROM 0 BY 1 UNTIL NOT (i_main < N_main)
+       DISPLAY "*" WITH NO ADVANCING
+       MOVE 1 TO val_main
+       COMPUTE TEMP_0 = (N_main - i_main - 1)
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_0)
+       DISPLAY val_main WITH NO ADVANCING
+       ADD 1 TO val_main
+       COMPUTE TEMP_0 = (N_main - i_main - 1)
+       END-PERFORM
+       SUBTRACT 2 FROM val_main GIVING val_main
+       PERFORM VARYING j_main FROM val_main BY -1 UNTIL NOT (j_main >= 1)
+       DISPLAY j_main WITH NO ADVANCING
+       END-PERFORM
+       IF i_main < N_main - 1
+       DISPLAY "*"
+       ELSE
+       DISPLAY " "
+       END-IF
+       END-PERFORM
+       IF N_main = 0
+       DISPLAY "*"
+       END-IF
+       EXIT.
+
+
