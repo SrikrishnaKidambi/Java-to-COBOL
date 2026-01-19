@@ -1,11 +1,20 @@
-//done ✅
-import java.util.Scanner;
-
 public class Test {
+
+    static void check(int x) {
+        if (x + 2 * 3 > 10) {
+            System.out.println("BIG");
+        } else {
+            System.out.println("SMALL");
+        }
+    }
+
     public static void main(String[] args) {
-       int a = 4;
-	int b = 9;
-	int c=10;
-	int d = (5 % 6) % (3 - 5 % 9);
+
+        int p = 2;
+        int q = 4;
+
+        int r = 10;
+
+        check(r + 1 - p + q);
     }
 }

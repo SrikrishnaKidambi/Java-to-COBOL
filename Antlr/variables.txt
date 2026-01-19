@@ -1,11 +1,14 @@
+Scope:Method:check->Class:TestScoped->GLOBAL
+  Type:int
+    x_check
+
 Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
 
 Scope:Block->Method:main->Class:TestScoped->GLOBAL
   Type:int
-    a_main
-    b_main
-    c_main
-    d_main
+    p_main
+    q_main
+    r_main
 

@@ -674,10 +674,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
             List<String>paramNames=methodParameters.getOrDefault(call, new ArrayList<>());
             int count=Math.min(paramNames.size(), argValues.size());
-            for(int i=0;i<count;i++){
-                emitCobol(INDENT+"MOVE "+argValues.get(i)+" TO "+paramNames.get(i)+"\n");
+            for (int i = 0; i < count; i++) {
+                String rawArg = argValues.get(i);
+                String finalArg = translateArgumentExpression(rawArg);
+                emitCobol(INDENT + "MOVE " + finalArg + " TO " + paramNames.get(i) + "\n");
             }
-            emitCobol(INDENT+"PERFORM "+methodName+"\n");
+            emitCobol(INDENT + "PERFORM " + methodName + "\n");
             return;
         }
         // System.out.println("Statement:"+text);
@@ -2190,6 +2192,28 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         return expr.trim();
     }
+
+    private String translateArgumentExpression(String argText) {
+
+        String finalArg = argText;
+
+        // Lower only if non-trivial expression
+        if (hasArithmetic(argText) || argText.contains("(")) {
+
+            String tempVar = newTemp();
+
+            String assignment = tempVar + " = " + argText + ";";
+
+            // Reuse full statement pipeline (COMPUTE, char ops, arrays, etc.)
+            statementTranslation(assignment);
+
+            finalArg = tempVar;
+        }
+
+        return finalArg;
+    }
+
+
     private String translateSwitchExpression(String exprText) {
 
         String finalExpr = exprText;
