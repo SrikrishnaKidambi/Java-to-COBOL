@@ -1,13 +1,15 @@
-//done ✅
-import java.util.Scanner;
-
 public class Test {
     public static void main(String[] args) {
-        int a = 5;
-	int b = 7;
-	int c = 8;
-	int d = 9;
-	
-	d = a % b + c;
+        int a=2;
+	int b=3; 
+	int i=0;
+	int n = 0;
+	while(i < a + b){
+    		for(int j = 0; j<n+2; j++){
+			a++;
+    			i++;
+		}
+	}
+
     }
 }

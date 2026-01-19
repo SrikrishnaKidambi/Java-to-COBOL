@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Question Link: https://www.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1
 class Solution {
 
@@ -33,5 +34,20 @@ class Solution {
         }
         // If the loop ends without reaching the last element
         return -1;
+=======
+public class TestScoped {
+
+    public static void main(String[] args_main) {
+        int a_main = 2;
+        int b_main = 3;
+        int i_main = 0;
+        int n_main = 0;
+        while (i_main < a_main + b_main) {
+            for (int j_main = 0; j_main < n_main + 2; j_main++) {
+                a_main++;
+                i_main++;
+            }
+        }
+>>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
     }
 }

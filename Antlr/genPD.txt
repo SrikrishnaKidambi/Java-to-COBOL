@@ -6,6 +6,7 @@
            STOP RUN.
 
 
+<<<<<<< HEAD
        minJumps-PARA.
       * If there's only one element, no jumps are needed
        IF n_minJumps = 1
@@ -35,5 +36,22 @@
        END-IF
        END-PERFORM
       * If the loop ends without reaching the last element
+=======
+       MAIN-PARA.
+       MOVE 2 TO a_main
+       MOVE 3 TO b_main
+       MOVE 0 TO i_main
+       MOVE 0 TO n_main
+       COMPUTE TEMP_0 = a_main + b_main
+       PERFORM UNTIL NOT (i_main < TEMP_0)
+       COMPUTE TEMP_1 = n_main + 2
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_1)
+       ADD 1 TO a_main
+       ADD 1 TO i_main
+       COMPUTE TEMP_1 = n_main + 2
+       END-PERFORM
+       COMPUTE TEMP_0 = a_main + b_main
+       END-PERFORM
+>>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
        EXIT.
 

@@ -47,6 +47,26 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private Map<String,List<String>>methodParameters=new HashMap<>();
     LinkedHashMap<String,StringBuilder>methodCodeMap=new LinkedHashMap<>();
     private int tempCounter = 0;
+    Stack<List<String>> forLoopRecomputeStack = new Stack<>();
+    Stack<List<String>> whileRecomputeStack = new Stack<>();
+    Stack<List<String>> doWhileRecomputeStack = new Stack<>();
+    Stack<String> doWhileCondStack = new Stack<>();
+
+
+    private static class ConditionResult {
+        String condition;
+        List<String> precomputeStatements;
+        List<String> recomputeStatements;
+
+        ConditionResult(String condition,
+                        List<String> precomputeStatements,
+                        List<String> recomputeStatements) {
+            this.condition = condition;
+            this.precomputeStatements = precomputeStatements;
+            this.recomputeStatements = recomputeStatements;
+        }
+    }
+
 
 
     private Set<String> tempVars = new HashSet<>();
@@ -674,10 +694,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
             List<String>paramNames=methodParameters.getOrDefault(call, new ArrayList<>());
             int count=Math.min(paramNames.size(), argValues.size());
-            for(int i=0;i<count;i++){
-                emitCobol(INDENT+"MOVE "+argValues.get(i)+" TO "+paramNames.get(i)+"\n");
+            for (int i = 0; i < count; i++) {
+                String rawArg = argValues.get(i);
+                String finalArg = translateArgumentExpression(rawArg);
+                emitCobol(INDENT + "MOVE " + finalArg + " TO " + paramNames.get(i) + "\n");
             }
-            emitCobol(INDENT+"PERFORM "+methodName+"\n");
+            emitCobol(INDENT + "PERFORM " + methodName + "\n");
             return;
         }
         // System.out.println("Statement:"+text);
@@ -1375,20 +1397,24 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                     }
                     // condition
                     if (forControl.expression() != null && varName != null) {
+
                         String cond = tokens.getText(forControl.expression());
-                        // Matcher cm = Pattern.compile(varName + "\\s*([<>=!]+)\\s*(.+)").matcher(cond);
-                        // if (cm.find()) {
-                        //     String op = cm.group(1), val = cm.group(2);
-                        //     if (op.equals("<")) untilCond = varName + " >= " + val;
-                        //     else if (op.equals("<=")) untilCond = varName + " > " + val;
-                        //     else if (op.equals(">")) untilCond = varName + " <= " + val;
-                        //     else if (op.equals(">=")) untilCond = varName + " < " + val;
-                        //     else if (op.equals("==")) untilCond = varName + " NOT = " + val;
-                        //     else if (op.equals("!=")) untilCond = varName + " = " + val;
-                        // }
-                        String cobolCond=translateCondition(cond);
-                        untilCond="NOT ("+cobolCond+")";
+
+                        // NEW: use temp-aware lowering
+                        ConditionResult cr = translateConditionWithTemps(cond);
+                        for (String stmt : cr.precomputeStatements) {
+                            emitCobol(INDENT + stmt + "\n");
+                        }
+
+                        untilCond = "NOT (" + cr.condition + ")";
+
+                        // store recompute statements for this loop
+                        forLoopRecomputeStack.push(new ArrayList<>(cr.recomputeStatements));
                     }
+                    else{
+                        forLoopRecomputeStack.push(new ArrayList<>()); // no temps
+                    }
+
                     // update: get the 5th child if present (structure: forInit ; expr ; update)
                     if (forControl.getChildCount() >= 5 && varName != null) {
                         update = forControl.getChild(4).getText();
@@ -1406,12 +1432,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
             }
             if (varName != null && fromValue != null && !untilCond.isEmpty()) {
-                // cobolCodePD.append(INDENT)
-                //     .append("PERFORM VARYING ").append(varName)
-                //     .append(" FROM ").append(fromValue)
-                //     .append(" BY ").append(increment ? byValue : -byValue)
-                //     .append(" UNTIL ").append(untilCond)
-                //     .append("\n");
                 emitCobol(INDENT+"PERFORM VARYING "+varName+" FROM "+fromValue+" BY "+(increment?byValue:-byValue)+" UNTIL "+untilCond+"\n");
                 blockStack.push("FOR");
                 updateInsideBlock();
@@ -1424,24 +1444,52 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // Handling DO-WHILE Loop
 
         if(ctx.DO()!=null){
-            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST AFTER\n");
-            emitCobol(INDENT+"PERFORM WITH TEST AFTER\n");
+
+            JavaParser.ParExpressionContext parExpr = ctx.parExpression();
+            String condText = tokens.getText(parExpr.expression());
+
+            ConditionResult cr = translateConditionWithTemps(condText);
+
+            // no precompute (condition checked AFTER body)
+
+            doWhileRecomputeStack.push(new ArrayList<>(cr.recomputeStatements));
+            doWhileCondStack.push(cr.condition);
+
+            emitCobol(INDENT + "PERFORM WITH TEST AFTER\n");
+
             blockStack.push("DOWHILE");
             updateInsideBlock();
             return;
         }
 
+
         // Handling WHILE Loop
 
         if(ctx.WHILE()!=null){
             JavaParser.ParExpressionContext parExpr=ctx.parExpression();
-            String condition=extractCondition(parExpr);
-            String untilCondition="NOT ("+condition+")";
+           if (ctx.WHILE() != null) {
 
-            // cobolCodePD.append(INDENT).append("PERFORM WITH TEST BEFORE\n");
-            emitCobol(INDENT+"PERFORM UNTIL "+untilCondition+"\n");
-            // blockStack.push("WHILE");
-            blockStack.push("WHILE:"+untilCondition);
+                String cond = tokens.getText(ctx.parExpression().expression());
+
+                // TEMP-aware lowering
+                ConditionResult cr = translateConditionWithTemps(cond);
+
+                // precompute temps BEFORE loop
+                for (String stmt : cr.precomputeStatements) {
+                    emitCobol(INDENT + stmt + "\n");
+                }
+
+                String untilCondition = "NOT (" + cr.condition + ")";
+
+                emitCobol(INDENT + "PERFORM UNTIL " + untilCondition + "\n");
+
+                blockStack.push("WHILE");
+                whileRecomputeStack.push(new ArrayList<>(cr.recomputeStatements));
+
+                updateInsideBlock();
+                return;
+            }
+
             updateInsideBlock();
             return;
         }
@@ -1488,46 +1536,42 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
         // do-while block
 
-        if(ctx.DO()!=null){
-            if(!blockStack.isEmpty() && blockStack.peek().equals("DOWHILE")){
-                blockStack.pop();
+        if(ctx.DO()!=null && !blockStack.isEmpty() && blockStack.peek().equals("DOWHILE")){
 
-                JavaParser.ParExpressionContext parExpr=ctx.parExpression();
-                String condition=extractCondition(parExpr);
-                String untilCondition="NOT ("+condition+")";
-                // cobolCodePD.append(INDENT).append("UNTIL ").append(untilCondition);
-                emitCobol(INDENT+"UNTIL "+untilCondition);
-                if(blockStack.isEmpty()){
-                    // cobolCodePD.append(".");
-                    emitCobol(".");
+            // recompute temps BEFORE END-PERFORM condition check
+            if(!doWhileRecomputeStack.isEmpty()){
+                List<String> recompute = doWhileRecomputeStack.pop();
+                for(String stmt : recompute){
+                    emitCobol(INDENT + stmt + "\n");
                 }
-                // cobolCodePD.append("\n");
-                emitCobol("\n");
-                updateInsideBlock();
-                return;
             }
+
+            String cond = doWhileCondStack.pop();
+
+            emitCobol(INDENT + "END-PERFORM UNTIL NOT (" + cond + ")\n");
+
+            blockStack.pop();
+            updateInsideBlock();
+            return;
         }
 
-        // while block
 
-        if(ctx.WHILE()!=null){
-            if(!blockStack.isEmpty() && blockStack.peek().startsWith("WHILE:")){
-                String whileEntry=blockStack.pop();
-                String untilCondition=whileEntry.substring(6);
-                // cobolCodePD.append(INDENT).append("UNTIL ").append(untilCondition);
-                // emitCobol(INDENT+"UNTIL "+untilCondition);
-                emitCobol(INDENT+"END-PERFORM\n");
+        if (ctx.WHILE() != null && !blockStack.isEmpty() && blockStack.peek().equals("WHILE")) {
 
-                // if(blockStack.isEmpty()){
-                //     // cobolCodePD.append(".");
-                //     emitCobol(".");
-                // }
-
-                // cobolCodePD.append("\n");
-                // emitCobol("\n");
-                updateInsideBlock();
+            //  recompute temps before next iteration
+            if (!whileRecomputeStack.isEmpty()) {
+                List<String> recompute = whileRecomputeStack.pop();
+                for (String stmt : recompute) {
+                    emitCobol(INDENT + stmt + "\n");
+                }
             }
+
+            emitCobol(INDENT + "END-PERFORM\n");
+            blockStack.pop();
+            updateInsideBlock();
+            return;
         }
+
 
         // int closingBraces = 0;
         // for (char c : text.toCharArray()) {
@@ -1644,10 +1688,20 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 return;
             }
             if (ctx.FOR() != null && !blockStack.isEmpty() && blockStack.peek().equals("FOR")) {
+
+                // recompute condition temps BEFORE END-PERFORM
+                if (!forLoopRecomputeStack.isEmpty()) {
+                    List<String> recompute = forLoopRecomputeStack.pop();
+                    for (String stmt : recompute) {
+                        emitCobol(INDENT + stmt + "\n");
+                    }
+                }
+
                 emitCobol(INDENT + "END-PERFORM\n");
                 blockStack.pop();
                 return;
             }
+
     }
 
     // @Override
@@ -2185,6 +2239,28 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         return expr.trim();
     }
+
+    private String translateArgumentExpression(String argText) {
+
+        String finalArg = argText;
+
+        // Lower only if non-trivial expression
+        if (hasArithmetic(argText) || argText.contains("(")) {
+
+            String tempVar = newTemp();
+
+            String assignment = tempVar + " = " + argText + ";";
+
+            // Reuse full statement pipeline (COMPUTE, char ops, arrays, etc.)
+            statementTranslation(assignment);
+
+            finalArg = tempVar;
+        }
+
+        return finalArg;
+    }
+
+
     private String translateSwitchExpression(String exprText) {
 
         String finalExpr = exprText;
@@ -2363,6 +2439,58 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         return s;
     }
+
+    private ConditionResult translateConditionWithTemps(String conditionText) {
+
+        List<String> precompute = new ArrayList<>();
+        List<String> recompute = new ArrayList<>();
+
+        String rewritten = conditionText;
+
+        String[] atomicExprs = conditionText.split("&&|\\|\\|");
+
+        for (String expr : atomicExprs) {
+
+            expr = expr.trim();
+
+            Matcher m = Pattern.compile("(.*?)(>=|<=|==|!=|>|<)(.*)").matcher(expr);
+            if (!m.find()) continue;
+
+            String lhs = m.group(1).trim();
+            String op = m.group(2);
+            String rhs = m.group(3).trim();
+
+            String lhsFinal = lhs;
+            String rhsFinal = rhs;
+
+            if (hasArithmetic(lhs) || lhs.contains("(")) {
+                String t = newTemp();
+                precompute.add("COMPUTE " + t + " = " + lhs);
+                recompute.add("COMPUTE " + t + " = " + lhs);
+                lhsFinal = t;
+            }
+
+            if (hasArithmetic(rhs) || rhs.contains("(")) {
+                String t = newTemp();
+                precompute.add("COMPUTE " + t + " = " + rhs);
+                recompute.add("COMPUTE " + t + " = " + rhs);
+                rhsFinal = t;
+            }
+
+            String newExpr = lhsFinal + " " + op + " " + rhsFinal;
+            rewritten = rewritten.replace(expr, newExpr);
+        }
+
+        rewritten = rewritten
+                .replace("&&", " AND ")
+                .replace("||", " OR ")
+                .replace("==", "=")
+                .replace("!=", "NOT =");
+
+        return new ConditionResult(rewritten.trim(), precompute, recompute);
+    }
+
+
 
     private String reduceArithmeticToTemp(String expr) {
         expr = stripRedundantParens(expr);
