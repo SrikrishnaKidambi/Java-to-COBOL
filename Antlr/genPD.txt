@@ -7,5 +7,13 @@
 
 
        MAIN-PARA.
+       MOVE 84 TO n_main
+       DIVIDE n_main BY 4 GIVING TEMP_0 REMAINDER TEMP_0
+       DIVIDE n_main BY 7 GIVING TEMP_1 REMAINDER TEMP_1
+       IF TEMP_0 = 0  AND  TEMP_1 = 0
+       DISPLAY 1
+       ELSE
+       DISPLAY 0
+       END-IF
        EXIT.
 
