@@ -1,12 +1,15 @@
-Scope:Method:printSubstrings->Class:TestScoped->GLOBAL
+Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
-    str_printSubstrings
+    args_main [size=[]]
 
-Scope:Block->Method:printSubstrings->Class:TestScoped->GLOBAL
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
   Type:int
-    count_printSubstrings
+    a_main
+    b_main
+    i_main
+    n_main
 
 Scope:For->Block->While->Block->Method:printSubstrings->Class:TestScoped->GLOBAL
   Type:int
-    i_printSubstrings
+    j_main
 

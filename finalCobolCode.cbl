@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
        IDENTIFICATION DIVISION.
        PROGRAM-ID. AllSubstrings.
 
@@ -45,3 +47,4 @@
        EXIT.
 
 
+>>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
