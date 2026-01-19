@@ -1230,12 +1230,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             if (parts.length == 2) {
                 String lhs = parts[0].trim();
                 String rhs = parts[1].replace(";", "").trim();
-
+            
                 String targetVar = lhs;
-
+            
                 List<String> preOps = new ArrayList<>();
                 List<String> postOps = new ArrayList<>();
-
+            
                 // Pre ++ / --
                 Pattern prePattern = Pattern.compile("(\\+\\+|--)(\\w+(?:\\([^()]*\\))?)");
                 Matcher preMatcher = prePattern.matcher(rhs);
@@ -1248,7 +1248,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
                 preMatcher.appendTail(sbPre);
                 rhs = sbPre.toString();
-
+            
                 // Post ++ / --
                 Pattern postPattern = Pattern.compile("(\\w+(?:\\([^()]*\\))?)(\\+\\+|--)");
                 Matcher postMatcher = postPattern.matcher(rhs);
@@ -1261,7 +1261,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
                 postMatcher.appendTail(sbPost);
                 rhs = sbPost.toString();
-
+            
                 // 🔥 THIS IS THE MISSING LINE
                 rhs = reduceExpression(rhs);
             
@@ -1275,7 +1275,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                         + " = "
                         + rhs
                         + (insideblock ? "\n" : ".\n"));
-
+                
                 for (String post : postOps) {
                     emitCobol(INDENT + post + "\n");
                 }
@@ -2284,8 +2284,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         String right = operands.pop();
         String left  = operands.pop();
 
-            left = reduceArithmeticToTemp(left);
-            right = reduceArithmeticToTemp(right);
+        left = reduceArithmeticToTemp(left);
+        right = reduceArithmeticToTemp(right);
 
         if (op.equals("%")) {
 
@@ -2308,7 +2308,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 (insideblock ? "\n" : ".\n")
             );
             operands.push(t);
-    }
+        }
     }
 
     private List<String> tokenize(String expr) {
@@ -2335,7 +2335,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                         sb.append(ch);
                         i++;
                     } else break;
-        }
+                }
                 tokens.add(sb.toString());
                 continue;
             }
