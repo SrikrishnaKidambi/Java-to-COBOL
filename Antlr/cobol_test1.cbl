@@ -1,5 +1,9 @@
        IDENTIFICATION DIVISION.
+<<<<<<< HEAD
        PROGRAM-ID. TestArgsExpr.
+=======
+       PROGRAM-ID. Test.
+>>>>>>> fa3c8b3a9fd6aaef27227d5625d1c6218356bd63
 
 
        DATA DIVISION.
