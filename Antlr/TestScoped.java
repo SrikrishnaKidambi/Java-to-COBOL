@@ -1,6 +1,21 @@
-// Question Link: https://www.geeksforgeeks.org/problems/minimum-number-of-jumps-1587115620/1
-class Solution {
+public class TestScoped {
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+    public static void printSubstrings(String str_printSubstrings) {
+        int count_printSubstrings = 1;
+        while (count_printSubstrings <= str_printSubstrings.length()) {
+            //System.out.println("Printing substring with " + count + " characters");
+            for (int i_printSubstrings = 0; i_printSubstrings + count_printSubstrings <= str_printSubstrings.length(); i_printSubstrings++) {
+                System.out.println(str_printSubstrings.substring(i_printSubstrings, i_printSubstrings + count_printSubstrings));
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
     // Time Complexity = O(n), Space Complexity = O(1)
     static int minJumps(int[] arr_minJumps, int n_minJumps) {
         // If there's only one element, no jumps are needed
@@ -29,9 +44,12 @@ class Solution {
                 if (currentEnd_minJumps >= n_minJumps - 1) {
                     return jumps_minJumps;
                 }
+<<<<<<< HEAD
+=======
+>>>>>>> a32651b2843df9819e4d5dbe30bd79b5f92bf8ac
+>>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
             }
         }
-        // If the loop ends without reaching the last element
-        return -1;
     }
 }

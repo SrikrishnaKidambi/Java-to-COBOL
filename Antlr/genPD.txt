@@ -6,6 +6,32 @@
            STOP RUN.
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+       MAIN-PARA.
+      * Write your code here
+      * Input from ODT is enabled
+       ACCEPT N_main
+       DISPLAY Integer.toString(N_main, 2)
+=======
+<<<<<<< HEAD
+       printSubstrings-PARA.
+       MOVE 1 TO count_printSubstrings
+       COMPUTE TEMP_0 = str_printSubstrings.length()
+       PERFORM UNTIL NOT (count_printSubstrings <= TEMP_0)
+      * System.out.println("Printing substring with " + count + " characters");
+       COMPUTE TEMP_1 = i_printSubstrings + count_printSubstrings
+       COMPUTE TEMP_2 = str_printSubstrings.length()
+       PERFORM VARYING i_printSubstrings FROM 0 BY 1 UNTIL NOT (TEMP_1 <= TEMP_2)
+       COMPUTE TEMP_4 = i_printSubstrings + count_printSubstrings
+       COMPUTE TEMP_3 = TEMP_4
+       DISPLAY TEMP_3
+       COMPUTE TEMP_1 = i_printSubstrings + count_printSubstrings
+       COMPUTE TEMP_2 = str_printSubstrings.length()
+=======
+<<<<<<< HEAD
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
        minJumps-PARA.
       * If there's only one element, no jumps are needed
        IF n_minJumps = 1
@@ -35,5 +61,28 @@
        END-IF
        END-PERFORM
       * If the loop ends without reaching the last element
+<<<<<<< HEAD
+=======
+=======
+       MAIN-PARA.
+       MOVE 2 TO a_main
+       MOVE 3 TO b_main
+       MOVE 0 TO i_main
+       MOVE 0 TO n_main
+       COMPUTE TEMP_0 = a_main + b_main
+       PERFORM UNTIL NOT (i_main < TEMP_0)
+       COMPUTE TEMP_1 = n_main + 2
+       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_1)
+       ADD 1 TO a_main
+       ADD 1 TO i_main
+       COMPUTE TEMP_1 = n_main + 2
+>>>>>>> a32651b2843df9819e4d5dbe30bd79b5f92bf8ac
+       END-PERFORM
+       ADD count_printSubstrings TO 1 GIVING count_printSubstrings
+       COMPUTE TEMP_0 = str_printSubstrings.length()
+       END-PERFORM
+>>>>>>> 28b8c928417ac931a4bf3d5a3b0f39cef431571d
+>>>>>>> c10d241639b7f70aa110c02d55ca59f650018278
+>>>>>>> 422adfae6256fd8bc6ceb17b579a7c508a43b9be
        EXIT.
 
