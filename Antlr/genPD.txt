@@ -7,5 +7,7 @@
 
 
        MAIN-PARA.
+       MOVE "hello" TO s_main
+       DISPLAY t_main
        EXIT.
 

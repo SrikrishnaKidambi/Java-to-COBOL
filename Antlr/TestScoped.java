@@ -1,7 +1,8 @@
-public class TestScoped {
+public class UpperCaseTest {
 
-    // code comes here
     public static void main(String[] args_main) {
-        int a_main = 3, b_main = 5, c_main = 6;
+        String s_main = "hello";
+        String t_main = s_main.toUpperCase();
+        System.out.println(t_main);
     }
 }

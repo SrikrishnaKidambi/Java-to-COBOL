@@ -1,0 +1,35 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. Program82.
+
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+      * Variables for Scope:METHOD_MAIN_CLASS_PROGRAM82_GLOBAL
+       01  ARGS_MAIN_-ARRAY.
+           05  args_main    PIC X(100) OCCURS 100 TIMES.
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_PROGRAM82_GLOBAL
+       01  a_main          PIC S9(5).
+       01  b_main          PIC S9(5).
+
+
+       PROCEDURE DIVISION.
+
+
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
+
+
+       MAIN-PARA.
+       MOVE 10 TO a_main
+       MOVE 20 TO b_main
+       IF a_main < b_main
+       DISPLAY "MIN:"
+       DISPLAY a_main
+       ELSE
+       DISPLAY "MIN:"
+       DISPLAY b_main
+       END-IF
+       EXIT.
+
+

@@ -2,7 +2,7 @@ import os
 import subprocess
 import shutil
 
-JAVA_DIR = "./Java_files"
+JAVA_DIR = "./Java_files_2"
 COBOL_DIR = "./COBOL_files"
 ANTLR_DIR = os.path.abspath(os.path.join(os.getcwd(), "..", "Antlr"))
 
