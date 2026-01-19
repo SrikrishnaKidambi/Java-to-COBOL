@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. DayOfWeek.
+       PROGRAM-ID. PrintExprTest.
 
 
        DATA DIVISION.
@@ -8,34 +8,25 @@
        01  ARGS_MAIN_-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
       * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_TESTSCOPED_GLOBAL
-       01  sc_main         PIC X(100).
-       01  day_main        PIC S9(5).
+       01  a_main          PIC S9(5).
+       01  b_main          PIC S9(5).
 
 
        PROCEDURE DIVISION.
 
 
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
+
+
        MAIN-PARA.
-      * Input from ODT is enabled
-       DISPLAY "Enter day number (1-7): " WITH NO ADVANCING
-       ACCEPT day_main
-       EVALUATE day_main
-       WHEN 1
-       DISPLAY "Monday"
-       WHEN 2
-       DISPLAY "Tuesday"
-       WHEN 3
-       DISPLAY "Wednesday"
-       WHEN 4
-       DISPLAY "Thursday"
-       WHEN 5
-       DISPLAY "Friday"
-       WHEN 6
-       DISPLAY "Saturday"
-       WHEN 7
-       DISPLAY "Sunday"
-       WHEN OTHER
-       DISPLAY "Invalid day number"
-       END-EVALUATE
-       STOP RUN.
+       MOVE 10 TO a_main
+       MOVE 5 TO b_main
+       DISPLAY a_main   b_main
+       DISPLAY a_main * b_main - 3
+       DISPLAY (a_main + b_main) * (a_main - b_main)
+       DISPLAY a_main / b_main   2 * 3
+       EXIT.
+
 

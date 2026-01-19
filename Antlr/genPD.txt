@@ -1,38 +1,18 @@
        PROCEDURE DIVISION.
 
 
-       MAIN-PARA.
-       PERFORM VARYING i_main FROM 0 BY 1 UNTIL NOT (i_main < 10)
-       COMPUTE arr_main(i_main + 1) = 0
-       END-PERFORM.
-       MOVE arr_main TO arr_sumArray
-       PERFORM SUMARRAY-PARA
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
 
-       sumArray-PARA.
-       MOVE 0 TO sum_sumArray
-       PERFORM VARYING i_sumArray FROM 0 BY 1 UNTIL NOT (i_sumArray < arr_sumArray.length)
-       COMPUTE sum_sumArray = sum_sumArray + arr_sumArray(i_sumArray + 1)
-       END-PERFORM.
+
+       MAIN-PARA.
+       MOVE 4 TO a_main
+       MOVE 9 TO b_main
+       MOVE 10 TO c_main
+       COMPUTE TEMP_0 = 5 % 6
+       COMPUTE TEMP_1 = 3 - 5 % 9
+       DIVIDE TEMP_0 BY TEMP_1 GIVING TEMP_2 REMAINDER TEMP_3
+       COMPUTE d_main = TEMP_3
        EXIT.
-      * Input from ODT is enabled
-       DISPLAY "Enter day number (1-7): " WITH NO ADVANCING
-       ACCEPT day_main
-       EVALUATE day_main
-       WHEN 1
-       DISPLAY "Monday"
-       WHEN 2
-       DISPLAY "Tuesday"
-       WHEN 3
-       DISPLAY "Wednesday"
-       WHEN 4
-       DISPLAY "Thursday"
-       WHEN 5
-       DISPLAY "Friday"
-       WHEN 6
-       DISPLAY "Saturday"
-       WHEN 7
-       DISPLAY "Sunday"
-       WHEN OTHER
-       DISPLAY "Invalid day number"
-       END-EVALUATE
-       STOP RUN.
+
