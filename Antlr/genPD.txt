@@ -7,31 +7,11 @@
 
 
        MAIN-PARA.
-<<<<<<< HEAD
-       MOVE 84 TO n_main
-       DIVIDE n_main BY 4 GIVING TEMP_0 REMAINDER TEMP_0
-       DIVIDE n_main BY 7 GIVING TEMP_1 REMAINDER TEMP_1
-       IF TEMP_0 = 0  AND  TEMP_1 = 0
-       DISPLAY 1
-       ELSE
-       DISPLAY 0
-=======
-       MOVE 3 TO a_main
-       MOVE 7 TO b_main
-       MOVE 0 TO sum_main
-       COMPUTE TEMP_0 = a_main + b_main
-       PERFORM VARYING j_main FROM 0 BY 1 UNTIL NOT (j_main < TEMP_0)
-       ADD sum_main TO j_main GIVING sum_main
-       COMPUTE TEMP_0 = a_main + b_main
-       END-PERFORM
-       DIVIDE sum_main BY 2 GIVING TEMP_1 REMAINDER TEMP_1
-       IF TEMP_1 = 0
-       DISPLAY "Even Sum: "
-       DISPLAY sum_main
-       ELSE
-       DISPLAY "Odd Sum: "
-       DISPLAY sum_main
->>>>>>> eaca98582af0ad720b3cad82711b003739512612
-       END-IF
+       MOVE 5 TO a_main
+       DISPLAY "Position in alphabet: "
+       COMPUTE TEMP_1 = ABS - 5
+       COMPUTE TEMP_2 = FUNCTION + TEMP_1
+       COMPUTE TEMP_0 = TEMP_2
+       DISPLAY TEMP_0
        EXIT.
 

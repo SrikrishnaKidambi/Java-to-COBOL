@@ -1,8 +1,6 @@
 public class Test {
-    // code comes here
     public static void main(String[] args) {
-    	int a=3,b=5,c=6;    
-
-		
+	int a = 5;
+        System.out.println("Position in alphabet: " + (a + Math.abs(-5)));
     }
 }

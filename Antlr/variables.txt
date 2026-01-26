@@ -1,24 +1,8 @@
-<<<<<<< HEAD
-Scope:Method:main->Class:Program79_CheckDivisible->GLOBAL
+Scope:Method:main->Class:TestScoped->GLOBAL
   Type:String
     args_main [size=[]]
 
-Scope:Block->Method:main->Class:Program79_CheckDivisible->GLOBAL
-  Type:int
-    n_main
-=======
-Scope:Method:main->Class:Program99->GLOBAL
-  Type:String
-    args_main [size=[]]
-
-Scope:Block->Method:main->Class:Program99->GLOBAL
+Scope:Block->Method:main->Class:TestScoped->GLOBAL
   Type:int
     a_main
-    b_main
-    sum_main
-
-Scope:For->Block->Method:main->Class:Program99->GLOBAL
-  Type:int
-    j_main
->>>>>>> eaca98582af0ad720b3cad82711b003739512612
 
