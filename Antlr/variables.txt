@@ -3,6 +3,11 @@ Scope:Method:main->Class:TestScoped->GLOBAL
     args_main [size=[]]
 
 Scope:Block->Method:main->Class:TestScoped->GLOBAL
+<<<<<<< HEAD
   Type:String
     s_main
+=======
+  Type:int
+    a_main
+>>>>>>> d0101356c30f8ca04a5b8847da13c60c00a185d3
 

@@ -7,10 +7,19 @@
 
 
        MAIN-PARA.
+<<<<<<< HEAD
        MOVE "Hello" TO s_main
        DISPLAY s_main.length()
        DISPLAY s_main.toUpperCase()
        DISPLAY s_main.charAt(1)
        DISPLAY s_main.substring(1, 3)
+=======
+       MOVE 5 TO a_main
+       DISPLAY "Position in alphabet: "
+       COMPUTE TEMP_1 = ABS - 5
+       COMPUTE TEMP_2 = FUNCTION + TEMP_1
+       COMPUTE TEMP_0 = TEMP_2
+       DISPLAY TEMP_0
+>>>>>>> d0101356c30f8ca04a5b8847da13c60c00a185d3
        EXIT.
 
