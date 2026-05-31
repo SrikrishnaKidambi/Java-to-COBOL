@@ -1,8 +1,9 @@
 public class Test {
-    // code comes here
     public static void main(String[] args) {
-    	int a=3,b=5,c=6;    
-
-		
+        String s = "Hello";
+        System.out.println(s.length());
+        System.out.println(s.toUpperCase());
+        System.out.println(s.charAt(1));
+        System.out.println(s.substring(1, 3));
     }
 }

@@ -1,0 +1,4753 @@
+==========================================================================================
+PROMPT 1
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO A
+    MOVE 10 TO B
+    ADD A TO B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO A
+    MOVE 10 TO B
+    ADD A TO B GIVING C
+    DISPLAY C.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO A
+    MOVE 10 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+DISPLAY 0
+DISPLAY 1
+DISPLAY 2
+DISPLAY 3
+DISPLAY 4
+DISPLAY 5
+DISPLAY 6
+DISPLAY 7
+DISPLAY 8
+DISPLAY 9
+EXIT.
+HANG.
+
+==========================================================================================
+PROMPT 2
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        DISPLAY I
+        INC I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 5
+    DISPLAY I
+    INC I
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        DISPLAY I
+        ADD I TO 1 GIVING I
+    END-PERFORM.
+END-THREAD.
+
+
+      MAIN-PARA.
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (I <= 20)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (I <= 30)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (I <= 40)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT
+
+==========================================================================================
+PROMPT 3
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO X
+    MOVE 15 TO Y
+    IF X > Y
+        DISPLAY X
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO X
+    MOVE 15 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+   
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO X
+    MOVE 15 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    END-IF
+    EXIT.
+
+RUN.
+       MAIN-PARA.
+       MOVE 20 TO x
+       MOVE 15 TO y
+       IF x > y
+       DISPLAY x
+       ELSE
+       DISPLAY y
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+==========================================================================================
+PROMPT 4
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N = 10
+        ADD 1 TO N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N = 10
+        ADD 1 TO N
+        DISPLAY N
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N = 10
+        ADD 1 TO N
+        DISPLAY N
+    END-PERFORM.
+
+
+      MAIN-PARA.
+      MOVE 0 TO N
+      PERFORM UNTIL NOT (N <= 10)
+      ADD 1 TO N
+      DISPLAY N
+      END-PERFORM.
+      EXIT.
+      STOP RUN.
+
+
+      MAIN-PARA.
+      MOVE 0 TO N
+      PERFORM UNTIL NOT (N <= 10)
+      ADD 1 TO N
+      DISPLAY N
+      END-PERFORM.
+      EXIT.
+      STOP RUN.
+
+
+      MAIN-PARA.
+      MOVE 0 TO N
+      PERFORM UNTIL NOT (N <= 10)
+      ADD 1 TO N
+      DISPLAY N
+      END-PERFORM.
+      EXIT.
+      STOP RUN.
+
+
+      MAIN-PARA.
+      MOVE 0 TO N
+      PERFORM UNTIL NOT (N <= 10)
+      ADD 1 TO N
+      DISPLAY N
+      END-P
+
+==========================================================================================
+PROMPT 5
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 7 TO A
+    MOVE 3 TO B
+    IF A < B
+        DISPLAY B
+    ELSE
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 7 TO A
+    MOVE 3 TO B
+    IF A < B
+        DISPLAY B
+    ELSE
+        DISPLAY A
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 7 TO A
+    MOVE 3 TO B
+    IF A < B
+        DISPLAY B
+    ELSE
+        DISPLAY A
+    END-IF
+    EXIT.
+
+RUN.
+DISPLAY 5
+DISPLAY 3
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P6_BreakLoop.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  ARGS_MAIN_-ARRAY.
+    05  args_main    PIC X(100) OCCURS 100 TIMES.
+01  n_main          PIC S9(5).
+
+
+PROCEDURE DIVISION.
+
+
+       PERFORM MAIN-PARA
+       STOP RUN.
+
+
+MAIN-PARA.
+       MOVE 5 TO n_main
+       PERFORM UNTIL NOT (n_main > 0)
+       DISPLAY n_main
+       SUBTRACT 1 FROM n_main
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+      
+
+==========================================================================================
+PROMPT 6
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 COUNT PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO COUNT
+    PERFORM UNTIL COUNT > 3
+        DISPLAY COUNT
+        ADD 1 TO COUNT
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 COUNT PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO COUNT
+    PERFORM UNTIL COUNT > 3
+        DISPLAY COUNT
+        ADD 1 TO COUNT
+        STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+    STOP RUN
+
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 COUNT PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO COUNT
+    PERFORM UNTIL COUNT > 3
+        DISPLAY COUNT
+        ADD 1 TO COUNT
+    END-PERFORM.
+    EXIT.
+
+      MAIN-PARA.
+      PERFORM MAIN-PARA-FUNCTION
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      MOVE 1 TO count
+      PERFORM UNTIL NOT (count <= 3)
+      DISPLAY count
+      ADD 1 TO count
+      END-PERFORM
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      DISPLAY "1\n2\n3"
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      DISPLAY "4\n5\n6"
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      DISPLAY "7\n8\n9"
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      DISPLAY "10\n11\n12"
+      EXIT.
+      STOP RUN.
+      MAIN-PARA-FUNCTION.
+      DISPLAY "13\n14\n15"
+      EXIT.
+      STOP
+
+==========================================================================================
+PROMPT 7
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 50 TO A
+    IF A > 40
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 50 TO A
+    IF A > 40
+        DISPLAY A
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 50 TO A
+    IF A > 40
+        DISPLAY A
+        END-IF
+    EXIT.
+
+RUN.
+    MAIN-PARA.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT.
+    EXIT
+
+==========================================================================================
+PROMPT 8
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 10
+        ADD 2 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 10
+        ADD 2 TO I
+        DISPLAY I
+        STOP
+    STOP.
+
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 10
+        ADD 2 TO I
+        DISPLAY I
+        EXIT PERFORM.
+    END-PERFORM.
+
+
+      MAIN-PARA.
+      MOVE 8 TO I
+      PERFORM UNTIL NOT (I > 0)
+       SUBTRACT 1 FROM I
+       DISPLAY I
+       EXIT PERFORM.
+      END-PERFORM.
+
+
+       MAIN-PARA.
+       MOVE 8 TO I
+       PERFORM UNTIL NOT (I > 0)
+       SUBTRACT 1 FROM I
+       DISPLAY I
+       EXIT PERFORM.
+       END-PERFORM.
+
+
+       MAIN-PARA.
+       MOVE 8 TO I
+       PERFORM UNTIL NOT (I > 0)
+       SUBTRACT 1 FROM I
+       DISPLAY I
+       EXIT PERFORM.
+       END-PERFORM.
+
+
+       MAIN-PARA.
+       MOVE 8 TO I
+       PERFORM UNTIL NOT (I > 0)
+       SUBTRACT 1 FROM I
+       DISPLAY I
+       EXIT PERFORM
+
+==========================================================================================
+PROMPT 9
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+01 Z PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO X
+    MOVE 6 TO Y
+    ADD X TO Y GIVING Z
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+01 Z PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO X
+    MOVE 6 TO Y
+    ADD X TO Y GIVING Z
+    DISPLAY Z
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+   
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+01 Z PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO X
+    MOVE 6 TO Y
+    ADD X TO Y GIVING Z
+    DISPLAY Z
+    EXIT.
+      * Addition
+      * Input from ODT is enabled
+      * Variables X and Y are declared
+      * Variable Z is declared to store the result
+      * Addition is performed using the + operator
+      * The final value of Z is displayed
+      * Exit is done
+       * Addition
+       * Input from ODT is enabled
+       * Variables X and Y are declared
+       * Variable Z is declared to store the result
+       * Addition is performed using the + operator
+       * The final value of Z is displayed
+       * Exit is done
+       * Addition
+       * Input from ODT is enabled
+       * Variables X and Y are declared
+       * Variable Z is declared to store the result
+       * Addition is performed using the + operator
+       * The final value of Z is displayed
+       * Exit is done
+       * Addition
+       * Input from ODT is enabled
+       * Variables
+
+==========================================================================================
+PROMPT 10
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 5
+        DISPLAY A
+        ADD 1 TO A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 5
+        DISPLAY A
+        ADD 1 TO A
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 5
+        DISPLAY A
+        ADD 1 TO A
+    END-PERFORM.
+
+
+       EXIT.
+
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       PERFORM UNTIL NOT (true)
+       DISPLAY "Hello"
+       DISPLAY "World"
+       EXIT
+
+==========================================================================================
+PROMPT 11
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P11.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 M PIC 9(3).
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 8 TO M
+    MOVE 8 TO N
+    IF M = N
+        DISPLAY M
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P11.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 M PIC 9(3).
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 8 TO M
+    MOVE 8 TO N
+    IF M = N
+        DISPLAY M
+        STOP
+    ELSE
+        DISPLAY N
+        STOP
+    END-IF
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P11.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 M PIC 9(3).
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 8 TO M
+    MOVE 8 TO N
+    IF M = N
+        DISPLAY M
+        DISPLAY N
+    ELSE
+        DISPLAY "Not equal"
+    END-IF
+    EXIT.
+QUIT.
+exit.
+display 8 to 10
+exit.
+8
+9
+10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 10
+exit.
+8 9 10
+8 9 10
+8 9 
+
+==========================================================================================
+PROMPT 12
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P12.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO K
+    PERFORM UNTIL K = 4
+        ADD 1 TO K
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P12.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO K
+    PERFORM UNTIL K = 4
+        ADD 1 TO K
+        DISPLAY K
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P12.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO K
+    PERFORM UNTIL K = 4
+        ADD 1 TO K
+    END-PERFORM
+    DISPLAY K
+    EXIT.
+
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       * Variables for Scope:METHOD_MAIN_CLASS_P12_GLOBAL
+       01  ARGS_MAIN_-ARRAY.
+           05  args_main    PIC X(100) OCCURS 100 TIMES.
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_P12_GLOBAL
+       * Variables for Scope:FOR_BLOCK_METHOD_MAIN_CLASS_P12_GLOBAL
+       01  i_main          PIC S9(5).
+       * Variables for Scope:BLOCK_FOR_BLOCK_METHOD_MAIN_CLASS_P12_GLOBAL
+       01  j_main          PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+
+
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
+
+
+       MAIN-PARA.
+      
+
+==========================================================================================
+PROMPT 13
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P13.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    MOVE 15 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P13.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    MOVE 15 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P13.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    MOVE 15 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    END-IF
+    EXIT.
+
+RUN.
+DISPLAY 13
+END-OF-CLASS.
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  ARGS_MAIN_-ARRAY.
+    05  args_main    PIC X(100) OCCURS 100 TIMES.
+      01 TEMP_0 PIC S9(9).
+      01 TEMP_1 PIC S9(9).
+      01 TEMP_2 PIC S9(9).
+      01 TEMP_3 PIC S9(9).
+      01 TEMP_4 PIC S9(9).
+      01 TEMP_5 PIC S9(9).
+
+
+       ENTRY-PARA.
+           PERFORM MAIN-PARA
+           STOP RUN.
+
+
+       MAIN-PARA.
+       MOVE 12 TO A
+       MOVE 15 TO B
+       IF A > B
+       DISPLAY A
+       ELSE
+       DISPLAY B
+       END-IF
+
+
+==========================================================================================
+PROMPT 14
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P14.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P14.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P14.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+    END-PERFORM
+    EXIT.
+ STOP RUN.
+       MAIN-PARA.
+       MOVE 10 TO I
+       PERFORM UNTIL NOT (I > 0)
+       DISPLAY I
+       SUBTRACT 1 FROM I
+       END-PERFORM
+       EXIT.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO I
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO I
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "T
+
+==========================================================================================
+PROMPT 15
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P15.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 3 TO B
+    ADD A TO B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P15.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 3 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+   
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P15.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 3 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * add your code here
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       ACCEPT a
+       ACCEPT b
+       ADD a TO b GIVING c
+       DISPLAY c
+       * Input from ODT is enabled
+       * Declaration & Initialization
+       ACCEPT a
+       ACCEPT b
+       ADD a TO b GIVING c
+       DISPLAY c
+       * Input from ODT is enabled
+       * Declaration & Initialization
+       ACCEPT a
+       ACCEPT b
+       ADD a TO b GIVING c
+       DISPLAY c
+       * Input from ODT is enabled
+       * Declaration & Initialization
+       ACCEPT a
+       ACCEPT b
+       ADD a TO b GIVING c
+       DISPLAY c
+       * Input from ODT is enabled
+       * Declaration & Initialization
+       ACCEPT a
+       ACCEPT b
+       ADD a TO b GIVING c
+       DISPLAY c
+       * Input from ODT
+
+==========================================================================================
+PROMPT 16
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P16.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 4
+        DISPLAY T
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P16.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 4
+        DISPLAY T
+        ADD 1 TO T
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P16.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 4
+        DISPLAY T
+        SUBTRACT 1 FROM T
+    END-PERFORM
+    EXIT.
+
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       ACCEPT T
+      * Logic
+       IF T = 1
+       DISPLAY "one"
+       ELSE
+       IF T = 2
+       DISPLAY "two"
+       ELSE
+       IF T = 3
+       DISPLAY "three"
+       ELSE
+       IF T = 4
+       DISPLAY "four"
+       ELSE
+       DISPLAY "other"
+       END-IF
+       END-IF
+       GOBACK
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+      
+
+==========================================================================================
+PROMPT 17
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P17.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 100 TO X
+    MOVE 50 TO Y
+    IF X > Y
+        DISPLAY X
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P17.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 100 TO X
+    MOVE 50 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    STOP.
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P17.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 100 TO X
+    MOVE 50 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    END-IF
+    EXIT.
+
+RUN.
+DISPLAY 100
+DISPLAY 50
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P18.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a       PIC S9(5).
+01  b       PIC S9(5).
+01  m       PIC S9(5).
+01  n       PIC S9(5).
+
+
+PROCEDURE DIVISION.
+
+
+       COMPUTE TEMP_0 = a * m
+       COMPUTE TEMP_1 = TEMP_0 + n
+       COMPUTE b = TEMP_1
+       EXIT.
+
+
+RUN.
+DISPLAY 1
+DISPLAY 2
+DISPLAY 3
+DISPLAY 4
+DISPLAY 5
+DISPLAY 6
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P19.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a       PIC S9(5).
+01
+
+==========================================================================================
+PROMPT 18
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P18.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO N
+    PERFORM UNTIL N = 5
+        ADD 1 TO N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P18.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO N
+    PERFORM UNTIL N = 5
+        ADD 1 TO N
+        DISPLAY N
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P18.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO N
+    PERFORM UNTIL N = 5
+        ADD 1 TO N
+        DISPLAY N
+        END-PERFORM
+        EXIT.
+
+      * Display number from 1 to 5
+      * Input from ODT is enabled
+      * Display current value of i
+      * Increment i by 1
+      * Display current value of i
+      * Exit.
+       GOBACK
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT
+
+==========================================================================================
+PROMPT 19
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P19.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    IF A > 20
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P19.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    IF A > 20
+        DISPLAY A
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P19.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    IF A > 20
+        DISPLAY A
+    ELSE
+        DISPLAY "Large"
+    END-IF
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P19.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a       PIC S9(5).
+
+
+PROCEDURE DIVISION.
+  MOVE 25 TO a
+  IF a > 20
+    DISPLAY "Large"
+  ELSE
+    DISPLAY "Small"
+  END-IF
+  EXIT.
+
+run.
+OUTPUT.
+25
+Small
+Large
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+
+==========================================================================================
+PROMPT 20
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P20.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+        ADD 3 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P20.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+        ADD 3 TO I
+    END-PERFORM
+    STOP RUN
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P20.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+        ADD 3 TO I
+    END-PERFORM
+    EXIT.
+
+RUN.
+DISPLAY 0
+DISPLAY 1
+DISPLAY 2
+DISPLAY 3
+DISPLAY 4
+DISPLAY 5
+DISPLAY 6
+DISPLAY 7
+DISPLAY 8
+DISPLAY 9
+EXIT.
+        MAIN-PARA.
+      * Display numbers from 3 to 15
+      * Use a for loop
+      * Display the integer part of each number
+      * Use a modulus operation to get the last digit
+      * Display the last digit of each number
+      * Use a while loop to display the entire number
+
+==========================================================================================
+PROMPT 21
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P21.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 9 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P21.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 9 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P21.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 9 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    END-IF
+    EXIT.
+
+RUN.
+RUN-PARA.
+OUTPUT.
+EXIT.
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P21.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a       PIC S9(5).
+01  b       PIC S9(5).
+
+
+PROCEDURE DIVISION.
+
+
+DISPLAY a
+DISPLAY b
+IF a > b
+DISPLAY a
+ELSE
+DISPLAY b
+END-IF
+EXIT.
+
+RUN-PARA.
+MOVE 4 TO a
+MOVE 9 TO b
+IF a > b
+DISPLAY a
+ELSE
+DISPLAY b
+END-IF
+EXIT.
+RUN-PARA.
+OUTPUT.
+EXIT.
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P21.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a       PIC S9(5).
+01  b       PIC S9(5).
+
+
+PROCEDURE DIVISION.
+
+
+DISPLAY a
+DISPLAY b
+IF a > b
+DISPLAY
+
+==========================================================================================
+PROMPT 22
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P22.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 6
+        ADD 1 TO I
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P22.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 6
+        ADD 1 TO I
+        DISPLAY I
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P22.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 6
+        ADD 1 TO I
+        DISPLAY I
+    END-PERFORM
+    EXIT.
+
+      * Output:
+      * 1
+      * 2
+      * 3
+      * 4
+      * 5
+      * 6
+      * 7
+      * 8
+      * 9
+
+==========================================================================================
+PROMPT 23
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P23.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 30 TO X
+    MOVE 20 TO Y
+    IF X = Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P23.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 30 TO X
+    MOVE 20 TO Y
+    IF X = Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P23.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+01 Y PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 30 TO X
+    MOVE 20 TO Y
+    IF X = Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    END-IF
+    EXIT.
+
+RUN.
+DISPLAY 15
+DISPLAY 25
+EXIT.
+STOP RUN.
+       MAIN-PARA.
+      * Display X and Y
+      * X = 30
+      * Y = 20
+       COMPUTE TEMP_0 = 3 * 2
+       COMPUTE TEMP_1 = TEMP_0 + 3
+       COMPUTE y = TEMP_1
+       DISPLAY "Y = "
+       DISPLAY y
+       EXIT.
+       EVALUATE x
+       WHEN 30
+       DISPLAY "X = 30"
+       WHEN 20
+       DISPLAY "Y = 20"
+       WHEN OTHER
+       DISPLAY "Unknown"
+       END-EVALUATE
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 30 TO x
+       MOVE 20 TO y
+       IF x = y
+       DISPLAY "X = Y"
+       ELSE
+       DISPLAY
+
+==========================================================================================
+PROMPT 24
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P24.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N > 5
+        ADD 1 TO N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P24.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N > 5
+        ADD 1 TO N
+        DISPLAY N
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P24.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO N
+    PERFORM UNTIL N > 5
+        ADD 1 TO N
+    END-PERFORM
+    DISPLAY N
+    EXIT.
+
+      * Display 0, 1, 2, 3, 4, 5
+      * Display 6, 7, 8, 9, 10, 11
+      * Display 12, 13, 14, 15, 16, 17
+      * Display 18, 19, 20, 21, 22, 23
+      * Display 24, 25, 26, 27, 28, 29
+      * Display 30, 31, 32, 33, 34, 35
+      * Display 36, 37, 38, 39, 40, 41
+      * Display 42, 
+
+==========================================================================================
+PROMPT 25
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P25.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P25.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P25.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * Output will be 6
+      * because in java, we always start from 0, so A starts from 0, B starts from 1, and C starts from 2.
+      * So, we add A with B to get C.
+       * Here, A is 2, B is 4, so 2 is added with 4 to get 6.
+       * Finally, C is displayed.
+       * In this case, the output is 6.
+       * But, if we change the value of A, B, and C, the output will be different.
+       * For example, if we change the value of A to 3, the output will be 9.
+       * And if we change the value of B to 5, the output will be 15.
+       * And if we change the value of C to 7, the output will be 17.
+       *
+
+==========================================================================================
+PROMPT 26
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P26.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P26.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P26.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO I
+    PERFORM UNTIL I < 1
+        DISPLAY I
+        ADD -1 TO I
+    END-PERFORM
+    EXIT.
+ STOP RUN.
+       MAIN-PARA.
+       MOVE 10 TO I
+       PERFORM UNTIL NOT (I > 0)
+       DISPLAY I
+       SUBTRACT 1 FROM I
+       END-PERFORM
+       EXIT.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO I
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO I
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "T
+
+==========================================================================================
+PROMPT 27
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P27.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 77 TO A
+    IF A > 50
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P27.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 77 TO A
+    IF A > 50
+        DISPLAY A
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P27.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 77 TO A
+    IF A > 50
+        DISPLAY A
+    ELSE
+        DISPLAY "Neither greater than 50 nor less than 33"
+    END-IF
+    EXIT.
+ STOP RUN.
+       MAIN-PARA.
+       MOVE 77 TO A
+       IF A > 50
+       DISPLAY "A is greater than 50"
+       ELSE
+       DISPLAY "A is less than 33"
+       END-IF
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 77 TO A
+       IF A >= 50
+       DISPLAY "A is greater than or equal to 50"
+       ELSE
+       DISPLAY "A is less than or equal to 50"
+       END-IF
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 77 TO A
+       IF A > 50
+       DISPLAY "A is greater than 50"
+       ELSE
+       DISPLAY "A is less than 50"
+       END
+
+==========================================================================================
+PROMPT 28
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P28.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K = 4
+        DISPLAY K
+        ADD 1 TO K
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P28.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K = 4
+        DISPLAY K
+        ADD 1 TO K
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P28.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K = 4
+        DISPLAY K
+        ADD 1 TO K
+    END-PERFORM
+    EXIT.
+
+RUN.
+DISPLAY 1
+DISPLAY 2
+DISPLAY 3
+DISPLAY 4
+EXIT.
+        MAIN-PARA.
+       EVALUATE n_main
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN 3
+       DISPLAY "THREE"
+       WHEN 4
+       DISPLAY "FOUR"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       EVALUATE n_main
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN 3
+       DISPLAY "THREE"
+       WHEN 4
+       DISPLAY "FOUR"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       MAIN-PARA.
+       EVALUATE n_main
+       WHEN 1
+       DISPLAY "ONE"
+      
+
+==========================================================================================
+PROMPT 29
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P29.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO X
+    MOVE 6 TO Y
+    IF X = Y
+        DISPLAY X
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P29.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO X
+    MOVE 6 TO Y
+    IF X = Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P29.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO X
+    MOVE 6 TO Y
+    IF X = Y
+        DISPLAY X
+        DISPLAY Y
+    ELSE
+        DISPLAY "Not equal"
+    END-IF
+    EXIT.
+ STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * X = 6
+      * Y = 6
+      * IF X = Y
+      * DISPLAY X
+      * DISPLAY Y
+      * ELSE
+      * DISPLAY "Not equal"
+      * END-IF
+      * EXIT.
+      * STOP RUN.
+       MAIN-PARA.
+       MOVE 6 TO x_main
+       MOVE 6 TO y_main
+       IF x_main = y_main
+       DISPLAY "Equal"
+       ELSE
+       DISPLAY "Not equal"
+       END-IF
+       EXIT.
+       MAIN-PARA.
+       MOVE 6 TO x_main
+       MOVE 6 TO y_main
+       IF x_main > y_main
+       DISPLAY "x_main is greater"
+       ELSE
+       DISPLAY "y_main is greater"
+       END-IF
+      
+
+==========================================================================================
+PROMPT 30
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P30.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 15
+        ADD 5 TO I
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P30.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 15
+        ADD 5 TO I
+        DISPLAY I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P30.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 15
+        ADD 5 TO I
+        DISPLAY I
+    END-PERFORM
+    EXIT.
+
+      * Output
+      * 15
+      * 20
+      * 35
+      * 40
+      * 45
+      * 50
+      * 55
+      * 60
+      * 65
+      * 70
+      * 75
+      * 80
+      * 85
+      * 90
+      * 95
+      * 100
+      * 105
+      * 110
+      * 115
+      * 120
+      * 125
+      * 130
+      * 135
+      * 140
+      * 145
+      * 150
+      * 155
+      * 160
+      * 165
+
+==========================================================================================
+PROMPT 31
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P31.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P31.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P31.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    END-IF
+    EXIT.
+
+RUN.
+   MAIN-PARA.
+       PERFORM UNTIL NOT (a > b)
+       ADD a TO b GIVING a
+       END-PERFORM
+       DISPLAY a
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+
+
+==========================================================================================
+PROMPT 32
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P32.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T = 5
+        ADD 1 TO T
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P32.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T = 5
+        ADD 1 TO T
+        DISPLAY T
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P32.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T = 5
+        ADD 1 TO T
+    END-PERFORM
+    DISPLAY T
+    EXIT.
+
+      * display pattern
+      * Input from ODT is enabled
+      * first row
+       DISPLAY "Pattern"
+       DISPLAY "---------"
+      * second row
+       DISPLAY "   *"
+       DISPLAY "  *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+       DISPLAY " *"
+      
+
+==========================================================================================
+PROMPT 33
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P33.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    MOVE 2 TO B
+    ADD A TO B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P33.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    MOVE 2 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P33.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    MOVE 2 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * Output will be 3
+       * because
+       * 1 + 2 gives 3
+
+==========================================================================================
+PROMPT 34
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P34.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 8
+        DISPLAY I
+        ADD 2 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P34.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 8
+        DISPLAY I
+        ADD 2 TO I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P34.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO I
+    PERFORM UNTIL I > 8
+        DISPLAY I
+        ADD 2 TO I
+    END-PERFORM
+    EXIT.
+
+      * Output
+      * 2
+      * 4
+      * 6
+      * 8
+       9
+       11
+       13
+       15
+       17
+       19
+       21
+       23
+       25
+       27
+       29
+       31
+       33
+       35
+       37
+       39
+       41
+       43
+       45
+       47
+       49
+       51
+       53
+       55
+       57
+       59
+       61
+       63
+       65
+       67
+       69
+       71
+       73
+       7
+
+==========================================================================================
+PROMPT 35
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P35.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO N
+    IF N > 5
+        DISPLAY N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P35.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO N
+    IF N > 5
+        DISPLAY N
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P35.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO N
+    IF N > 5
+        DISPLAY N
+    ELSE
+        DISPLAY "Less than 5"
+    END-IF
+    EXIT.
+
+      MAIN-PARA.
+      PERFORM SUM-PARA
+      EXIT.
+      STOP RUN.
+       EXIT.
+
+       SUM-PARA.
+       IF sum >= 0
+       ADD sum TO lsum = n
+       END-IF
+       EXIT.
+
+       MAIN-PARA.
+       MOVE 0 TO sum
+       MOVE 5 TO n
+       PERFORM SUM-PARA
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+==========================================================================================
+PROMPT 36
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P36.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P36.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 9
+    DISPLAY I
+    INCREMENT I
+END-PROCEDURE.
+
+PROGRAM-ID. P37.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+02 J PIC 9(2).
+03 K PIC 9(2).
+04 L PIC 9(2).
+05 M PIC 9(2).
+06 N PIC 9(2).
+07 O PIC 9(2).
+08 P PIC 9(2).
+09 Q PIC 9(2).
+10 R PIC 9(2).
+11 S PIC 9(2).
+12 T PIC 9(2).
+13 U PIC 9(2).
+14 V PIC 9(2).
+15 W PIC 9(2).
+16 X PIC 9(2).
+17
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P36.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO I
+    PERFORM UNTIL I > 9
+        DISPLAY I
+        SUBTRACT 1 FROM I
+    END-PERFORM
+    EXIT.
+
+      * display 3 2 1
+      * display 4 3 2 1
+      * display 5 4 3 2 1
+      * display 6 5 4 3 2 1
+      * display 7 6 5 4 3 2 1
+      * display 8 7 6 5 4 3 2 1
+      * display 9 8 7 6 5 4 3 2 1
+      * display 10 9 8 7 6 5 4 3 2 1
+      * display 11 10 9 8 7 6 5 4 3 2 1
+      * display 12 11 10 9 8 7
+
+==========================================================================================
+PROMPT 37
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P37.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 7 TO B
+    IF A < B
+        DISPLAY B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P37.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 7 TO B
+    IF A < B
+        DISPLAY B
+    ELSE
+        DISPLAY A
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P37.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO A
+    MOVE 7 TO B
+    IF A < B
+        DISPLAY B
+    ELSE
+        DISPLAY A
+    END-IF
+    EXIT.
+
+RUN.
+   MAIN-PARA.
+   MOVE 4 TO a
+   MOVE 7 TO b
+   IF a < b
+   DISPLAY b
+   ELSE
+   DISPLAY a
+   END-IF
+   EXIT.
+   STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+==========================================================================================
+PROMPT 38
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P38.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K > 3
+        ADD 1 TO K
+        DISPLAY K
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P38.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K > 3
+        ADD 1 TO K
+        DISPLAY K
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P38.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO K
+    PERFORM UNTIL K > 3
+        ADD 1 TO K
+        DISPLAY K
+    END-PERFORM.
+    EXIT.
+
+      * Output:
+      * 2
+      * 3
+       * K
+       * 4
+       * 5
+       * 6
+       * 7
+       * 8
+       * 9
+       * 10
+       * 11
+       * 12
+       * 13
+       * 14
+       * 15
+       * 16
+       * 17
+       * 18
+       * 19
+       * 20
+       * 21
+       * 22
+       * 23
+       * 24
+       * 25
+       * 26
+       * 27
+       * 28
+       * 29
+       * 30
+       * 31
+       * 32
+       * 33
+
+==========================================================================================
+PROMPT 39
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P39.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO X
+    IF X = 9
+        DISPLAY X
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P39.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO X
+    IF X = 9
+        DISPLAY X
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P39.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 9 TO X
+    IF X = 9
+        DISPLAY X
+    END-IF
+    EXIT.
+
+      * Display 9
+      * Execution starts here
+      * Code is executed until not (false)
+       * If condition is true, it continues
+       * X = 9, so it displays 9
+       * If condition is false, it breaks out of loop and doesn't display anything
+       * X = 10, so it doesn't display anything
+       * When the loop breaks out of it, the program continues from line 25, which displays X
+       * Therefore, the output is 9, 10
+       * Hence, the answer is 10
+       * 10 - 1 = 9
+       * Therefore, the answer is 9
+       * 20 - 1 = 19
+       * Therefore, the answer is 19
+       * 30 - 1 = 29
+       * Therefore, the answer is
+
+==========================================================================================
+PROMPT 40
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P40.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 4
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P40.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 4
+        DISPLAY I
+        INC I
+        STOP
+    STOP.
+    STOP.
+
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P40.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 4
+        DISPLAY I
+        ADD I TO 1 GIVING I
+    END-PERFORM
+    EXIT.
+
+      * Output
+      * 1
+      * 2
+      * 3
+      * 4
+
+==========================================================================================
+PROMPT 41
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P41.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P41.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+    STOP.
+   
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P41.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 3 TO A
+    MOVE 4 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+RUN.
+RUN.
+RUN.
+DISPLAY 0
+DISPLAY 1
+DISPLAY 2
+DISPLAY 3
+DISPLAY 4
+DISPLAY 5
+DISPLAY 6
+DISPLAY 7
+DISPLAY 8
+DISPLAY 9
+DISPLAY 10
+DISPLAY 11
+DISPLAY 12
+DISPLAY 13
+DISPLAY 14
+DISPLAY 15
+DISPLAY 16
+DISPLAY 17
+DISPLAY 18
+DISPLAY 19
+DISPLAY 20
+DISPLAY 21
+DISPLAY 22
+DISPLAY 23
+DISPLAY 24
+DISPLAY 25
+DISPLAY 26
+DISPLAY 27
+DISPLAY 28
+DISPLAY 29
+DISPLAY 30
+DISPLAY 31
+DISPLAY 32
+DISPLAY 33
+DISPLAY 34
+DISPLAY 35
+DISPLAY 36
+DISPLAY 37
+DISPLAY 38
+
+
+==========================================================================================
+PROMPT 42
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P42.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO N
+    PERFORM UNTIL N > 6
+        ADD 2 TO N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P42.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO N
+    PERFORM UNTIL N > 6
+        ADD 2 TO N
+        DISPLAY N
+        STOP
+    STOP.
+    STOP.
+
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P42.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO N
+    PERFORM UNTIL N > 6
+        ADD 2 TO N
+    END-PERFORM
+    DISPLAY N
+    EXIT.
+
+RUN.
+INPUT N
+DISPLAY "After adding 2 to each whole number: "
+DISPLAY N
+EXIT.
+exit
+P42
+OUTPUT
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+6
+
+==========================================================================================
+PROMPT 43
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P43.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    IF A > 10
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P43.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    IF A > 10
+        DISPLAY A
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P43.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 12 TO A
+    IF A > 10
+        DISPLAY A
+        END-IF
+    EXIT.
+
+RUN.
+       ENTRY.
+       DISPLAY "7"
+       DISPLAY "8"
+       DISPLAY "9"
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+==========================================================================================
+PROMPT 44
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P44.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO I
+    PERFORM UNTIL I > 12
+        DISPLAY I
+        ADD 4 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P44.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO I
+    PERFORM UNTIL I > 12
+        DISPLAY I
+        ADD 4 TO I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P44.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 4 TO I
+    PERFORM UNTIL I > 12
+        DISPLAY I
+        ADD 4 TO I
+    END-PERFORM
+    EXIT.
+
+RUN.
+DISPLAY "Welcome to P44"
+DISPLAY "4 is divisible by 2"
+DISPLAY "8 is divisible by 4"
+DISPLAY "10 is not divisible by 4"
+DISPLAY "12 is divisible by 4"
+DISPLAY "24 is divisible by 4"
+DISPLAY "6 is not divisible by 4"
+DISPLAY "10 is not divisible by 4"
+DISPLAY "22 is not divisible by 4"
+DISPLAY "48 is divisible by 4"
+DISPLAY "66 is divisible by 4"
+DISPLAY "100 is divisible by 4"
+DISPLAY "200 is divisible by 4"
+DISPLAY "84 is not divisible by 4"
+DISPLAY "28 is not divisible by 4"
+DISPLAY "33 is not divisible by 4"
+DISPLAY "94 is not divisible by 4"
+DISPLAY "73456 is not divisible by 4"
+
+
+==========================================================================================
+PROMPT 45
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P45.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO X
+    MOVE 9 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P45.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO X
+    MOVE 9 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P45.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 2 TO X
+    MOVE 9 TO Y
+    IF X > Y
+        DISPLAY X
+    ELSE
+        DISPLAY Y
+    END-IF
+    EXIT.
+      * Display 2
+      * Display 9
+      * X > Y is false
+      * Therefore, display 2
+      * 9 > 2 is true
+      * Therefore, display 9
+       * Number line
+       * -5       -4       -3       -2       -1       1       2       3       4       5
+       * | X = 2     V     Y = 9     |
+       * 16    10     8     6     4     2
+       * 8    10     16
+       * 4    8     16
+       * 2    4     8
+       * 1    2     4
+       * 0    1     2
+       * 1 DIVIDE BY 2 GIVING 0
+
+==========================================================================================
+PROMPT 46
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P46.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 5
+        DISPLAY T
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P46.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 5
+        DISPLAY T
+        ADD 1 TO T
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P46.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 T PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO T
+    PERFORM UNTIL T > 5
+        DISPLAY T
+        SUBTRACT 1 FROM T
+    END-PERFORM
+    EXIT.
+
+      * Display pattern UNTIL condition T > 5
+       * Display T
+       * Subtract 1 from T
+       * Continue display T until T <= 5
+       * Exit.
+       * Display pattern until condition T > 5
+       * Display T
+       * Subtract 1 from T
+       * Continue display T until T <= 5
+       * Exit.
+       * Pattern display until condition T >= 1
+       * Display T
+       * Subtract 1 from T
+       * Continue display T until T >= 1
+       * Exit.
+       * Display pattern from 1 to 5
+       PERFORM VARYING i FROM 1 BY 1 UNTIL NOT (i <= 5)
+       DISPLAY i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+==========================================================================================
+PROMPT 47
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P47.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO A
+    IF A = 20
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P47.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO A
+    IF A = 20
+        DISPLAY A
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P47.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 20 TO A
+    IF A = 20
+        DISPLAY A
+    END-IF
+    EXIT.
+STOP RUN.
+```
+
+In this example, the code checks if the variable `a` has a value of 20. If it does, the code displays the value of `a`. If `a` has a different value, the code does nothing and continues execution. This demonstrates the use of conditional statements in Java.
+
+==========================================================================================
+PROMPT 48
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P48.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 25
+        ADD 5 TO I
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P48.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 25
+        ADD 5 TO I
+        DISPLAY I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P48.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 5 TO I
+    PERFORM UNTIL I > 25
+        ADD 5 TO I
+        DISPLAY I
+    END-PERFORM
+    EXIT.
+
+RUN.
+DISPLAY "After 25 iterations, the value of I is: "
+DISPLAY p48_1
+DISPLAY "After 48 iterations, the value of I is: "
+DISPLAY p48_2
+DISPLAY "After 87 iterations, the value of I is: "
+DISPLAY p48_3
+DISPLAY "After 97 iterations, the value of I is: "
+DISPLAY p48_4
+DISPLAY "After 98 iterations, the value of I is: "
+DISPLAY p48_5
+DISPLAY "After 99 iterations, the value of I is: "
+DISPLAY p48_6
+DISPLAY "After 100 iterations, the value of I is: "
+DISPLAY p48_7
+DISPLAY "After 101 iterations, the value of I is: "
+DISPLAY p48_8
+DISPLAY "After 102 iterations, the value
+
+==========================================================================================
+PROMPT 49
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P49.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P49.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+    ELSE
+        DISPLAY B
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P49.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 6 TO A
+    MOVE 3 TO B
+    IF A > B
+        DISPLAY A
+        DISPLAY B
+    ELSE
+        DISPLAY A
+        DISPLAY B
+    END-IF
+    EXIT.
+
+RUN.
+      * Output:
+      * 6
+      * 3
+      * 6
+      * 3
+      * 5
+      * 3
+      * 6
+      * 3
+      * 7
+      * 3
+      * 8
+      * 3
+      * 9
+      * 3
+      * 10
+      * 3
+      * 11
+      * 3
+      * 12
+      * 3
+      * 13
+      * 3
+      * 14
+      * 3
+      * 15
+      * 3
+      * 16
+      * 3
+      * 17
+      * 3
+      * 18
+      * 3
+      *
+
+==========================================================================================
+PROMPT 50
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P50.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 3
+        DISPLAY I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P50.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 3
+        DISPLAY I
+        MOVE 2 TO I
+    END-PERFORM
+    DISPLAY 'END'
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P50.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I = 3
+        DISPLAY I
+        ADD I TO 1 GIVING I
+    END-PERFORM
+    EXIT.
+
+RUN.
+DISPLAY "1
+2
+3"
+EXIT.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 3)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 3)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 3)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 3)
+
+

@@ -1,0 +1,1390 @@
+==========================================================================================
+PROMPT 1
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ACC1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+
+PROCEDURE DIVISION.
+    DISPLAY "Enter value:"
+    ACCEPT X
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ACC1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+
+PROCEDURE DIVISION.
+    DISPLAY "Enter value:"
+    ACCEPT X
+    DISPLAY "X = ", X
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ACC1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(3).
+
+PROCEDURE DIVISION.
+    DISPLAY "Enter value:"
+    ACCEPT X
+    IF X > 0
+       DISPLAY "Positive"
+    ELSE
+       DISPLAY "Zero or Negative"
+    END-IF
+    EXIT.
+      STOP RUN.
+       MAIN-PARA.
+       MOVE 5 TO X
+       EVALUATE X
+       WHEN 5
+       DISPLAY "Five"
+       WHEN OTHER
+       DISPLAY "Other"
+       END-EVALUATE
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 10 TO X
+       EVALUATE X
+       WHEN 10
+       DISPLAY "Ten"
+       WHEN OTHER
+       DISPLAY "Other"
+       END-EVALUATE
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 0 TO X
+       EVALUATE X
+       WHEN 0
+       DISPLAY "Zero"
+       WHEN OTHER
+       DISPLAY "Other"
+       END-EVALUATE
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 8 TO X
+
+==========================================================================================
+PROMPT 2
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "HELLO".
+01 B PIC X(5) VALUE "WORLD".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "HELLO".
+01 B PIC X(5) VALUE "WORLD".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+    DISPLAY C.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "HELLO".
+01 B PIC X(5) VALUE "WORLD".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+    DISPLAY C
+    EXIT.
+STOP RUN.
+```
+
+In this example, the first 5 characters of string A are displayed, the last 3 characters of string B are displayed, and the entire string C is displayed.
+
+==========================================================================================
+PROMPT 3
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. UNS1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10,20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO A B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. UNS1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10,20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. UNS1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10,20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO A B
+    DISPLAY "a = "   A
+       "   b = "   B
+       "   a + b = " (A+B)
+       "   a - b = " (A-B)
+       "   a * b = " (A*B)
+       "   a / b = "   (A/B)
+       "   a % b = "   (A%B)
+       "   b / a = "   (B/A)
+       "   b % a = "   (B%A)
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       STRING        "9 7 5 3 1" DELIMITED BY SPACE INTO STR
+       UNSTRING      STR DELIMITED BY SPACE INTO A B
+       DISPLAY "a = "   A
+       DISPLAY "b = "   B
+       DISPLAY "a + b = " (A+B)
+       DISPLAY "a - b = " (A-B)
+       DISPLAY "a
+
+==========================================================================================
+PROMPT 4
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. DIV1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 100.
+01 B PIC 9(2) VALUE 5.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. DIV1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 100.
+01 B PIC 9(2) VALUE 5.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C
+    DISPLAY C.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. DIV1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 100.
+01 B PIC 9(2) VALUE 5.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C
+    DISPLAY C
+    EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       MOVE 6 TO A
+       MOVE 5 TO B
+       DIVIDE A BY B GIVING C
+       DISPLAY C
+       EXIT.
+       STOP RUN.
+
+
+       REVERSE-PARA.
+       MOVE 12345 TO A
+       MOVE 0 TO B
+       MOVE 1 TO C
+       PERFORM UNTIL NOT (A NOT = 0)
+       ADD B TO C
+       DIVIDE A BY 10 GIVING A
+       END-PERFORM
+       DISPLAY C
+       EXIT.
+       STOP RUN.
+
+
+       FACTORY-PARA.
+       MOVE 1 TO fact
+       PERFORM UNTIL NOT (n NOT = 1)
+       MULTIPLY fact BY n GIVING fact
+       SUBTRACT 1 FROM n
+       END-PERFORM
+       DISPLAY fact
+       EXIT.
+       STOP RUN.
+
+
+       GREETING-PARA.
+
+
+==========================================================================================
+PROMPT 5
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MOD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 17.
+01 B PIC 9(2) VALUE 5.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C REMAINDER R
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MOD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 17.
+01 B PIC 9(2) VALUE 5.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C REMAINDER R
+    DISPLAY C.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MOD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3) VALUE 17.
+01 B PIC 9(2) VALUE 5.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    DIVIDE A BY B GIVING C REMAINDER R
+    DISPLAY C
+    EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       MOVE 17 TO A
+       MOVE 5 TO B
+       DIVIDE A BY B GIVING C REMAINDER R
+       DISPLAY C
+       EXIT.
+       STOP RUN.
+
+
+       EXECUTE.
+       EXIT.
+       STOP RUN.
+
+
+       RESULT.
+
+
+       REVERSE-PARA.
+       MOVE 12345 TO A
+       MOVE 0 TO B
+       MOVE 1 TO C
+       PERFORM UNTIL NOT (A NOT = 0)
+       DIVIDE A BY 10 GIVING TEMP_12 REMAINDER TEMP_13
+       COMPUTE TEMP_14 = B + TEMP_13
+       COMPUTE C = TEMP_14
+       DIVIDE A BY 10 GIVING A
+       END-PERFORM
+       EXIT.
+
+       reverse-PARA.
+       MOVE 0 TO b_reverse
+       MOVE 0
+
+==========================================================================================
+PROMPT 6
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ORD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 CH PIC X VALUE "A".
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE N = FUNCTION ORD(CH)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ORD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 CH PIC X VALUE "A".
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE N = FUNCTION ORD(CH)
+    DISPLAY N.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. ORD1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 CH PIC X VALUE "A".
+01 N PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE N = FUNCTION ORD(CH)
+    DISPLAY N
+    EXIT.
+
+      MAIN-PARA.
+      PERFORM ORD1-PARA
+      EXIT.
+      STOP RUN.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT
+
+==========================================================================================
+PROMPT 7
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CHAR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3) VALUE 66.
+01 CH PIC X.
+
+PROCEDURE DIVISION.
+    COMPUTE CH = FUNCTION CHAR(N)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CHAR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3) VALUE 66.
+01 CH PIC X.
+
+PROCEDURE DIVISION.
+    COMPUTE CH = FUNCTION CHAR(N)
+    DISPLAY CH.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CHAR1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9(3) VALUE 66.
+01 CH PIC X.
+
+PROCEDURE DIVISION.
+    COMPUTE CH = FUNCTION CHAR(N)
+    DISPLAY "Character: "   CH
+    EXIT.
+STOP RUN.
+```
+
+In this example, the `FUNCTION CHAR(N)` method is used to generate a random character. The `N` variable is set to 66, which represents the Unicode code point of the letter 'r'. The random character is then displayed on the console.
+
+You can modify the `N` variable to generate characters of different code points. For example, to generate characters with code points between 97 and 122, you can change the range of `N` to 97 to 122. The random character will be displayed on the console.
+
+You can also generate characters with a specific Unicode category, such as letters or digits. For example, to generate characters that are letters, you can change the first character of the `N` variable to 65 and the last character to 90. The random character will be displayed on the console.
+
+To generate characters with
+
+==========================================================================================
+PROMPT 8
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SW1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 2.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            DISPLAY "ONE"
+        WHEN 2
+            DISPLAY "TWO"
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SW1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 2.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            DISPLAY "ONE"
+        WHEN 2
+            DISPLAY "TWO"
+        WHEN 3
+            DISPLAY "THREE"
+        WHEN 4
+            DISPLAY "FOUR"
+        WHEN 5
+            DISPLAY "FIVE"
+        WHEN 6
+            DISPLAY "SIX"
+        WHEN 7
+            DISPLAY "SEVEN"
+        WHEN 8
+            DISPLAY "EIGHT"
+        WHEN 9
+            DISPLAY "NINE"
+        WHEN 0
+            DISPLAY "ZERO"
+        WHEN 10
+            DISPLAY "TEN"
+        WHEN 11
+            DISPLAY "ELEVEN"
+        WHEN 12
+            DISPLAY "TWELVE"
+        WHEN 13
+            DISPLAY "THIRTEEN"
+        WHEN 14
+            DISPLAY "FOURTEEN"
+        WHEN 15
+            DISPLAY "FIFTEEN"
+        WHEN 16
+            DISPLAY "SIXTEEN"
+        WHEN 17
+            DISPLAY "SEVENTEEN"
+        WHEN 18
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SW1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 2.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            DISPLAY "ONE"
+        WHEN 2
+            DISPLAY "TWO"
+        WHEN OTHER
+            DISPLAY "OTHER"
+    END-EVALUATE
+    EXIT.
+
+RUN.
+DISPLAY "1"
+DISPLAY "2"
+DISPLAY "OTHER"
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. Program69_CountDigits.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  n      PIC S9(5).
+01  count    PIC S9(5).
+
+
+PROCEDURE DIVISION.
+
+
+      PERFORM UNTIL NOT (n > 0)
+       DIVIDE n BY 10 GIVING count
+       DISPLAY count
+       DIVIDE n BY 10 GIVING n
+      END-PERFORM.
+      EXIT.
+
+RUN.
+DISPLAY 12345
+DISPLAY 0
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. Program70_SumDigits.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  n      PIC S9(5).
+01  sum      PIC S9(5).
+0
+
+==========================================================================================
+PROMPT 9
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MIN1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 10.
+01 B PIC 9(2) VALUE 20.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MIN(A B)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MIN1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 10.
+01 B PIC 9(2) VALUE 20.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MIN(A B)
+    DISPLAY M.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MIN1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 10.
+01 B PIC 9(2) VALUE 20.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MIN(A B)
+    DISPLAY "Minimum is "   M
+    EXIT.
+
+RUN.
+MIN1.
+EXIT.
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+      * Input from ODT is enabled
+      * Code is valid for all compilers
+     
+
+==========================================================================================
+PROMPT 10
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MAX1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 30.
+01 B PIC 9(2) VALUE 15.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MAX(A B)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MAX1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 30.
+01 B PIC 9(2) VALUE 15.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MAX(A B)
+    DISPLAY M.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. MAX1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 30.
+01 B PIC 9(2) VALUE 15.
+01 M PIC 9(2).
+
+PROCEDURE DIVISION.
+    COMPUTE M = FUNCTION MAX(A B)
+    DISPLAY "Max = "   M
+    EXIT.
+STOP RUN.
+```
+
+In this example, we first compute the maximum value between two integers using the `MAX` function. Then, we display the result. Finally, we exit the program.
+
+==========================================================================================
+PROMPT 11
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. METH1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    PERFORM ADD-PARA USING A B GIVING C
+
+ADD-PARA.
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. METH1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    PERFORM ADD-PARA USING A B GIVING C
+
+ADD-PARA.
+    DISPLAY 'A = ', A
+    DISPLAY 'B = ', B
+    DISPLAY 'C = ', C
+    STOP RUN
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. METH1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    PERFORM ADD-PARA USING A B GIVING C
+
+ADD-PARA.
+      ADD A TO B GIVING C
+      DISPLAY C
+      EXIT.
+
+RUN.
+ADD-TEST.
+       15
+       22
+       33
+       EXIT.
+EXIT.
+      * Input from ODT is enabled
+      * Declaration and Initialization
+       01  a_add       PIC S9(5).
+       01  b_add        PIC S9(5).
+       01  c_add         PIC S9(5).
+      * Statement body
+       COMPUTE TEMP_0 = a_add + b_add
+       COMPUTE TEMP_1 = c_add
+       DISPLAY TEMP_1
+      * Statement body
+       COMPUTE TEMP_0 = a_add + b_add
+       COMPUTE TEMP_1 = c_add
+       DISPLAY TEMP_0
+       DISPLAY TEMP_1
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 15 TO a_main
+       MOVE 22 TO
+
+==========================================================================================
+PROMPT 12
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EXIT1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9 VALUE 1.
+
+PROCEDURE DIVISION.
+    PERFORM UNTIL I > 5
+        IF I = 3
+            EXIT
+        END-IF
+        ADD 1 TO I
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EXIT1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9 VALUE 1.
+
+PROCEDURE DIVISION.
+    PERFORM UNTIL I > 5
+        IF I = 3
+            EXIT
+        END-IF
+        ADD 1 TO I
+        STOP RUN
+    END-PERFORM
+    STOP RUN
+
+    STOP PROGRAM EXIT1.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EXIT1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9 VALUE 1.
+
+PROCEDURE DIVISION.
+    PERFORM UNTIL I > 5
+        IF I = 3
+            EXIT
+        END-IF
+        ADD 1 TO I
+    END-PERFORM
+DISPLAY "After exiting loop: "   I
+EXIT.
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM MAIN-PARA-FUNCTION
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+==========================================================================================
+PROMPT 13
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. RET1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Returning from program"
+    GO BACK
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. RET1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Returning from program"
+    GO BACK
+    STOP RUN
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. RET1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Returning from program"
+    GO BACK
+    EXIT.
+
+    STOP RUN.
+
+
+       MAIN-PARA.
+       DISPLAY "Before"
+       PERFORM UNTIL NOT (i <= 5)
+       ADD i TO 1 GIVING i
+       DISPLAY i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+
+
+==========================================================================================
+PROMPT 14
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STOP1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Program End"
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STOP1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Program End"
+    STOP 1.
+
+    STOP 2.
+
+    STOP 3.
+
+    STOP 4.
+
+    STOP 5.
+
+    STOP 6.
+
+    STOP 7.
+
+    STOP 8.
+
+    STOP 9.
+
+    STOP 10.
+
+    STOP 11.
+
+    STOP 12.
+
+    STOP 13.
+
+    STOP 14.
+
+    STOP 15.
+
+    STOP 16.
+
+    STOP 17.
+
+    STOP 18.
+
+    STOP 19.
+
+    STOP 20.
+
+    STOP 21.
+
+    STOP 22.
+
+    STOP 23.
+
+    STOP 24.
+
+    STOP 25.
+
+    STOP 26.
+
+    STOP 27.
+
+    STOP 28.
+
+    STOP 29.
+
+    STOP 30.
+
+    STOP 31.
+
+    STOP 32.
+
+    STOP 33.
+
+    STOP 34.
+
+    STOP 35
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STOP1.
+
+PROCEDURE DIVISION.
+    DISPLAY "Program End"
+    EXIT.
+
+STOP-CLASSIFIER.
+    CLASS STOP1.
+    ENVIRONMENT VARIABLES.
+        NAME = "Class STOP1"
+        BLOCK_METHOD_DISPLAY.
+            DISPLAY "Program End"
+            EXIT.
+        BLOCK_METHOD_STOP.
+            STOP RUN.
+            EXIT.
+    DO_METHOD_MAIN.
+        PERFORM display
+        PERFORM stop
+        EXIT.
+        STOP RUN.
+        EXIT.
+        STOP CLASS_MAIN.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+        EXIT.
+       
+
+==========================================================================================
+PROMPT 15
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CMP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 5.
+01 B PIC 9(2) VALUE 3.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE C = A * B + 10
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CMP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 5.
+01 B PIC 9(2) VALUE 3.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE C = A * B + 10
+    DISPLAY C.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CMP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2) VALUE 5.
+01 B PIC 9(2) VALUE 3.
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    COMPUTE C = A * B + 10
+    DISPLAY C
+    EXIT.
+STOP RUN.
+
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. Program98.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  a               PIC S9(5).
+01  b               PIC S9(5).
+  COMPUTE c = a * b + 10
+  DISPLAY c
+  EXIT.
+
+      * Compute and display the result of a * b + 10
+      * Input from ODT is enabled
+      * Variables a and b have integer values
+      * Variable c has integer value 50
+      * Display c
+      * Exit
+

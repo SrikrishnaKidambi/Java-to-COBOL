@@ -1,0 +1,1049 @@
+==========================================================================================
+PROMPT 1
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 1.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            COMPUTE R = 5 + 3
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 1.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            COMPUTE R = 5 + 3
+            DISPLAY "The sum of 5 and 3 is 8"
+        WHEN 2
+            COMPUTE R = 5 - 3
+            DISPLAY "The difference of 5 and 3 is 2"
+        WHEN 3
+            COMPUTE R = 5 * 3
+            DISPLAY "The product of 5 and 3 is 15"
+        WHEN 4
+            COMPUTE R = 5 / 3
+            DISPLAY "The quotient of 5 and 3 is 1.6666666666666667"
+        WHEN 5
+            COMPUTE R = 5 % 3
+            DISPLAY "The remainder of 5 and 3 is 2"
+        WHEN 6
+            COMPUTE R = 5 + 3
+            DISPLAY "The sum of 5 and 3 is 8"
+        WHEN 7
+            COMPUTE R = 5
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 1.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 1
+            COMPUTE R = 5 + 3
+            DISPLAY "R = "   R
+        WHEN 2
+            COMPUTE R = X * 2
+            DISPLAY "R = "   R
+        WHEN OTHER
+            DISPLAY "Invalid Choice"
+    END-EVALUATE
+    EXIT.
+
+      MAIN-PARA.
+      MOVE 1 TO X
+      EVALUATE X
+      WHEN 1
+      COMPUTE R = 5 + 3
+      DISPLAY "R = "   R
+      WHEN 2
+      COMPUTE R = X * 2
+      DISPLAY "R = "   R
+      WHEN OTHER
+      DISPLAY "Invalid Choice"
+      END-IF
+      EXIT.
+      STOP RUN.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+     
+
+==========================================================================================
+PROMPT 2
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 2.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 2
+            COMPUTE R = 10 - 4
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 2.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 2
+            COMPUTE R = 10 - 4
+            DISPLAY R
+        WHEN 1
+            COMPUTE R = 10 - 2
+            DISPLAY R
+        WHEN 0
+            COMPUTE R = 10 - 1
+            DISPLAY R
+        WHEN -1
+            COMPUTE R = 10 - 0
+            DISPLAY R
+        WHEN -2
+            COMPUTE R = 10 - 1
+            DISPLAY R
+        WHEN -3
+            COMPUTE R = 10 - 2
+            DISPLAY R
+        WHEN -4
+            COMPUTE R = 10 - 3
+            DISPLAY R
+        WHEN -5
+            COMPUTE R = 10 - 4
+            DISPLAY R
+        WHEN -6
+            COMPUTE R = 10 - 5
+            DISPLAY R
+        WHEN -7
+            COMPUTE R = 10 - 6
+            DISPLAY R
+        WHEN -8
+            COMPUT
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 2.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 2
+            COMPUTE R = 10 - 4
+            COMPUTE R = R * 2
+            COMPUTE R = R * 3
+            COMPUTE R = R * 4
+            COMPUTE R = R * 5
+            COMPUTE R = R * 6
+            COMPUTE R = R * 7
+            COMPUTE R = R * 8
+            COMPUTE R = R * 9
+            DISPLAY R
+            EXIT.
+        WHEN 3
+            COMPUTE R = 25 - 10
+            COMPUTE R = R * 3
+            COMPUTE R = R * 4
+            COMPUTE R = R * 5
+            COMPUTE R = R * 6
+            COMPUTE R = R * 7
+            COMPUTE R = R * 8
+            COMPUTE R = R * 9
+            COMPUTE R = R * 10
+            DISPLAY R
+            EXIT.
+        WHEN 4
+            COMPUT
+
+==========================================================================================
+PROMPT 3
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 3.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 3
+            COMPUTE R = 6 * 7
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 3.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 3
+            COMPUTE R = 6 * 7
+            DISPLAY R
+        WHEN 2
+            COMPUTE R = 5 * 6
+            DISPLAY R
+        WHEN 1
+            COMPUTE R = 4 * 5
+            DISPLAY R
+        WHEN 0
+            COMPUTE R = 3 * 4
+            DISPLAY R
+        ELSE
+            DISPLAY 'ERROR'
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 3.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 3
+            COMPUTE R = 6 * 7
+            DISPLAY "Area = "
+            DISPLAY R
+            EXIT.
+        WHEN 4
+            COMPUTE R = 8 * 9
+            DISPLAY "Perimeter = "
+            DISPLAY R
+            EXIT.
+        WHEN OTHER
+            DISPLAY "Invalid Choice"
+            EXIT.
+    END-EVALUATE.
+    EXIT.
+
+RUN.
+DISPLAY "Enter the number of rows: 3"
+DISPLAY "Enter the number of columns: 4"
+DISPLAY "Area = 24"
+DISPLAY "Perimeter = 30"
+EXIT.
+STOP RUN.
+EXIT.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. P3_MultiplicationTable.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  rows_p3           PIC S9(5).
+01  cols_p3           PIC S9(5).
+01  i               PIC S9(5).
+P3-MULTIPLICATIONTABLE-PARA.
+      MOVE 1 TO i
+      PERFORM VARYING rows
+
+==========================================================================================
+PROMPT 4
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9 VALUE 4.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE K
+        WHEN 4
+            DIVIDE 20 BY 5 GIVING R
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9 VALUE 4.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE K
+        WHEN 4
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 5
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 6
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 7
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 8
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 9
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 10
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+        WHEN 11
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "The quotient is " R
+
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 K PIC 9 VALUE 4.
+01 R PIC 9(3).
+
+PROCEDURE DIVISION.
+    EVALUATE K
+        WHEN 4
+            DIVIDE 20 BY 5 GIVING R
+            DISPLAY "R = "
+            DISPLAY R
+        WHEN OTHER
+            DISPLAY "Default case"
+            EXIT.
+    END-EVALUATE.
+
+
+      MAIN-PARA.
+      MOVE 4 TO K
+      EVALUATE K
+      WHEN 4
+      DIVIDE 20 BY 5 GIVING R
+      DISPLAY "R = "
+      DISPLAY R
+      WHEN OTHER
+      DISPLAY "Default case"
+      END-EVALUATE
+      EXIT.
+      STOP RUN.
+      MAIN-PARA.
+      MOVE 4 TO K
+      EVALUATE K
+      WHEN 4
+      DIVIDE 20 BY 5 GIVING R
+      DISPLAY "R = "
+      DISPLAY R
+      WHEN OTHER
+      DISPLAY "Default case"
+      END-EVALUATE
+      EXIT.
+      MAIN-PARA.
+      MOVE 4 TO K
+      EVALUATE K
+      WHEN 4
+      DIVIDE 20 BY 5 GIVING
+
+==========================================================================================
+PROMPT 5
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 5.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 5
+            DISPLAY "FIVE"
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 5.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 5
+            DISPLAY "FIVE"
+        WHEN 4
+            DISPLAY "FOUR"
+        WHEN 3
+            DISPLAY "THREE"
+        WHEN 2
+            DISPLAY "TWO"
+        WHEN 1
+            DISPLAY "ONE"
+        WHEN 0
+            DISPLAY "ZERO"
+        ELSE
+            DISPLAY "ERROR"
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9 VALUE 5.
+
+PROCEDURE DIVISION.
+    EVALUATE X
+        WHEN 5
+            DISPLAY "FIVE"
+        WHEN 10
+            DISPLAY "TEN"
+        WHEN OTHER
+            DISPLAY "OTHER"
+    END-EVALUATE
+    EXIT.
+ STOP RUN.
+       MAIN-PARA.
+       MOVE 5 TO x
+       EVALUATE x
+       WHEN 5
+       DISPLAY "FIVE"
+       WHEN 10
+       DISPLAY "TEN"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 5 TO x
+       DISPLAY Math.floor(x)
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       DISPLAY Math.ceil(1.5)
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       DISPLAY Math.round(1.5)
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       DISPLAY Math.sqrt(25)
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       DISPLAY Math.pow(2, 3)
+
+
+==========================================================================================
+PROMPT 6
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 6.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 6
+            COMPUTE R = FUNCTION ABS(-9)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 6.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 6
+            COMPUTE R = FUNCTION ABS(-9)
+            DISPLAY R
+        WHEN 5
+            COMPUTE R = FUNCTION ABS(-8)
+            DISPLAY R
+        WHEN 4
+            COMPUTE R = FUNCTION ABS(-7)
+            DISPLAY R
+        WHEN 3
+            COMPUTE R = FUNCTION ABS(-6)
+            DISPLAY R
+        WHEN 2
+            COMPUTE R = FUNCTION ABS(-5)
+            DISPLAY R
+        WHEN 1
+            COMPUTE R = FUNCTION ABS(-4)
+            DISPLAY R
+        WHEN 0
+            COMPUTE R = FUNCTION ABS(-3)
+            DISPLAY R
+        WHEN -1
+            COMPUTE R = FUNCTION ABS(-2)
+            DISPLAY R
+        WHEN -2
+            COMPUTE R = FUNCTION ABS(-1)
+            DISPLAY R
+        WHEN -3
+            COMPUTE R = FUNCTION ABS(0)
+            DISPLAY R
+        WHEN -4
+            COMPUTE R = FUNCTION ABS(1)
+            DISPLAY R
+        WHEN -5
+           
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 6.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 6
+            COMPUTE R = FUNCTION ABS(-9)
+            DISPLAY "Absolute Value: "   R
+        WHEN 5
+            COMPUTE R = FUNCTION SQROOT(100)
+            DISPLAY "Square Root: "   R
+        WHEN 4
+            COMPUTE R = FUNCTION EXP(2)
+            DISPLAY "Exponential: "   R
+        WHEN 3
+            COMPUTE R = FUNCTION LOG(5)
+            DISPLAY "Natural Log: "   R
+        WHEN 2
+            COMPUTE R = FUNCTION GOLDEN_RATIO()
+            DISPLAY "Golden Ratio: "   R
+        WHEN 1
+            COMPUTE R = FUNCTION PI()
+            DISPLAY "Pi: "   R
+        WHEN OTHER
+            DISPLAY "Invalid Choice"
+    END-EVALUATE
+    EXIT.
+
+RUN.
+      MAIN-PARA.
+      DISPLAY "Select an option:"
+      DISPLAY "1. Absolute Value"
+      DISPLAY "2. Square Root"
+      DISPLAY "3. Exponential"
+      DISPLAY "4. Natural Log
+
+==========================================================================================
+PROMPT 7
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 7.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 7
+            COMPUTE R = FUNCTION MIN(3 5)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 7.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 7
+            COMPUTE R = FUNCTION MIN(3 5)
+            DISPLAY R
+        WHEN 6
+            COMPUTE R = FUNCTION MIN(3 5 7)
+            DISPLAY R
+        WHEN 5
+            COMPUTE R = FUNCTION MIN(3 5 7 9)
+            DISPLAY R
+        WHEN 4
+            COMPUTE R = FUNCTION MIN(3 5 7 9 11)
+            DISPLAY R
+        WHEN 3
+            COMPUTE R = FUNCTION MIN(3 5 7 9 11 13)
+            DISPLAY R
+        WHEN 2
+            COMPUTE R = FUNCTION MIN(3 5 7 9 11 13 15)
+            DISPLAY R
+        WHEN 1
+            COMPUTE R = FUNCTION MIN(3 5 7 9 11 13 15 17)
+            DISPLAY R
+        WHEN 0
+            COMPUTE R = FUNCTION MIN(3 5 7
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 C PIC 9 VALUE 7.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE C
+        WHEN 7
+            COMPUTE R = FUNCTION MIN(3 5)
+            DISPLAY "Minimum is "   R
+        WHEN 3
+            COMPUTE R = FUNCTION MAX(2 4)
+            DISPLAY "Maximum is "   R
+        WHEN OTHER
+            DISPLAY "Invalid Choice"
+    END-EVALUATE
+    EXIT.
+
+RUN.
+DISPLAY "Enter a number: 3"
+DISPLAY "Enter a number: 2"
+DISPLAY "Minimum is 3"
+DISPLAY "Maximum is 2"
+EXIT.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * Prompt the user to enter two numbers
+       DISPLAY "Enter first number: " WITH NO ADVANCING
+       ACCEPT a_main
+       DISPLAY "Enter second number: " WITH NO ADVANCING
+       ACCEPT b_main
+      * Display the minimum and maximum
+       DISPLAY "Minimum is "   MIN(a_main b_main)
+       DISPLAY "Maximum is "   MAX(a_main b_main)
+       EXIT.
+       MAIN-PARA.
+      * Input from O
+
+==========================================================================================
+PROMPT 8
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Z PIC 9 VALUE 8.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE Z
+        WHEN 8
+            COMPUTE R = FUNCTION MAX(4 9)
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Z PIC 9 VALUE 8.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE Z
+        WHEN 8
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 9
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 10
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 11
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 12
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 13
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 14
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 15
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 16
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+        WHEN 17
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY R
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Z PIC 9 VALUE 8.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE Z
+        WHEN 8
+            COMPUTE R = FUNCTION MAX(4 9)
+            DISPLAY "Max = "   R
+        WHEN 9
+            COMPUTE R = FUNCTION MIN(7 10)
+            DISPLAY "Min = "   R
+        WHEN OTHER
+            DISPLAY "Invalid Choice"
+    END-EVALUATE
+    EXIT.
+
+      MAIN-PARA.
+      MOVE 8 TO Z
+      EVALUATE Z
+      WHEN 8
+      COMPUTE R = FUNCTION MAX(4 9)
+      DISPLAY "Max = "   R
+      WHEN 9
+      COMPUTE R = FUNCTION MIN(7 10)
+      DISPLAY "Min = "   R
+      WHEN OTHER
+      DISPLAY "Invalid Choice"
+      END-EVALUATE
+      EXIT.
+      STOP RUN.
+      MAIN-PARA.
+      MOVE 8 TO Z
+      EVALUATE Z
+      WHEN 8
+      COMPUTE R = FUNCTION MAX(4 9)
+      DISPLAY "Max = "   R
+      WHEN 9
+
+
+==========================================================================================
+PROMPT 9
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 9.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 9
+            COMPUTE R = 9 / 3
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 9.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 9
+            COMPUTE R = 9 / 3
+            DISPLAY R
+        WHEN 8
+            COMPUTE R = 9 / 2
+            DISPLAY R
+        WHEN 7
+            COMPUTE R = 9 / 1
+            DISPLAY R
+        WHEN 6
+            COMPUTE R = 9 / 0
+            DISPLAY R
+        WHEN 5
+            COMPUTE R = 9 / 2
+            DISPLAY R
+        WHEN 4
+            COMPUTE R = 9 / 1
+            DISPLAY R
+        WHEN 3
+            COMPUTE R = 9 / 0
+            DISPLAY R
+        WHEN 2
+            COMPUTE R = 9 / 1
+            DISPLAY R
+        WHEN 1
+            COMPUTE R = 9 / 2
+            DISPLAY R
+        WHEN 0
+            COMPUTE R = 9 / 3
+            DISPLAY R
+        WHEN 9
+            COMPUTE R = 9 / 2
+
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 N PIC 9 VALUE 9.
+01 R PIC 9(2).
+
+PROCEDURE DIVISION.
+    EVALUATE N
+        WHEN 9
+            COMPUTE R = 9 / 3
+            COMPUTE R = R * 2
+            COMPUTE R = R * 3
+            COMPUTE R = R * 4
+            COMPUTE R = R * 5
+            COMPUTE R = R * 6
+            COMPUTE R = R * 7
+            COMPUTE R = R * 8
+            COMPUTE R = R * 9
+            DISPLAY R
+            EXIT.
+
+      MAIN-PARA.
+      COMPUTE N = 9
+      COMPUTE R = N * 2
+      DISPLAY R
+      EXIT.
+      STOP RUN.
+      MAIN-PARA.
+      EVALUATE N
+      WHEN 9
+      COMPUTE R = N * 2
+      COMPUTE R = R * 3
+      COMPUTE R = R * 4
+      COMPUTE R = R * 5
+      COMPUTE R = R * 6
+      COMPUTE R = R * 7
+      COMPUTE
+
+==========================================================================================
+PROMPT 10
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 V PIC 9 VALUE 0.
+
+PROCEDURE DIVISION.
+    EVALUATE V
+        WHEN OTHER
+            DISPLAY "DEFAULT"
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 V PIC 9 VALUE 0.
+
+PROCEDURE DIVISION.
+    EVALUATE V
+        WHEN OTHER
+            DISPLAY "DEFAULT"
+            STOP RUN
+        WHEN 1
+            DISPLAY "1"
+        WHEN 2
+            DISPLAY "2"
+        WHEN 3
+            DISPLAY "3"
+        WHEN 4
+            DISPLAY "4"
+        WHEN 5
+            DISPLAY "5"
+        WHEN 6
+            DISPLAY "6"
+        WHEN 7
+            DISPLAY "7"
+        WHEN 8
+            DISPLAY "8"
+        WHEN 9
+            DISPLAY "9"
+        WHEN 0
+            DISPLAY "0"
+        WHEN 10
+            DISPLAY "10"
+        WHEN 11
+            DISPLAY "11"
+        WHEN 12
+            DISPLAY "12"
+        WHEN 13
+            DISPLAY "13"
+        WHEN 14
+            DISPLAY "14"
+        WHEN 15
+            DISPLAY "15"
+        WHEN 16
+            DISPLAY "16"
+        WHEN 17
+            DISPLAY "17"
+
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. EA10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 V PIC 9 VALUE 0.
+
+PROCEDURE DIVISION.
+    EVALUATE V
+        WHEN OTHER
+            DISPLAY "DEFAULT"
+            EXIT.
+
+        WHEN 0
+            DISPLAY "ONE"
+            EXIT.
+
+        WHEN 1
+            DISPLAY "TWO"
+            EXIT.
+
+        WHEN 2
+            DISPLAY "THREE"
+            EXIT.
+
+        WHEN 3
+            DISPLAY "FOUR"
+            EXIT.
+
+        WHEN 5
+            DISPLAY "FIVE"
+            EXIT.
+
+        WHEN 6
+            DISPLAY "SIX"
+            EXIT.
+
+        WHEN 7
+            DISPLAY "SEVEN"
+            EXIT.
+
+        WHEN 8
+            DISPLAY "EIGHT"
+            EXIT.
+
+        WHEN 9
+            DISPLAY "NINE"
+            EXIT.
+
+
+       EVALUATE V
+       WHEN 10
+       DISPLAY "TEN"
+       EXIT.
+
+
+       EVALUATE V
+       WHEN 11
+       DISPLAY "ELEVEN"
+       EXIT.
+
+
+       EVALUATE V
+       WHEN 12
+       DISPLAY "TWELVE"
+       EXIT.
+
+
+       EVALUATE V
+      
+

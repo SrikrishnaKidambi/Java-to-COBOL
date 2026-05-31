@@ -59,35 +59,31 @@ public class IntrinsicFunctionConverter {
     // Replace your findFunctionStart method with this corrected version
     private int findFunctionStart(String text, int fromIndex) {
         int earliestMatch = -1;
-        
-        // Pattern 1: Regular function calls like Math.sin, Integer.parseInt, etc.
-        Pattern functionPattern = Pattern.compile("\\b\\w+\\.\\w+\\b");
-        Matcher matcher = functionPattern.matcher(text);
-        if (matcher.find(fromIndex)) {
-            int nextChar = matcher.end();
-            if (nextChar < text.length() && text.charAt(nextChar) == '(') {
-                earliestMatch = matcher.start();
+
+        // Single unified pattern: word.word( — covers ALL method calls with any args
+        // This handles: Math.sin(, s.length(, s.charAt(1, "lit".toUpperCase(
+        Pattern callPattern = Pattern.compile("\\b\\w+\\.\\w+\\s*\\(");
+        Matcher m = callPattern.matcher(text);
+        // Find ALL matches from fromIndex and pick the earliest one
+        m.region(fromIndex, text.length());
+        while (m.find()) {
+            // The match includes the '(' - function start is at m.start()
+            if (earliestMatch == -1 || m.start() < earliestMatch) {
+                earliestMatch = m.start();
+                break; // region scan goes left-to-right, first is earliest
             }
         }
-        
-        // Pattern 2: String literals with method calls like "Hello".toUpperCase()
-        Pattern stringMethodPattern = Pattern.compile("\"[^\"]*\"\\.\\w+\\(\\)");
-        Matcher stringMatcher = stringMethodPattern.matcher(text);
-        if (stringMatcher.find(fromIndex)) {
-            if (earliestMatch == -1 || stringMatcher.start() < earliestMatch) {
-                earliestMatch = stringMatcher.start();
+
+        // Also check string literal method calls: "Hello".method(
+        Pattern stringMethodPattern = Pattern.compile("\"[^\"]*\"\\.\\w+\\s*\\(");
+        Matcher sm = stringMethodPattern.matcher(text);
+        sm.region(fromIndex, text.length());
+        if (sm.find()) {
+            if (earliestMatch == -1 || sm.start() < earliestMatch) {
+                earliestMatch = sm.start();
             }
         }
-        
-        // Pattern 3: Variables with method calls like myString.toUpperCase()
-        Pattern varMethodPattern = Pattern.compile("\\b\\w+\\.\\w+\\(\\)");
-        Matcher varMatcher = varMethodPattern.matcher(text);
-        if (varMatcher.find(fromIndex)) {
-            if (earliestMatch == -1 || varMatcher.start() < earliestMatch) {
-                earliestMatch = varMatcher.start();
-            }
-        }
-        
+
         return earliestMatch;
     }
     // Find the position of the matching closing parenthesis
@@ -368,6 +364,189 @@ public class IntrinsicFunctionConverter {
                     String processedArgs = accomodateIntrinsicFunctions(args);
                     return "FUNCTION ORD-MIN(" + processedArgs + ")";
                 }
+            }
+        }
+
+        // ---- Fix 1.8: String instance method mappings ----
+        // These are called with fullFuncCall = "varName.method(args)"
+
+        // var.length()
+        if (text.matches("\\w+\\.length\\(\\)")) {
+            String var = text.substring(0, text.indexOf('.'));
+            return "FUNCTION LENGTH(FUNCTION TRIM(" + var + "))";
+        }
+        // "literal".length()
+        if (text.matches("\"[^\"]*\"\\.length\\(\\)")) {
+            String lit = text.substring(0, text.indexOf('.'));
+            return "FUNCTION LENGTH(" + lit + ")";
+        }
+
+        // var.isEmpty()
+        if (text.matches("\\w+\\.isEmpty\\(\\)")) {
+            String var = text.substring(0, text.indexOf('.'));
+            return "(FUNCTION LENGTH(FUNCTION TRIM(" + var + ")) = 0)";
+        }
+
+        // var.equals(other)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.equals\\((.+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                return m.group(1) + " = " + m.group(2);
+            }
+        }
+
+        // var.equalsIgnoreCase(other)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.equalsIgnoreCase\\((.+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                return "FUNCTION UPPER-CASE(" + m.group(1) + ") = FUNCTION UPPER-CASE(" + m.group(2) + ")";
+            }
+        }
+
+        // var.charAt(literal_int)  →  var(pos+1:1)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.charAt\\((\\d+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                int pos = Integer.parseInt(m.group(2)) + 1;
+                return m.group(1) + "(" + pos + ":1)";
+            }
+        }
+        // var.charAt(expr)  →  var(expr+1:1)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.charAt\\((.+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                return m.group(1) + "(" + m.group(2) + " + 1:1)";
+            }
+        }
+
+        // var.substring(start)  →  var(start+1:)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.substring\\((\\d+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                int start = Integer.parseInt(m.group(2)) + 1;
+                return m.group(1) + "(" + start + ":)";
+            }
+        }
+        // var.substring(start, end) with literal ints  →  var(start+1 : end-start)
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.substring\\((\\d+),\\s*(\\d+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                int start  = Integer.parseInt(m.group(2));
+                int end    = Integer.parseInt(m.group(3));
+                int length = end - start;
+                return m.group(1) + "(" + (start + 1) + ":" + length + ")";
+            }
+        }
+        // var.substring(expr, expr) with variable indices
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.substring\\(([^,]+),\\s*(.+)\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                String var   = m.group(1);
+                String start = m.group(2).trim();
+                String end   = m.group(3).trim();
+                return var + "(" + start + " + 1:" + end + " - " + start + ")";
+            }
+        }
+
+        // var.trim()
+        if (text.matches("\\w+\\.trim\\(\\)")) {
+            String var = text.substring(0, text.indexOf('.'));
+            return "FUNCTION TRIM(" + var + ")";
+        }
+
+        // var.indexOf("x") — no direct COBOL equivalent, emit 0 as safe fallback
+        if (text.matches("\\w+\\.indexOf\\(.+\\)")) {
+            return "0";
+        }
+
+        // var.startsWith("prefix") with string literal
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.startsWith\\(\"([^\"]*)\"\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                String var    = m.group(1);
+                String prefix = m.group(2);
+                int len = prefix.length();
+                return var + "(1:" + len + ") = \"" + prefix + "\"";
+            }
+        }
+
+        // var.endsWith("suffix") with string literal
+        {
+            Pattern p = Pattern.compile("^(\\w+)\\.endsWith\\(\"([^\"]*)\"\\)$");
+            Matcher m = p.matcher(text);
+            if (m.matches()) {
+                String var    = m.group(1);
+                String suffix = m.group(2);
+                int len = suffix.length();
+                return var + "(FUNCTION LENGTH(FUNCTION TRIM(" + var + ")) - "
+                     + (len - 1) + ":" + len + ") = \"" + suffix + "\"";
+            }
+        }
+
+        // String.valueOf(x) — just pass through the value
+        if (text.startsWith("String.valueOf(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                return accomodateIntrinsicFunctions(text.substring(start + 1, end));
+            }
+        }
+
+        // Integer.toString(x) / Long.toString(x)
+        if (text.startsWith("Integer.toString(") || text.startsWith("Long.toString(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                return accomodateIntrinsicFunctions(text.substring(start + 1, end));
+            }
+        }
+
+        // Character.isDigit(c)
+        if (text.startsWith("Character.isDigit(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String arg = text.substring(start + 1, end);
+                return arg + " >= '0' AND " + arg + " <= '9'";
+            }
+        }
+
+        // Character.isLetter(c)
+        if (text.startsWith("Character.isLetter(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String arg = text.substring(start + 1, end);
+                return "(" + arg + " >= 'A' AND " + arg + " <= 'Z') OR ("
+                     + arg + " >= 'a' AND " + arg + " <= 'z')";
+            }
+        }
+
+        // Character.isUpperCase(c)
+        if (text.startsWith("Character.isUpperCase(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String arg = text.substring(start + 1, end);
+                return arg + " >= 'A' AND " + arg + " <= 'Z'";
+            }
+        }
+
+        // Character.isLowerCase(c)
+        if (text.startsWith("Character.isLowerCase(")) {
+            int start = text.indexOf('(');
+            int end   = text.lastIndexOf(')');
+            if (start != -1 && end != -1) {
+                String arg = text.substring(start + 1, end);
+                return arg + " >= 'a' AND " + arg + " <= 'z'";
             }
         }
 

@@ -1,0 +1,1075 @@
+==========================================================================================
+PROMPT 1
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 2
+            DISPLAY I J
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 2
+            DISPLAY I J
+            MOVE 1 TO J
+        END-PERFORM
+        MOVE 2 TO J
+        PERFORM UNTIL J > 1
+            DISPLAY I J
+            MOVE 2 TO J
+        END-PERFORM
+        MOVE 3 TO J
+        PERFORM UNTIL J > 0
+            DISPLAY I J
+            MOVE 3 TO J
+        END-PERFORM
+        STOP RUN
+    END-PERFORM
+    STOP RUN
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 2
+            DISPLAY I J
+            ADD I TO 1 GIVING I
+            ADD J TO 1 GIVING J
+        END-PERFORM
+        EXIT.
+
+      * Output
+      * 1
+      * 2
+      * 3
+
+==========================================================================================
+PROMPT 2
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 R PIC 9(2).
+01 C PIC 9(2).
+01 P PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO R
+    PERFORM UNTIL R > 5
+        MOVE 1 TO C
+        PERFORM UNTIL C > 5
+            COMPUTE P = R * C
+            DISPLAY P
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 R PIC 9(2).
+01 C PIC 9(2).
+01 P PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO R
+    PERFORM UNTIL R > 5
+        MOVE 1 TO C
+        PERFORM UNTIL C > 5
+            COMPUTE P = R * C
+            DISPLAY P
+            MOVE P TO R
+            MOVE C TO C
+        END-PERFORM
+    END-PERFORM
+    DISPLAY 'END'
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 R PIC 9(2).
+01 C PIC 9(2).
+01 P PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO R
+    PERFORM UNTIL R > 5
+        MOVE 1 TO C
+        PERFORM UNTIL C > 5
+            COMPUTE P = R * C
+            DISPLAY P
+            ADD R TO 1 GIVING R
+        END-PERFORM
+        EXIT.
+
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       ACCEPT R
+       ACCEPT C
+       COMPUTE P = R * C
+       DISPLAY P
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       COMPUTE TEMP_0 = 10 * 8
+       COMPUTE TEMP_1 = TEMP_0 * 2
+       COMPUTE TEMP_2 = TEMP_1 * 3
+       COMPUTE TEMP_3 = TEMP_2 * 4
+       DISPLAY TEMP_3
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       COMPUTE TEMP_0 = 2 * 3
+       COMPUTE TEMP_1 = TEMP_0 * 4
+       COMPUTE TEMP_2 = TEMP_1 * 5
+       COMPUTE TEMP_3 = TEMP_2 * 6
+       DISPLAY TEMP_
+
+==========================================================================================
+PROMPT 3
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 SUM PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO SUM
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            ADD I TO SUM
+            ADD J TO SUM
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 SUM PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO SUM
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            ADD I TO SUM
+            ADD J TO SUM
+            ADD 1 TO I
+            ADD 1 TO J
+        END-PERFORM
+        ADD 1 TO SUM
+    END-PERFORM
+    DISPLAY SUM.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 SUM PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO SUM
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            ADD I TO SUM
+            ADD J TO SUM
+            END-PERFORM
+        END-PERFORM
+        EXIT.
+
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       ACCEPT n1_main
+       ACCEPT n2_main
+       ADD n1_main TO n2_main GIVING ans_main
+       DISPLAY ans_main
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * Variables for Scope:METHOD_MAIN_CLASS_MAIN_GLOBAL
+       ACCEPT n1_main
+       ACCEPT n2_main
+       COMPUTE TEMP_0 = n1_main + n2_main
+       DISPLAY TEMP_0
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * Variables for Scope:BLOCK_METHOD_MAIN_CLASS_MAIN_GLOBAL
+       ACCEPT n1_main
+       ACCEPT n2_main
+       COMPUTE TEMP_0 = n1_main * n2_main
+       DISPLAY TEMP_0
+       EXIT.
+       STOP RUN
+
+==========================================================================================
+PROMPT 4
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO X
+    PERFORM UNTIL X > 4
+        MOVE 1 TO Y
+        PERFORM UNTIL Y > 4
+            IF X = Y
+                DISPLAY "EQUAL"
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO X
+    PERFORM UNTIL X > 4
+        MOVE 1 TO Y
+        PERFORM UNTIL Y > 4
+            IF X = Y
+                DISPLAY "EQUAL"
+                STOP
+            ELSE
+                DISPLAY "NOT EQUAL"
+                STOP
+        END-PERFORM
+    END-PERFORM
+    DISPLAY "NOT EQUAL"
+
+    STOP.
+    STOP.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC 9(2).
+01 Y PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO X
+    PERFORM UNTIL X > 4
+        MOVE 1 TO Y
+        PERFORM UNTIL Y > 4
+            IF X = Y
+                DISPLAY "EQUAL"
+                EXIT PERFORM
+            END-IF
+            ADD X TO 1 GIVING X
+            ADD Y TO 1 GIVING Y
+        END-PERFORM
+        DISPLAY "NOT EQUAL"
+      * Output NOT EQUAL because 1 is not equal to 2.
+      * because 3 is not equal to 4.
+      * because 5 is not equal to 6.
+      * and so on.
+       EXIT.
+       STOP RUN.
+
+
+       MAIN-PARA.
+       MOVE 1 TO x
+       PERFORM UNTIL NOT (x <= 6)
+       MOVE 1 TO y
+       PERFORM UNTIL NOT (y <= 6)
+       IF x = y
+       DISPLAY "EQUAL"
+       EXIT PERFORM
+       END-IF
+       ADD x TO 1 GIVING x
+       ADD y TO 1 GIVING y
+       END-PERFORM
+       DISPLAY "NOT EQUAL"
+       EXIT.
+       STOP RUN.
+
+
+      
+
+==========================================================================================
+PROMPT 5
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 3
+        MOVE 1 TO B
+        PERFORM UNTIL B > 5
+            DISPLAY A B
+            ADD 1 TO B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 3
+        MOVE 1 TO B
+        PERFORM UNTIL B > 5
+            DISPLAY A B
+            ADD 1 TO B
+        END-PERFORM
+    END-PERFORM
+    STOP RUN.
+
+PROGRAM-ID. NEST6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 3
+        MOVE 1 TO B
+        PERFORM UNTIL B > 5
+            DISPLAY A B
+            ADD 1 TO B
+        END-PERFORM
+    END-PERFORM
+    STOP RUN.
+
+PROGRAM-ID. NEST7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 3
+        MOVE 1 TO B
+        PERFORM UNTIL B > 5
+            DISPLAY A B
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 3
+        MOVE 1 TO B
+        PERFORM UNTIL B > 5
+            DISPLAY A B
+            ADD 1 TO B
+            IF B >= 5
+                EXIT PERFORM
+            END-IF
+        END-PERFORM
+        EXIT.
+
+      * Input from ODT is enabled
+      * Prompt the user to enter two integers a and b
+       * Assign the first integer to a variable
+       * Assign the second integer to b variable
+      * Display the following expression
+       * (a + b) * (a - b)
+      * Compute the value of the expression
+       * Display the result
+       * Exit
+       * Stop execution.
+       * Input from ODT is enabled
+       * Prompt the user to enter two integers a and b
+       * Assign the first integer to a variable
+       * Assign the second integer to b variable
+       * Compute the value of the expression
+       * Display the result
+       * Exit
+       * Stop execution.
+       * Input from ODT is enabled
+       * Prompt the user to enter two integers a and b
+
+
+==========================================================================================
+PROMPT 6
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 TOTAL PIC 9(5).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO TOTAL
+    MOVE 1 TO I
+    PERFORM UNTIL I > 4
+        MOVE 1 TO J
+        PERFORM UNTIL J > 4
+            ADD I TO TOTAL
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 TOTAL PIC 9(5).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO TOTAL
+    MOVE 1 TO I
+    PERFORM UNTIL I > 4
+        MOVE 1 TO J
+        PERFORM UNTIL J > 4
+            ADD I TO TOTAL
+            ADD J TO TOTAL
+            ADD 1 TO I
+            ADD 1 TO J
+        END-PERFORM
+        ADD 1 TO TOTAL
+    END-PERFORM
+    DISPLAY TOTAL.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 TOTAL PIC 9(5).
+
+PROCEDURE DIVISION.
+    MOVE 0 TO TOTAL
+    MOVE 1 TO I
+    PERFORM UNTIL I > 4
+        MOVE 1 TO J
+        PERFORM UNTIL J > 4
+            ADD I TO TOTAL
+            ADD J TO TOTAL
+        END-PERFORM
+        DISPLAY "Total = "
+        DISPLAY TOTAL
+        EXIT.
+
+      * Input from ODT is enabled
+      * Declaration & Initialization
+       ACCEPT n1_main
+       ACCEPT n2_main
+       ACCEPT d_main
+      * Calculation
+       COMPUTE TEMP_0 = n1_main * n2_main
+       COMPUTE TEMP_1 = 0 * 10
+       COMPUTE TEMP_2 = TEMP_0 + TEMP_1
+       COMPUTE answer_main = TEMP_2
+      * Output
+       DISPLAY "Simple Interest = "
+       DISPLAY answer_main
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+       ACCEPT p_main
+       ACCEPT r_main
+       ACCEPT t_main
+       COMPUTE TEMP_0 = p_main * r_main
+       COMPUTE TEMP_1 = TEMP_0 * t_main
+       COMPUTE TEMP_2
+
+==========================================================================================
+PROMPT 7
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 ROW PIC 9(2).
+01 COL PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO ROW
+    PERFORM UNTIL ROW > 3
+        MOVE 1 TO COL
+        PERFORM UNTIL COL > 3
+            DISPLAY ROW COL
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 ROW PIC 9(2).
+01 COL PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO ROW
+    PERFORM UNTIL ROW > 3
+        MOVE 1 TO COL
+        PERFORM UNTIL COL > 3
+            DISPLAY ROW COL
+            MOVE ROW TO ROW
+            MOVE COL TO COL
+        END-PERFORM
+        MOVE 2 TO ROW
+        PERFORM UNTIL ROW > 3
+            MOVE 1 TO COL
+            PERFORM UNTIL COL > 3
+                DISPLAY ROW COL
+                MOVE ROW TO ROW
+                MOVE COL TO COL
+            END-PERFORM
+            MOVE 2 TO ROW
+        END-PERFORM
+        MOVE 3 TO ROW
+        PERFORM UNTIL ROW > 3
+            MOVE 1 TO COL
+            PERFORM UNTIL COL > 3
+                DISPLAY ROW COL
+                MOVE ROW TO ROW
+                MOVE COL TO COL
+            END-PERFORM
+            MOVE 3 TO ROW
+        END-PERFORM
+        MOVE 4 TO ROW
+        PERFORM UNTIL ROW > 3
+            MOVE 1 TO COL
+            PERFORM UNTIL COL > 3
+                DISPLAY
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 ROW PIC 9(2).
+01 COL PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO ROW
+    PERFORM UNTIL ROW > 3
+        MOVE 1 TO COL
+        PERFORM UNTIL COL > 3
+            DISPLAY ROW COL
+            ADD 1 TO ROW
+        END-PERFORM
+        EXIT.
+
+      * Display pattern N = 7
+       MOVE 1 TO ROW
+       PERFORM UNTIL ROW <= 5
+       MOVE 1 TO COL
+       PERFORM UNTIL COL <= 10
+       DISPLAY ROW COL
+       ADD 1 TO ROW
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       PERFORM VARYING ROW FROM 1 BY 1 UNTIL NOT (ROW <= 5)
+       PERFORM VARYING COL FROM 1 BY 1 UNTIL NOT (COL <= 10)
+       DISPLAY ROW COL
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       PERFORM VARYING rows FROM 1 BY 1 UNTIL NOT (rows <= 5)
+       PERFORM VARYING cols FROM 1 BY 1 UNT
+
+==========================================================================================
+PROMPT 8
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 R PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            COMPUTE R = I + J
+            DISPLAY R
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 R PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            COMPUTE R = I + J
+            DISPLAY R
+            MOVE R TO I
+            MOVE R TO J
+        END-PERFORM
+    END-PERFORM
+    STOP RUN
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+01 R PIC 9(4).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 3
+        MOVE 1 TO J
+        PERFORM UNTIL J > 3
+            COMPUTE R = I + J
+            DISPLAY R
+            ADD I TO 1 GIVING I
+            ADD J TO 1 GIVING J
+        END-PERFORM
+      * Output will be:
+      * 1
+      * 3
+      * 5
+      * 7
+      * 9
+      * 11
+      * 13
+      * 15
+      * 17
+      * 19
+      * 21
+      * 23
+      * 25
+      * 27
+      * 29
+      * 31
+      * 33
+      * 35
+      * 37
+      * 39
+      * 41
+      * 43
+      * 45
+      * 47
+      * 49
+      * 51
+      * 53
+      * 55
+      * 57
+
+==========================================================================================
+PROMPT 9
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        MOVE 1 TO J
+        PERFORM UNTIL J > 5
+            IF J > I
+                DISPLAY J
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        MOVE 1 TO J
+        PERFORM UNTIL J > 5
+            IF J > I
+                DISPLAY J
+            END-IF
+        END-PERFORM
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+01 J PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 5
+        MOVE 1 TO J
+        PERFORM UNTIL J > 5
+            IF J > I
+                DISPLAY J
+                END-IF
+            END-PERFORM
+        ADD I TO 1 GIVING I
+    END-PERFORM
+    EXIT.
+
+RUN.
+RUN.
+RUN.
+RUN.
+RUN.
+RUN.
+RUN.
+RUN.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+EXIT.
+
+
+==========================================================================================
+PROMPT 10
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 2
+        MOVE 1 TO B
+        PERFORM UNTIL B > 2
+            MOVE 1 TO C
+            PERFORM UNTIL C > 2
+                DISPLAY A B C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 2
+        MOVE 1 TO B
+        PERFORM UNTIL B > 2
+            MOVE 1 TO C
+            PERFORM UNTIL C > 2
+                DISPLAY A B C
+                STOP
+            END-PERFORM
+        END-PERFORM
+    END-PERFORM
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+    STOP
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. NEST10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(2).
+01 B PIC 9(2).
+01 C PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO A
+    PERFORM UNTIL A > 2
+        MOVE 1 TO B
+        PERFORM UNTIL B > 2
+            MOVE 1 TO C
+            PERFORM UNTIL C > 2
+                DISPLAY A B C
+                EXIT PERFORM
+                ADD A TO B GIVING A
+                ADD B TO C GIVING C
+            END-PERFORM
+        EXIT PERFORM
+        ADD 1 TO A GIVING A
+        ADD 1 TO B GIVING B
+        ADD 1 TO C GIVING C
+      * Output will be:
+      * 1 1 2
+      * 2 1 4
+      * 3 1 8
+      * 4 1 16
+      * 5 1 32
+      * 6 1 64
+      * 7 1 128
+      * 8 1 256
+      * 9 1 512
+      * 10 1 1024
+      * 11 1 2256
+      * 12 1 4504
+     
+

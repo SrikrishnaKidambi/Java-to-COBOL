@@ -1,0 +1,894 @@
+==========================================================================================
+PROMPT 1
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "HELLO".
+01 L PIC X(5) VALUE "WORLD".
+01 S PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F DELIMITED BY SIZE
+           L DELIMITED BY SIZE
+           INTO S
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "HELLO".
+01 L PIC X(5) VALUE "WORLD".
+01 S PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F DELIMITED BY SIZE
+           L DELIMITED BY SIZE
+           INTO S
+    DISPLAY S.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP1.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "HELLO".
+01 L PIC X(5) VALUE "WORLD".
+01 S PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F DELIMITED BY SIZE
+           L DELIMITED BY SIZE
+           INTO S
+    DISPLAY S
+    EXIT.
+
+      MAIN-PARA.
+      PERFORM STRING F DELIMITED BY SIZE
+       DISPLAY "Hello World"
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+==========================================================================================
+PROMPT 2
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10-20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "-"
+        INTO A B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10-20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "-"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "10-20".
+01 A PIC 9(2).
+01 B PIC 9(2).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "-"
+        INTO A B
+    COMPUTE TEMP_0 = A * B
+    DISPLAY TEMP_0
+    EXIT.
+
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String to be unstringed
+       STR        PIC X(20) VALUE "10-20"
+      * Variables to store the parts of the string
+       A           PIC S9(5)
+       B           PIC S9(5)
+      * Compute the product
+       COMPUTE TEMP_0 = A * B
+      * Display the result
+       DISPLAY TEMP_0
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+==========================================================================================
+PROMPT 3
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "CS".
+01 B PIC X(5) VALUE "IIT".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           "-" DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "CS".
+01 B PIC X(5) VALUE "IIT".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           "-" DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+    DISPLAY C.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP3.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(5) VALUE "CS".
+01 B PIC X(5) VALUE "IIT".
+01 C PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING A DELIMITED BY SIZE
+           "-" DELIMITED BY SIZE
+           B DELIMITED BY SIZE
+           INTO C
+       DISPLAY "Pattern: "   C
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String - Input from user
+       DISPLAY "Enter first word: " WITH NO ADVANCING
+       ACCEPT A
+       DISPLAY "Enter second word: " WITH NO ADVANCING
+       ACCEPT B
+      * Display pattern
+       DISPLAY "  * "   A
+       DISPLAY " * "   B
+       DISPLAY " * "   A
+       DISPLAY " * "   B
+       DISPLAY " * "   A
+       DISPLAY " * "   B
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String - Input from user
+       DISPLAY "Enter first word: " WITH NO ADVANCING
+       ACCEPT A
+       DISPLAY "Enter second word: " WITH NO ADVANCING
+       ACCEPT B
+      * Display pattern
+       DISPLAY
+
+==========================================================================================
+PROMPT 4
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "A:B:C".
+01 X PIC X.
+01 Y PIC X.
+01 Z PIC X.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ":"
+        INTO X Y Z
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "A:B:C".
+01 X PIC X.
+01 Y PIC X.
+01 Z PIC X.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ":"
+        INTO X Y Z
+        DISPLAY X Y Z
+        STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP4.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "A:B:C".
+01 X PIC X.
+01 Y PIC X.
+01 Z PIC X.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ":"
+        INTO X Y Z
+    COMPUTE TEMP_0 = X + Y
+    COMPUTE TEMP_1 = TEMP_0 * Z
+    COMPUTE TEMP_2 = TEMP_1 / 3
+    COMPUTE TEMP_3 = TEMP_2 * 2
+    DISPLAY TEMP_3
+    EXIT.
+STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String to be unstringified
+       ACCEPT str
+      * Split the string at the delimiter:
+       COMPUTE TEMP_0 = str DELIMITED BY ":"
+       COMPUTE TEMP_1 = TEMP_0
+       COMPUTE TEMP_2 = TEMP_1
+       DISPLAY TEMP_2
+       EXIT.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String to be unstringified
+       ACCEPT str
+      * Split the string at the delimiter:
+       COMPUTE TEMP_0 = str DELIMITED BY ":"
+       COMPUTE TEMP_
+
+==========================================================================================
+PROMPT 5
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(4) VALUE "2026".
+01 B PIC X(2) VALUE "01".
+01 C PIC X(2) VALUE "23".
+01 D PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING A "-" B "-" C INTO D
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(4) VALUE "2026".
+01 B PIC X(2) VALUE "01".
+01 C PIC X(2) VALUE "23".
+01 D PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING A "-" B "-" C INTO D
+    DISPLAY D.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP5.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC X(4) VALUE "2026".
+01 B PIC X(2) VALUE "01".
+01 C PIC X(2) VALUE "23".
+01 D PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING A "-" B "-" C INTO D
+    DISPLAY D
+    EXIT.
+
+       MAIN-PARA.
+       COMPUTE A = 2026
+       COMPUTE B = 67890
+       COMPUTE C = 34567
+       COMPUTE D = A + B * C
+       DISPLAY D
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+==========================================================================================
+PROMPT 6
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(30) VALUE "CS,AI,ML".
+01 S1 PIC X(10).
+01 S2 PIC X(10).
+01 S3 PIC X(10).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO S1 S2 S3
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(30) VALUE "CS,AI,ML".
+01 S1 PIC X(10).
+01 S2 PIC X(10).
+01 S3 PIC X(10).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO S1 S2 S3
+        DISPLAY S1 S2 S3
+        STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP6.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(30) VALUE "CS,AI,ML".
+01 S1 PIC X(10).
+01 S2 PIC X(10).
+01 S3 PIC X(10).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY ","
+        INTO S1 S2 S3
+    COMPUTE TEMP_0 = S1 + " " + S2
+    COMPUTE TEMP_1 = TEMP_0 + " " + S3
+    COMPUTE answer = TEMP_1
+    DISPLAY answer
+    EXIT.
+
+      MAIN-PARA.
+      STRING        "CS,AI,ML" DELIMITED BY "," INTO str_main
+      COMPUTE TEMP_0 = str_main + " "
+      COMPUTE TEMP_1 = TEMP_0 + " " + "PHP"
+      COMPUTE TEMP_2 = TEMP_1 + " " + "JAVA"
+      COMPUTE TEMP_3 = TEMP_2 + " " + "C++"
+      DISPLAY TEMP_3
+      EXIT.
+      STOP RUN.
+       MAIN-PARA.
+       STRING        "CS,AI,ML" DELIMITED BY "," INTO str_main
+       COMPUTE TEMP_0 = str_main + " "
+       COMPUTE TEMP_1 = TEMP_0 + " " +
+
+==========================================================================================
+PROMPT 7
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "RAM".
+01 L PIC X(5) VALUE "KUMAR".
+01 N PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F SPACE L INTO N
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "RAM".
+01 L PIC X(5) VALUE "KUMAR".
+01 N PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F SPACE L INTO N
+    DISPLAY N
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP7.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 F PIC X(5) VALUE "RAM".
+01 L PIC X(5) VALUE "KUMAR".
+01 N PIC X(15).
+
+PROCEDURE DIVISION.
+    STRING F SPACE L INTO N
+    DISPLAY "Length of string: "   N
+    EXIT.
+
+      MAIN-PARA.
+      STRING F "Programming is fun"
+      DISPLAY "Length of string: "  
+      STRING GIVING N
+      DISPLAY "Shashi Kumar"
+      EXIT.
+      STOP RUN.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+      EXIT.
+
+
+==========================================================================================
+PROMPT 8
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "100|200".
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "100|200".
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+        DISPLAY A B
+        STOP RUN
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP8.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "100|200".
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "|"
+        INTO A B
+    COMPUTE TEMP_0 = A * B
+    DISPLAY TEMP_0
+    EXIT.
+STOP RUN.
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * Prompt the user to enter two integers
+       DISPLAY "Enter two integers: " WITH NO ADVANCING
+       ACCEPT str_main
+      * Convert the strings to integers
+       COMPUTE A = STR_MAIN
+       COMPUTE B = int_main
+      * Compute and display the product
+       COMPUTE TEMP_0 = A * B
+       DISPLAY TEMP_0
+       EXIT.
+       int_main-PARA.
+       MOVE 1 TO ans_main
+       IF A > 0
+       COMPUTE TEMP_1 = A * 10
+       COMPUTE TEMP_2 = ans_main + TEMP_1
+       COMPUTE ans_main = TEMP_2
+       END-IF
+       IF B > 0
+       COMPUTE TEMP_3 = B * 10
+
+==========================================================================================
+PROMPT 9
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC X(3) VALUE "AAA".
+01 Y PIC X(3) VALUE "BBB".
+01 Z PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING X "," Y INTO Z
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC X(3) VALUE "AAA".
+01 Y PIC X(3) VALUE "BBB".
+01 Z PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING X "," Y INTO Z
+    DISPLAY Z.
+
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP9.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 X PIC X(3) VALUE "AAA".
+01 Y PIC X(3) VALUE "BBB".
+01 Z PIC X(10).
+
+PROCEDURE DIVISION.
+    STRING X "," Y INTO Z
+    DISPLAY "Origin: "   Z
+    EXIT.
+
+      * Input from ODT is enabled
+      * String X = "AAABBB"
+      * will be converted to
+      * AA
+      * BB
+      * and then displayed as
+      * origin: AA BB
+      * which is exactly what we expected.
+      * String X = "AAABBB" will be
+      * converted to
+      * AAA
+      * BBB
+      * and then displayed as
+      * origin: AAA BBB
+      * which is exactly what we
+      * expected.
+      * String X = "AAABBB" will be
+      * converted to
+      * AAA
+      * BBB
+      * and then displayed as
+      * origin: AAA BBB
+      * which is exactly what we
+      * expected.
+      * String X = "AAABBB" will be
+      * converted to
+      * AAA
+      * BBB
+     
+
+==========================================================================================
+PROMPT 10
+
+INCOMPLETE PROGRAM:
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "1#2#3".
+01 A PIC 9.
+01 B PIC 9.
+01 C PIC 9.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "#"
+        INTO A B C
+
+
+----- BASE MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "1#2#3".
+01 A PIC 9.
+01 B PIC 9.
+01 C PIC 9.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "#"
+        INTO A B C
+    DISPLAY A B C.
+    STOP RUN.
+
+----- FINE-TUNED MODEL COMPLETION -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. STRP10.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 STR PIC X(20) VALUE "1#2#3".
+01 A PIC 9.
+01 B PIC 9.
+01 C PIC 9.
+
+PROCEDURE DIVISION.
+    UNSTRING STR DELIMITED BY "#"
+        INTO A B C
+    DISPLAY A B C
+    EXIT.
+
+       MAIN-PARA.
+      * Input from ODT is enabled
+      * String consists of three parts separated by #
+      * Part1: Integer for shifting value
+      * Part2: Second integer for shifting value
+      * Part3: Third integer for shifting value
+      * Create integer for shifting value
+       COMPUTE TEMP_0 = 16 - 4
+       COMPUTE TEMP_1 = A + TEMP_0
+       COMPUTE TEMP_2 = TEMP_1 - 1
+       COMPUTE TEMP_3 = TEMP_2
+       COMPUTE B = TEMP_3
+       COMPUTE TEMP_4 = C + TEMP_3
+       COMPUTE TEMP_5 = TEMP_4 - 1
+       COMPUTE TEMP_6 = TEMP_5
+       COMPUTE C = TEMP_6
+       DISPLAY "After Shifting Value : "   C
+       EXIT.
+       MAIN-PARA
+

@@ -1,0 +1,4289 @@
+================================================================================
+PROMPT 0
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM        PIC S9(5).
+ 01  B_SUM        PIC S9(5).
+ 01  C_SUM        PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+       * respectively.
+      * The ADD operation is performed between these two variables,
+       * adding their values together to produce C_SUM.
+       * Finally, the value of C_SUM is displayed.
+       * In this case, the output will be 30.
+       * Variables A_SUM and B_SUM are initialized with 10 and 2
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 905, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 1
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 791, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 2
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15 COMPUTE B = 20 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+COMPUTE A = 15 COMPUTE B = 20 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 20
+IF A > B
+    DISPLAY 1
+ELSE
+    IF A < B
+        DISPLAY 2
+    ELSE
+        DISPLAY 0
+    END-IF
+END-IF
+EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 20
+
+
+BASE SCORE: {'length': 270, 'keyword_hits': 3, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 703, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 3
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM        PIC S9(5).
+ 01  B_SUM        PIC S9(5).
+ 01  C_SUM        PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+       * respectively.
+      * The ADD operation is performed between these two variables,
+       * adding their values together.
+       * The result is stored in C_SUM.
+      * Finally, the value of C_SUM is displayed.
+       * Output: 30
+       * Explanation:
+       * Variables A_SUM and B_SUM are initialized with 1
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 916, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 4
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 10
+    DISPLAY I
+    INCREMENT I
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+
+
+BASE SCORE: {'length': 290, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 794, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 5
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+DISPLAY A.
+DISPLAY B.
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 446, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 6
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, the expression B + A gives 30 as the answer
+      * the expression C + 0 gives 0 as the answer
+      * the expression C + B gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives
+
+BASE SCORE: {'length': 228, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 849, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 7
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 10
+    DISPLAY I
+    INCREMENT I
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+
+       MAIN-PARA.
+       PERFORM TEST_CLASS_LOOPTEST_GLOBAL
+       EXIT.
+       STOP RUN.
+       EXIT.
+
+       TEST_CLASS_LOOPTEST_GLOBAL.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+
+
+BASE SCORE: {'length': 290, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 947, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 8
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 701, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 9
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM         PIC S9(5).
+ 01  B_SUM         PIC S9(5).
+ 01  C_SUM         PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+      * respectively.
+      * The addition operation is performed, resulting in C_SUM being 30.
+      * Finally, the output is displayed.
+      * Explanation of the code:
+       * First, the variables A_SUM and B_SUM are initialized with the values 10 and 20, respectively.
+       * Then, the addition operation
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 911, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 10
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM VARYING I FROM 1 BY 1 UNTIL NOT (I <= 5)
+       DISPLAY "Looping"
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 955, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 11
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15
+COMPUTE B = 25
+DISPLAY A > B
+DISPLAY A < B
+DISPLAY A >= B
+DISPLAY A <= B
+DISPLAY NOT (A >= B)
+DISPLAY NOT (A <= B)
+DISPLAY NOT (A > B)
+DISPLAY NOT (A < B)
+EXIT.
+quit.
+       MAIN-PARA.
+       MOVE 25 TO a
+       MOVE 30 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 813, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 12
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM           PIC S9(5).
+ 01  B_SUM           PIC S9(5).
+ 01  C_SUM           PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized at 10 and 20,
+      * respectively.
+      * The addition operation is performed, resulting in C_SUM at 30.
+      * Finally, the display of C_SUM shows the final answer.
+       * Explanation:
+       * Variables A_SUM and B_SUM are assigned values of 10 and 20,
+       * respectively.
+       * An addition operation is performed
+
+BASE SCORE: {'length': 241, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 916, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 13
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 10
+    DISPLAY I
+    INCREMENT I
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM VARYING I FROM 1 BY 1 UNTIL NOT (I <= 5)
+       DISPLAY "Looping"
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+      
+
+BASE SCORE: {'length': 290, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 955, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 14
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE IF A < B
+        DISPLAY 'A is less than B'
+    ELSE
+        DISPLAY 'A is equal to B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+Exit.
+        01  a       PIC S9(5).
+        01  b       PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+       01 TEMP_2 PIC S9(9).
+       01 TEMP_3 PIC S9(9).
+       01 TEMP_4 PIC S9(9).
+       01 TEMP_5 PIC S9(9).
+
+
+BASE SCORE: {'length': 336, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 707, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 15
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, because the line below is a comment, the code will not be executed
+      * when the program is run.
+      * if you press F12 in the debugger, the code will be executed.
+      * you can also add a line like this to display the line number where the code is executed
+      * DISPLAY FUNCTION WHEN MAIN BLOCK
+      * this will display the code between the { and } which is executed when the program is run.
+      * you can also add a line like this to display the code between the double quotes
+      * DISPLAY "This will display in the debugger as well."
+      * this will display the code between the double quotes in the debugger.
+      * you can also add a line like this to display the entire code
+      * DISPLAY "Welcome to Java."
+      * this will display the entire code in the debugger.
+      * you can also add
+
+BASE SCORE: {'length': 228, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 1070, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 16
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INC I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL
+
+BASE SCORE: {'length': 226, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 788, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 17
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE IF A < B
+        DISPLAY 'A is less than B'
+    ELSE
+        DISPLAY 'A is equal to B'
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+       MAIN-PARA.
+       MOVE 25 TO a
+       MOVE 30 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 322, 'keyword_hits': 3, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 848, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 18
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, the expression B + A yields 30, which is what you expect
+      * the expression C + A yields 35, which is what you get if you
+      * compile and run the above code
+      * the expression B + C yields 35, which is what you get if you
+      * compile and run the above code
+      * the expression A + B + C yields 35, which is what you get if you
+      * compile and run the above code
+      * the expression A + (B + C) yields 35, which is what you get if you
+      * compile and run the above code
+      * the expression (A + B) + C yields 35, which is what you get if you
+      * compile and run the above code
+      * the expression A + B + C
+
+BASE SCORE: {'length': 241, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 897, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 19
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 10
+    DISPLAY I
+    INCREMENT I
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+
+       MAIN-PARA.
+       PERFORM TEST_CLASS_TEST_GLOBAL
+       EXIT.
+       STOP RUN.
+       EXIT.
+
+       TEST_CLASS_TEST_GLOBAL.
+       MOVE 1 TO count_main
+       PERFORM VARYING i_main FROM 1 BY 1 UNTIL NOT (i_main <= 10)
+       ADD 1 TO count_main
+       END-PERFORM
+       DISPLAY "Count = "   count_main
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       STOP RUN.
+       EXIT
+
+BASE SCORE: {'length': 290, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 940, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 20
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15
+COMPUTE B = 25
+DISPLAY A > B
+DISPLAY A < B
+DISPLAY NOT (A >= B)
+DISPLAY NOT (A <= B)
+DISPLAY NOT (A != B)
+DISPLAY NOT (A = B)
+EXIT.
+quit.
+       MAIN-PARA.
+       MOVE 25 TO a
+       MOVE 30 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 825, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 21
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B, C
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, the expression B + A gives 30 as the answer.
+      * the expression C + 0 gives 0 as the answer.
+      * the expression C + B gives 35 as the answer.
+      * the expression C + 5 gives 36 as the answer.
+      * the expression C + 6 gives 37 as the answer.
+      * the expression C + 7 gives 38 as the answer.
+      * the expression C + 8 gives 39 as the answer.
+      * the expression C + 9 gives 40 as the answer.
+      * the expression C + 10 gives 41 as the answer.
+      * the expression C + 11 gives 42 as the answer.
+      * the expression C + 12 gives 43 as the answer.
+      * the expression C +
+
+BASE SCORE: {'length': 234, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 855, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 22
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INC I
+    STOP RUN.
+
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL
+
+BASE SCORE: {'length': 240, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 791, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 23
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY (A <= B)
+ DISPLAY A = B
+ EXIT.
+quit
+       01  argc_main    PIC S9(5).
+       01  argv_main     PIC X(100) OCCURS 100 TIMES.
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+       01 TEMP_2 PIC S9(9).
+       01 TEMP_3 PIC S9(9).
+       01 TEMP_4 PIC S9(9).
+       01 TEMP_
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 704, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 24
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B, C
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM           PIC S9(5).
+ 01  B_SUM           PIC S9(5).
+ 01  C_SUM           PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized at 10 and 20,
+      * respectively.
+      * The addition operation is performed as C_SUM.
+      * Finally, the value of C_SUM is displayed.
+      * Explanation:
+       * Sum = 10 + 20 = 30
+       * C_SUM = 30
+       * EXIT.
+       * STOP RUN.
+       * STOP EXECUT
+
+BASE SCORE: {'length': 234, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 853, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 25
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+
+       MAIN-PARA.
+       PERFORM TEST_CLASS_LOOPTEST_GLOBAL
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 1007, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 26
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY "A is greater than B"
+    ELSE
+        DISPLAY "A is less than B"
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+       MAIN-PARA.
+       MOVE 25 TO a
+       MOVE 30 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 848, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 27
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM           PIC S9(5).
+ 01  B_SUM           PIC S9(5).
+ 01  C_SUM           PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+       * respectively.
+      * The addition operation is performed, resulting in C_SUM being 30.
+       * Finally, the output is displayed.
+       * Explanation:
+       * SumExpression adds the values of two or more variables.
+       * In this case, the variables A_SUM and B_SUM are used to store the
+       * initial values
+
+BASE SCORE: {'length': 238, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 931, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 28
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 791, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 29
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY (A <= B)
+ DISPLAY A = B
+ EXIT.
+quit
+       01  argc_main    PIC S9(5).
+       01  argv_main     PIC X(100) OCCURS 100 TIMES.
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+       01 TEMP_2 PIC S9(9).
+       01 TEMP_3 PIC S9(9).
+       01 TEMP_4 PIC S9(9).
+       01 TEMP_
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 704, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 30
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+EXECUTE.
+DISPLAY "Sum = "
+DISPLAY 30
+DISPLAY "Expected = 30"
+EXIT.
+DISPLAY "Sum = "
+DISPLAY 0
+DISPLAY "Expected = 0"
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF
+
+BASE SCORE: {'length': 228, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 647, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 31
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 2 TO I
+       PERFORM UNTIL NOT (I <= 5)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 3 TO I
+       PERFORM UNTIL NOT (I <= 8)
+       DISPLAY I
+       ADD I TO 2 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 4 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 3 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 5 TO I
+       PERFORM UNTIL NOT (I <=
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 805, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 32
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    END-IF
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+Exit.
+        01 TEMP_0 PIC S9(9).
+        01 TEMP_1 PIC S9(9).
+        01 TEMP_2 PIC S9(9).
+        01 TEMP_3 PIC S9(9).
+        01 TEMP_4 PIC S9(9).
+        01 TEMP_5 PIC S9(9).
+        01 TEMP_6 PIC S9(9).
+        01 TEMP_7 PIC S9(9).
+
+
+
+
+BASE SCORE: {'length': 295, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+FT   SCORE: {'length': 711, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 33
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, the expression B + A gives 30 as the answer
+      * the expression C + 0 gives 0 as the answer
+      * the expression C + B gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives 35 as the answer
+      * the expression C + 0 gives
+
+BASE SCORE: {'length': 241, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 849, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 34
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        ADD 1 TO I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL NOT (i <= 10)
+       DISPLAY i
+       ADD i TO 1 GIVING i
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       MAIN-PARA.
+       MOVE 1 TO i
+       PERFORM UNTIL
+
+BASE SCORE: {'length': 231, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 791, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 35
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE IF A < B
+        DISPLAY 'A is less than B'
+    ELSE
+        DISPLAY 'A is equal to B'
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+Exit.
+        01  a           PIC S9(5).
+        01  b           PIC S9(5).
+       01 TEMP_0 PIC S9(9).
+       01 TEMP_1 PIC S9(9).
+       01 TEMP_2 PIC S9(9).
+       01 TEMP_3 PIC S9(9).
+       01 TEMP_4 PIC S9(9).
+       01 TEMP_5 PIC S9(9).
+
+
+BASE SCORE: {'length': 322, 'keyword_hits': 3, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 715, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 36
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM        PIC S9(5).
+ 01  B_SUM        PIC S9(5).
+ 01  C_SUM        PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+       * respectively.
+      * The addition operation is performed, resulting in C_SUM being 30.
+       * Finally, the display of C_SUM shows the answer.
+       * Program execution continues from here.
+       * Variables A_SUM and B_SUM are now updated to 30 and 60,
+        * respectively.
+       * The addition
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 909, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 37
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+
+       MAIN-PARA.
+       MOVE 1 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 943, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 38
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15
+COMPUTE B = 25
+DISPLAY A > B
+DISPLAY A < B
+DISPLAY A = B
+EXIT.
+quit
+       MAIN-PARA.
+       MOVE 15 TO a
+       MOVE 25 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 857, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 39
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B, C
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM        PIC S9(5).
+ 01  B_SUM        PIC S9(5).
+ 01  C_SUM        PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+       * respectively.
+      * The addition operation is performed between these two variables,
+       * resulting in the assignment C_SUM being 30.
+      * Finally, the value of C_SUM is displayed.
+       * Explanation:
+       * The first line initializes two variables: A_SUM and B_SUM,
+       * both set to 10 and 
+
+BASE SCORE: {'length': 234, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 914, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 40
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    STOP RUN.
+
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 2 TO I
+       PERFORM UNTIL NOT (I <= 5)
+       DISPLAY I
+       ADD I TO 1 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 3 TO I
+       PERFORM UNTIL NOT (I <= 10)
+       DISPLAY I
+       ADD I TO 2 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 4 TO I
+       PERFORM UNTIL NOT (I <= 8)
+       DISPLAY I
+       ADD I TO 3 GIVING I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       TEST.
+       MOVE 5 TO I
+       PERFORM UNTIL NOT (I <=
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 805, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 41
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2 ELSE GIVING 0 END-IF EXIT.
+
+
+COMPUTE A = 15 COMPUTE B = 25 IF A > B GIVING 1 ELSE IF A < B GIVING 2
+
+BASE SCORE: {'length': 280, 'keyword_hits': 3, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 701, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 42
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+EXECUTE.
+DISPLAY "Sum = "
+DISPLAY 30
+DISPLAY "Expected = 30"
+EXIT.
+DISPLAY "Sum = "
+DISPLAY 0
+DISPLAY "Expected = 0"
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF.
+END-IF
+
+BASE SCORE: {'length': 241, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 647, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 43
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 869, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 44
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE
+        DISPLAY 'A is less than B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 10
+ COMPUTE B = 20
+ DISPLAY A > B
+ DISPLAY A < B
+ DISPLAY NOT (A >= B)
+ DISPLAY NOT (A <= B)
+ DISPLAY NOT (A != B)
+ EXIT.
+quit
+       MAIN-PARA.
+       MOVE 25 TO a
+       MOVE 30 TO b
+       IF a > b
+       DISPLAY 1
+       ELSE
+       IF a < b
+       DISPLAY 2
+       ELSE
+       DISPLAY 0
+       END-IF
+       END-IF
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 284, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 848, 'keyword_hits': 5, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 45
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A
+    STOP.
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+
+RUN.
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+ 01  A_SUM       PIC S9(5).
+ 01  B_SUM       PIC S9(5).
+ 01  C_SUM       PIC S9(5).
+
+
+PROCEDURE DIVISION.
+ ADD A_SUM TO B_SUM GIVING C_SUM
+ DISPLAY C_SUM
+ EXIT.
+
+RUN.
+      * Output will be 30
+      * Variables A_SUM and B_SUM are initialized with 10 and 20,
+      * respectively.
+      * The addition operation is performed between these two variables,
+      * and the result is stored in C_SUM.
+      * Finally, the value of C_SUM is displayed.
+       * Explanation:
+       * Sum = 10 + 20 = 30
+       * C_SUM = 30
+       *
+
+BASE SCORE: {'length': 238, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 860, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 46
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INCREMENT I
+    END-PERFORM
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+QUIT.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+       DISPLAY "TWO"
+       WHEN OTHER
+       DISPLAY "OTHER"
+       END-EVALUATE.
+       EXIT.
+       STOP RUN.
+       EVALUATE I
+       WHEN 1
+       DISPLAY "ONE"
+       WHEN 2
+
+
+BASE SCORE: {'length': 232, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 869, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+
+================================================================================
+PROMPT 47
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 'A is greater than B'
+    ELSE IF A < B
+        DISPLAY 'A is less than B'
+    ELSE
+        DISPLAY 'A is equal to B'
+    STOP RUN.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CompareNums.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 25 TO A
+    MOVE 30 TO B
+    IF A > B
+        DISPLAY 1
+    ELSE
+        IF A < B
+            DISPLAY 2
+        ELSE
+            DISPLAY 0
+        END-IF
+    END-IF
+    EXIT.
+
+RUN.
+COMPUTE A = 15
+COMPUTE B = 20
+DISPLAY A > B
+DISPLAY A < B
+DISPLAY NOT (A >= B)
+DISPLAY NOT (A <= B)
+DISPLAY NOT (A != B)
+DISPLAY NOT (A = B)
+EXIT.
+quit.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT
+
+BASE SCORE: {'length': 336, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 912, 'keyword_hits': 4, 'has_end_if': True, 'has_end_perform': False}
+
+================================================================================
+PROMPT 48
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B
+    DISPLAY A, B
+    STOP.
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. SumExample.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 A PIC 9(3).
+01 B PIC 9(3).
+01 C PIC 9(3).
+
+PROCEDURE DIVISION.
+    MOVE 10 TO A
+    MOVE 20 TO B
+    ADD A TO B GIVING C
+    DISPLAY C
+    EXIT.
+      * here, the expression B + A yields 30, which is what you expect
+      * but note that the expression C + A yields 35, which is not what you
+      * expect. That is because the expression C + A is actually equivalent
+      * to the expression B + (A + C), which evaluates to 25 + 15 = 35.
+      * So, the result of the expression B + (A + C) is actually 20 + 10 = 30.
+      * Therefore, the value of C is 35, not 30.
+      * This is a common mistake when working with expressions involving
+      * variables and their values.
+      * To fix this, you need to change the expression C + A to B + (A + C).
+      * This will give you the correct result
+
+BASE SCORE: {'length': 231, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+FT   SCORE: {'length': 892, 'keyword_hits': 4, 'has_end_if': False, 'has_end_perform': False}
+
+================================================================================
+PROMPT 49
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+
+
+----- BASE MODEL OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+        DISPLAY I
+        INC I
+    END-PERFORM
+    STOP RUN.
+
+UNTIL I > 10
+    DISPLAY I
+    INC I
+END-PROCEDURE.
+
+PROGRAM-ID. LoopTest2.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+02 J PIC 9(2).
+03 K PIC 9(2).
+04 L PIC 9(2).
+05 M PIC 9(2).
+06 N PIC 9(2).
+07 O PIC 9(2).
+08 P PIC 9(2).
+09 Q PIC 9(2).
+10 R PIC 9(2).
+11 S PIC 9(2).
+12 T PIC 9(2).
+13 U PIC 9(2).
+14 V PIC 9(2).
+15 W PIC 9(2).
+16 X PIC 9(2
+
+----- FINE-TUNED OUTPUT -----
+IDENTIFICATION DIVISION.
+PROGRAM-ID. LoopTest.
+
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 I PIC 9(2).
+
+PROCEDURE DIVISION.
+    MOVE 1 TO I
+    PERFORM UNTIL I > 10
+       DISPLAY I
+       ADD I TO 1 GIVING I
+    END-PERFORM.
+
+       EXIT.
+
+       MAIN-PARA.
+       PERFORM VARYING I FROM 1 BY 1 UNTIL NOT (I <= 5)
+       DISPLAY I
+       END-PERFORM.
+       EXIT.
+       STOP RUN.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+       EXIT.
+
+
+BASE SCORE: {'length': 582, 'keyword_hits': 5, 'has_end_if': False, 'has_end_perform': True}
+FT   SCORE: {'length': 954, 'keyword_hits': 6, 'has_end_if': False, 'has_end_perform': True}
+

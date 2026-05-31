@@ -100,6 +100,8 @@ public class VariableListenerScoped extends JavaParserBaseListener{
         String type = ctx.typeType().getText();
         String variableName = ctx.variableDeclaratorId().getText();
         addVariable(type, variableName, null);
+        // ---- Fix 1.7: also register the loop index variable in DATA DIVISION ----
+        addVariable("int", variableName + "-IDX", null);
     }
 
     @Override

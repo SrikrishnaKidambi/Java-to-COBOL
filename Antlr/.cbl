@@ -5,5 +5,5 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
       * Variables for Method:
-       01  ARGS_MAIN_[SIZE=[]]-ARRAY.
+       01  args_main-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES

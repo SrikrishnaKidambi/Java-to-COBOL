@@ -78,6 +78,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
 
     private boolean hasArithmetic(String s){
+        // Exclude COBOL FUNCTION expressions - hyphens in FUNCTION names are not arithmetic
+        if (s.contains("FUNCTION ")) return false;
+        // Exclude reference modification like s(1:3) - colon is not arithmetic
         return s.matches(".*[+\\-*/%].*");
     }
 
@@ -212,6 +215,26 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
+
+        // ---- Fix 3: brace array initializer {1,2,3} ----
+        // Matches: int[] nums = {1,2,3} or int[] nums = {1, 2, 3}
+        {
+            java.util.regex.Pattern braceInit = java.util.regex.Pattern.compile(
+                "^(?:int|long|double|float|short|byte|char|String)\\[\\]\\s+(\\w+)\\s*=\\s*\\{([^}]+)\\}\\s*;?$"
+            );
+            java.util.regex.Matcher bm = braceInit.matcher(text.trim());
+            if (bm.matches()) {
+                String arrVar  = bm.group(1);
+                String[] elems = bm.group(2).split(",");
+                for (int ei = 0; ei < elems.length; ei++) {
+                    String val = elems[ei].trim();
+                    // COBOL arrays are 1-based
+                    emitCobol(INDENT + "MOVE " + val + " TO " + arrVar + "(" + (ei + 1) + ")"
+                        + (insideblock ? "\n" : ".\n"));
+                }
+                return;
+            }
+        }
 
         //check for chars
         if (text.startsWith("char ")) {
@@ -726,7 +749,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if (text.startsWith("System.out.println") || text.startsWith("System.err.println")) {
 
             List<String> parts = extractDisplayParts(text);
-            if (parts == null) return;
+
+            // ---- Fix 1.10: empty println() → DISPLAY SPACE (blank line) ----
+            if (parts == null || parts.isEmpty()) {
+                emitCobol(INDENT + "DISPLAY SPACE" + (insideblock ? "\n" : ".\n"));
+                return;
+            }
 
             for (String p : parts) {
                 String cobolExpr = processDisplayExpression(p);
@@ -736,10 +764,68 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             return;
         }
 
+        // ---- Fix 1.10: printf is a superset of print — check it BEFORE the plain "print" branch ----
+        else if (text.startsWith("System.out.printf") || text.startsWith("System.err.printf")) {
+            // printf("format", arg1, arg2, ...)
+            // Strategy: parse the format string and interleave DISPLAY calls
+            // Simple case: replace %d/%s/%f with the corresponding argument
+            int parenOpen  = text.indexOf('(');
+            int parenClose = text.lastIndexOf(')');
+            if (parenOpen == -1 || parenClose == -1) return;
+
+            String inner = text.substring(parenOpen + 1, parenClose).trim();
+
+            // Split on top-level commas only
+            List<String> printfArgs = new ArrayList<>();
+            int depth2 = 0;
+            StringBuilder curr2 = new StringBuilder();
+            for (int ci = 0; ci < inner.length(); ci++) {
+                char ch = inner.charAt(ci);
+                if (ch == '(') depth2++;
+                else if (ch == ')') depth2--;
+                else if (ch == ',' && depth2 == 0) {
+                    printfArgs.add(curr2.toString().trim());
+                    curr2.setLength(0);
+                    continue;
+                }
+                curr2.append(ch);
+            }
+            if (curr2.length() > 0) printfArgs.add(curr2.toString().trim());
+
+            if (printfArgs.isEmpty()) return;
+
+            String fmtStr = printfArgs.get(0); // e.g. "\"Hello %s, you are %d\""
+            // Strip surrounding quotes if present
+            if (fmtStr.startsWith("\"") && fmtStr.endsWith("\"")) {
+                fmtStr = fmtStr.substring(1, fmtStr.length() - 1);
+            }
+
+            // Replace each %d/%s/%f/%c/%n with the next argument or newline
+            int argIndex = 1;
+            String[] fmtParts = fmtStr.split("(?<=%[dsfcnbxo])|(?=%[dsfcnbxo])");
+            for (String seg : fmtParts) {
+                if (seg.equals("%n") || seg.equals("\\n")) {
+                    emitCobol(INDENT + "DISPLAY SPACE" + (insideblock ? "\n" : ".\n"));
+                } else if (seg.matches("%[dsfcbxo]")) {
+                    if (argIndex < printfArgs.size()) {
+                        String cobolExpr = processDisplayExpression(printfArgs.get(argIndex++));
+                        emitCobol(INDENT + "DISPLAY " + cobolExpr
+                            + " WITH NO ADVANCING" + (insideblock ? "\n" : ".\n"));
+                    }
+                } else if (!seg.isEmpty()) {
+                    emitCobol(INDENT + "DISPLAY \"" + seg + "\""
+                        + " WITH NO ADVANCING" + (insideblock ? "\n" : ".\n"));
+                }
+            }
+            return;
+        }
+
         else if (text.startsWith("System.out.print") || text.startsWith("System.err.print")) {
         
             List<String> parts = extractDisplayParts(text);
-            if (parts == null) return;
+
+            // ---- Fix 1.10: null/empty print → no-op ----
+            if (parts == null || parts.isEmpty()) return;
         
             for (int i = 0; i < parts.size(); i++) {
                 String cobolExpr = processDisplayExpression(parts.get(i));
@@ -767,6 +853,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 emitCobol((INDENT)+("ACCEPT ")+(cobolVar)+(insideblock?"\n":".\n"));  //---- this is the recent change -------------
                 
                 // cobolCodePD.append(INDENT).append("ACCEPT ").append(var).append(insideblock?"\n":".\n");
+            }
+            return;
+        }
+        // ---- Fix: array element assignment — LHS is a subscripted reference like arr(2) or m(1, 2) ----
+        else if (text.matches("^\\w+\\s*\\([^)]+\\)\\s*=\\s*.+;?$")) {
+            int eqIdx = text.indexOf('=');
+            if (eqIdx > 0) {
+                String lhs = text.substring(0, eqIdx).trim();   // e.g. m_main(1, 2)
+                String rhs = text.substring(eqIdx + 1).replaceAll(";$", "").trim(); // e.g. 42
+                emitCobol(INDENT + "MOVE " + rhs + " TO " + lhs + (insideblock ? "\n" : ".\n"));
             }
             return;
         }
@@ -1377,15 +1473,42 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         // Handling for loop statements
         
             if (ctx.FOR() != null) {
-                // insideForLoopHeader = true;
-
                 JavaParser.ForControlContext forControl = ctx.forControl();
+
+                // ---- Fix 1.7: detect enhanced-for (for-each) ----
+                if (forControl != null && forControl.enhancedForControl() != null) {
+                    JavaParser.EnhancedForControlContext efc = forControl.enhancedForControl();
+
+                    // The loop variable (e.g. "x" in "for (int x : arr)")
+                    String loopVar   = efc.variableDeclaratorId().getText();
+                    // The iterable expression (e.g. "arr")
+                    String iterExpr  = tokens.getText(efc.expression());
+
+                    // We need a size variable. Convention: iterExpr + "-SIZE" in WORKING-STORAGE.
+                    // For arrays mapped with OCCURS we use the array group name.
+                    // Emit a PERFORM VARYING over an index, then MOVE arr(IDX) TO loopVar at body start.
+                    String idxVar    = loopVar + "-IDX";
+                    String sizeVar   = iterExpr  + "-MAX";   // must exist in DATA DIVISION
+
+                    // Emit: PERFORM VARYING loopVar-IDX FROM 1 BY 1 UNTIL loopVar-IDX > iterExpr-SIZE
+                    emitCobol(INDENT + "PERFORM VARYING " + idxVar
+                        + " FROM 1 BY 1 UNTIL " + idxVar + " > " + sizeVar + "\n");
+                    // First statement of the body must be: MOVE iterExpr(IDX) TO loopVar
+                    emitCobol(INDENT + "    MOVE " + iterExpr + "(" + idxVar + ") TO " + loopVar + "\n");
+
+                    blockStack.push("FOR");
+                    forLoopRecomputeStack.push(new ArrayList<>());
+                    updateInsideBlock();
+                    insideblock = true;
+                    return;
+                }
+
+                // ---- Standard counted for-loop (unchanged from original) ----
                 String varName = null, fromValue = null, untilCond = "", update = "";
                 int byValue = 1;
                 boolean increment = true;
 
                 if (forControl != null) {
-                    // forInit (may be null)
                     if (forControl.forInit() != null) {
                         String init = tokens.getText(forControl.forInit());
                         Matcher m = Pattern.compile("(?:int|long|short|var)?\\s*(\\w+)\\s*=\\s*([\\w\\d+-]+)").matcher(init);
@@ -1395,27 +1518,17 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                             forLoopInitVars.add(varName);
                         }
                     }
-                    // condition
                     if (forControl.expression() != null && varName != null) {
-
                         String cond = tokens.getText(forControl.expression());
-
-                        // NEW: use temp-aware lowering
                         ConditionResult cr = translateConditionWithTemps(cond);
                         for (String stmt : cr.precomputeStatements) {
                             emitCobol(INDENT + stmt + "\n");
                         }
-
                         untilCond = "NOT (" + cr.condition + ")";
-
-                        // store recompute statements for this loop
                         forLoopRecomputeStack.push(new ArrayList<>(cr.recomputeStatements));
+                    } else {
+                        forLoopRecomputeStack.push(new ArrayList<>());
                     }
-                    else{
-                        forLoopRecomputeStack.push(new ArrayList<>()); // no temps
-                    }
-
-                    // update: get the 5th child if present (structure: forInit ; expr ; update)
                     if (forControl.getChildCount() >= 5 && varName != null) {
                         update = forControl.getChild(4).getText();
                         if (update.contains("++")) {
@@ -1429,17 +1542,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                                 increment = um.group(1).equals("+=");
                             }
                         }
+                    }
                 }
+                if (varName != null && fromValue != null && !untilCond.isEmpty()) {
+                    emitCobol(INDENT + "PERFORM VARYING " + varName + " FROM " + fromValue
+                        + " BY " + (increment ? byValue : -byValue) + " UNTIL " + untilCond + "\n");
+                    blockStack.push("FOR");
+                    updateInsideBlock();
+                    insideblock = true;
+                }
+                insideForLoopHeader = false;
+                return;
             }
-            if (varName != null && fromValue != null && !untilCond.isEmpty()) {
-                emitCobol(INDENT+"PERFORM VARYING "+varName+" FROM "+fromValue+" BY "+(increment?byValue:-byValue)+" UNTIL "+untilCond+"\n");
-                blockStack.push("FOR");
-                updateInsideBlock();
-                insideblock = true;
-            }
-            insideForLoopHeader = false;
-            return;
-        }
 
         // Handling DO-WHILE Loop
 
@@ -1954,31 +2068,50 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
     //------------------Helper function to process the arrays-------------------------
     public String convertArrayAccessToCobol(String text) {
-        // Regex to match array access patterns like arr[0], matrix[i], etc.
-        Pattern pattern = Pattern.compile("(\\w+)\\s*\\[([^\\]]+)]");
-        Matcher matcher = pattern.matcher(text);
+        // ---- Fix 1.6: handle both 1D arr[i] and 2D matrix[i][j] ----
+        // Strategy: repeatedly replace the LAST remaining [...] bracket pair
+        // so that matrix[i][j] → matrix[i](j+1) → matrix(i+1, j+1)
+
+        // First pass: collapse all consecutive [] into a single COBOL (d1, d2, ...) subscript
+        // Pattern matches: word followed by one or more [expr] groups
+        Pattern multiDimPattern = Pattern.compile("(\\w+)((?:\\s*\\[[^\\]]+\\])+)");
+        Matcher mdMatcher = multiDimPattern.matcher(text);
         StringBuffer sb = new StringBuffer();
 
-        while (matcher.find()) {
-            String arrayName = matcher.group(1);
-            String indexExpr = matcher.group(2).trim();
+        while (mdMatcher.find()) {
+            String arrayName = mdMatcher.group(1);
+            String allBrackets = mdMatcher.group(2); // e.g. "[i][j]" or "[0][1][2]"
 
-            // Normalize spacing in expression (e.g., i+1 => i + 1)
-            String spacedExpr = indexExpr.replaceAll("\\s*", ""); // Remove all whitespace
-            spacedExpr = spacedExpr.replaceAll("([+\\-*/()])", " $1 "); // Add space around operators
-            spacedExpr = spacedExpr.replaceAll("\\s+", " ").trim(); // Collapse multiple spaces
-
-            // If index is a number, increment it
-            try {
-                int index = Integer.parseInt(indexExpr);
-                matcher.appendReplacement(sb, arrayName + "(" + (index + 1) + ")");
-            } catch (NumberFormatException e) {
-                // Otherwise, add + 1 with spacing
-                matcher.appendReplacement(sb, arrayName + "(" + spacedExpr + " + 1)");
+            // Extract each index expression
+            Pattern bracketPat = Pattern.compile("\\[([^\\]]+)\\]");
+            Matcher bm = bracketPat.matcher(allBrackets);
+            List<String> indices = new ArrayList<>();
+            while (bm.find()) {
+                indices.add(bm.group(1).trim());
             }
+
+            // Convert each index: literal → +1, expression → expr + 1
+            StringBuilder cobolSubscript = new StringBuilder();
+            for (int idx = 0; idx < indices.size(); idx++) {
+                if (idx > 0) cobolSubscript.append(", ");
+                String indexExpr = indices.get(idx);
+                try {
+                    int literal = Integer.parseInt(indexExpr);
+                    cobolSubscript.append(literal + 1);
+                } catch (NumberFormatException e) {
+                    // Normalize spacing
+                    String spaced = indexExpr.replaceAll("\\s*", "");
+                    spaced = spaced.replaceAll("([+\\-*/()])", " $1 ");
+                    spaced = spaced.replaceAll("\\s+", " ").trim();
+                    cobolSubscript.append(spaced).append(" + 1");
+                }
+            }
+
+            mdMatcher.appendReplacement(sb,
+                Matcher.quoteReplacement(arrayName + "(" + cobolSubscript + ")"));
         }
 
-        matcher.appendTail(sb);
+        mdMatcher.appendTail(sb);
         return sb.toString();
     }
 
