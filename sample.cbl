@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. Dog.
+       PROGRAM-ID. TestScoped.
 
 
        DATA DIVISION.
@@ -7,10 +7,12 @@
        01  args_main-ARRAY.
            05  args_main    PIC X(100) OCCURS 100 TIMES.
        01  args_main-MAX   PIC S9(9) VALUE 100.
-       01  d_main          PIC X(100).
        01  TESTSCOPED-OBJ.
            05  TESTSCOPED-OBJ-NAME         PIC X(100).
            05  TESTSCOPED-OBJ-AGE          PIC S9(9).
+       01  TESTSCOPED-D-INST.
+           05  TESTSCOPED-D-INST-NAME         PIC X(100).
+           05  TESTSCOPED-D-INST-AGE          PIC S9(9).
 
 
        PROCEDURE DIVISION.
@@ -27,8 +29,13 @@
 
 
        MAIN-PARA.
-       MOVE "Rex" TO d_main.name
-       DISPLAY d_main.age
+       INITIALIZE TESTSCOPED-D-INST
+       MOVE "Rex" TO TESTSCOPED-D-INST-NAME
+       MOVE 3 TO TESTSCOPED-D-INST-AGE
+       MOVE TESTSCOPED-D-INST TO TESTSCOPED-OBJ
+       PERFORM TESTSCOPED-SPEAK-PARA
+       MOVE TESTSCOPED-OBJ TO TESTSCOPED-D-INST
+       DISPLAY TESTSCOPED-D-INST-AGE
        EXIT.
 
 

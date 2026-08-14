@@ -6,13 +6,23 @@
            STOP RUN.
 
 
-       TESTSCOPED-SPEAK-PARA.
-       DISPLAY TESTSCOPED-OBJ-NAME
+       ANIMAL-SPEAK-PARA.
+       DISPLAY ANIMAL-OBJ-NAME
+       EXIT.
+
+
+       DOG-SPEAK-PARA.
+       DISPLAY DOG-OBJ-NAME
+       DISPLAY DOG-OBJ-AGE
        EXIT.
 
 
        MAIN-PARA.
-       MOVE "Rex" TO d_main.name
-       DISPLAY d_main.age
+       INITIALIZE DOG-D-INST
+       MOVE "Rex" TO DOG-D-INST-NAME
+       MOVE 3 TO DOG-D-INST-AGE
+       MOVE DOG-D-INST TO DOG-OBJ
+       PERFORM DOG-SPEAK-PARA
+       MOVE DOG-OBJ TO DOG-D-INST
        EXIT.
 

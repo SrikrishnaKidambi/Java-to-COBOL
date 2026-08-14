@@ -1,0 +1,38 @@
+diff --git a/Antlr/TestJavaVariableScoping.java b/Antlr/TestJavaVariableScoping.java
+--- a/Antlr/TestJavaVariableScoping.java
++++ b/Antlr/TestJavaVariableScoping.java
+@@
+-            md.findAll(VariableDeclarator.class, v -> isInMethod(v, md)).forEach(vd -> vars.add(vd.getNameAsString()));
++            md.findAll(VariableDeclarator.class, v -> isInMethod(v, md)).forEach(vd -> {
++                if (!isObjectVariable(vd)) {
++                    vars.add(vd.getNameAsString());
++                }
++            });
+@@
+-            md.findAll(VariableDeclarator.class, v -> isInMethod(v, md)).forEach(vd -> vd.setName(vd.getNameAsString() + "_" + currentMethod));
++            md.findAll(VariableDeclarator.class, v -> isInMethod(v, md)).forEach(vd -> {
++                if (!isObjectVariable(vd)) {
++                    vd.setName(vd.getNameAsString() + "_" + currentMethod);
++                }
++            });
+@@
+     private static boolean isInMethod(VariableDeclarator vd, MethodDeclaration md) {
+         return vd.findAncestor(MethodDeclaration.class)
+                 .map(m -> m == md)
+                 .orElse(false);
+     }
++
++    /**
++     * Returns true for object-instance declarations such as:
++     *
++     *     Dog d = new Dog();
++     *
++     * Object variables must retain their original names because the
++     * Java-to-COBOL OOP translation uses the variable name to resolve
++     * object field and method references.
++     */
++    private static boolean isObjectVariable(VariableDeclarator vd) {
++        return vd.getInitializer()
++                .map(initializer -> initializer instanceof ObjectCreationExpr)
++                .orElse(false);
++    }

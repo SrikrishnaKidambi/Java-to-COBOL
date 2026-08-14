@@ -38,7 +38,7 @@ public class ToolGUI {
 
     private static String rewriteEntryClassToTest(String javaCode, String entryClassName) {
         String pattern = "(?s)\\b(?:public\\s+)?class\\s+" + Pattern.quote(entryClassName);
-        return javaCode.replaceFirst(pattern, "public class Test");
+        return javaCode.replaceFirst(pattern, "public class " + entryClassName);
     }
 
     public static void main(String[] args) {

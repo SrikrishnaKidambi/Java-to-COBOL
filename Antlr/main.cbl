@@ -5,4 +5,4 @@
        DATA DIVISION.
        WORKING-STORAGE SECTION.
       * Variables for Method:main
-           05  d_main       PIC X(100).
+           05  d            PIC X(100).
