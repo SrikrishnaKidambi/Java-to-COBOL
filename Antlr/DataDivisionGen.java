@@ -69,8 +69,8 @@ public class DataDivisionGen {
                         currMethodName = "";  // Reset if not in a method scope
                     }
 
-                } else if (line.startsWith("Type:")) {
-                    currType = line.substring(5).trim();
+                } else if (line.trim().startsWith("Type:")) {
+                    currType = line.trim().substring(5).trim();
                 } else if (!line.isEmpty()) {
                     String variableName = line;
                     String cobolVarname = "";

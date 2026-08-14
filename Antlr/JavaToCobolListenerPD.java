@@ -41,6 +41,11 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     private String currentMethodPara=null;
     private boolean inMethod=false;
 
+    // OOP support
+    private Map<String, ClassInfoExtractor.ClassInfo> classInfoMap = Collections.emptyMap();
+    private Map<String, String> objectVariables = new LinkedHashMap<>(); // varName → className
+    private String currentClassName = null;  // class being translated now
+
     private final Map<String,Map<String,String>>methodVarNameMap=new HashMap<>();
     private final Map<String,String>globalVarNameMap=new HashMap<>();
     private final Map<String, String> returnVars = new LinkedHashMap<>(); // methodName -> Java type
@@ -52,7 +57,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     Stack<List<String>> whileRecomputeStack = new Stack<>();
     Stack<List<String>> doWhileRecomputeStack = new Stack<>();
     Stack<String> doWhileCondStack = new Stack<>();
-
 
     private static class ConditionResult {
         String condition;
@@ -79,12 +83,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     }
 
     private boolean hasArithmetic(String s){
+        if (s == null || s.trim().isEmpty()) return false;
+        s = s.trim();
         // Exclude COBOL FUNCTION expressions - hyphens in FUNCTION names are not arithmetic
         if (s.contains("FUNCTION ")) return false;
         // RETURN-<method> is a COBOL identifier, not a subtraction expression.
         if (s.matches("RETURN-[a-zA-Z_][a-zA-Z0-9_]*")) return false;
+        // Generated COBOL data names are hyphenated identifiers, not subtraction.
+        String withoutCobolNames = s.replaceAll("\\b[A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)+\\b", "NAME");
         // Exclude reference modification like s(1:3) - colon is not arithmetic
-        return s.matches(".*[+\\-*/%].*");
+        return withoutCobolNames.matches(".*[+\\-*/%].*");
     }
 
     /** COBOL MOVE/COMPUTE applies the destination PIC; Java casts need no emitted syntax. */
@@ -153,6 +161,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         return Collections.unmodifiableMap(returnVars);
     }
 
+    public Map<String, String> getObjectVariables() {
+        return Collections.unmodifiableMap(objectVariables);
+    }
+
     @Override
     public void enterCompilationUnit(JavaParser.CompilationUnitContext ctx) {
         collectReturnTypes(ctx);
@@ -186,14 +198,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         addLeadingComments(ctx);
         String methodName=ctx.identifier().getText();
         String returnType = ctx.typeTypeOrVoid().getText();
-        if (!"void".equals(returnType)) {
+        boolean oopMethod = currentClassName != null && !methodName.equals("main");
+        String methodKey = oopMethod ? currentClassName + "#" + methodName : methodName;
+        if (!oopMethod && !"void".equals(returnType)) {
             returnVars.put(methodName, returnType);
         }
-        currentMethod=methodName;
-        String methodPara=methodName.equals("main")?INDENT+"MAIN-PARA.":INDENT+methodName+"-PARA.";
+        currentMethod=methodKey;
+        String methodPara=methodName.equals("main") ? INDENT + "MAIN-PARA."
+                : INDENT + (oopMethod ? currentClassName.toUpperCase() + "-" + methodName.toUpperCase()
+                : methodName) + "-PARA.";
         methodBuffer=new StringBuilder();
         methodBuffer.append('\n').append(methodPara).append('\n');
-        methodCodeMap.put(methodName, methodBuffer);
+        methodCodeMap.put(methodKey, methodBuffer);
         currentMethodPara=methodPara;
         inMethod=true;
         methodVarNameMap.putIfAbsent(currentMethod, new HashMap<>());
@@ -205,12 +221,15 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if(ctx.formalParameters()!=null && ctx.formalParameters().formalParameterList()!=null){
             for(JavaParser.FormalParameterContext fp:ctx.formalParameters().formalParameterList().formalParameter()){
                 String paramName=fp.variableDeclaratorId().getText();
-                parameters.add(paramName);
-                parameterMap.put(paramName, paramName+"_"+methodName);
+                String cobolParam = oopMethod
+                        ? oopParameterName(currentClassName, methodName, paramName)
+                        : paramName;
+                parameters.add(cobolParam);
+                parameterMap.put(paramName, cobolParam);
             }
         }
-        methodParameters.put(methodName, parameters);
-        methodVarNameMap.put(methodName, parameterMap);
+        methodParameters.put(methodKey, parameters);
+        methodVarNameMap.put(methodKey, parameterMap);
     }
 
     @Override
@@ -230,6 +249,45 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         updateInsideBlock();
         currentMethod=null;
     }
+
+    // ── OOP: treat constructors as named INIT paragraphs ──────────────────
+    @Override
+    public void enterConstructorDeclaration(JavaParser.ConstructorDeclarationContext ctx) {
+        String ctorClass = ctx.identifier().getText();
+        currentMethod = ctorClass + "#INIT";
+        String paraName = ctorClass.toUpperCase() + "-INIT-PARA";
+
+        methodBuffer = new StringBuilder();
+        methodBuffer.append('\n').append(INDENT).append(paraName).append(".\n");
+        methodCodeMap.put(currentMethod, methodBuffer);
+        currentMethodPara = paraName;
+        inMethod = true;
+        methodVarNameMap.putIfAbsent(currentMethod, new HashMap<>());
+
+        List<String> params = new ArrayList<>();
+        Map<String, String> parameterMap = new HashMap<>();
+        if (ctx.formalParameters().formalParameterList() != null) {
+            for (var fp : ctx.formalParameters().formalParameterList().formalParameter()) {
+                String paramName = fp.variableDeclaratorId().getText();
+                String cobolParam = oopParameterName(ctorClass, "INIT", paramName);
+                params.add(cobolParam);
+                parameterMap.put(paramName, cobolParam);
+            }
+        }
+        methodParameters.put(currentMethod, params);
+        methodVarNameMap.put(currentMethod, parameterMap);
+        updateInsideBlock();
+    }
+
+    @Override
+    public void exitConstructorDeclaration(JavaParser.ConstructorDeclarationContext ctx) {
+        methodBuffer = null;
+        currentMethodPara = null;
+        inMethod = false;
+        updateInsideBlock();
+        currentMethod = null;
+    }
+    // ──────────────────────────────────────────────────────────────────────
 
     private void emitCobol(String line){
         if(inMethod && methodBuffer!=null){
@@ -264,9 +322,15 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     //**************************** //
     Set<String> stringVars = new HashSet<>();
     Set<String> charVariables = new HashSet<>();
-    public JavaToCobolListenerPD(TokenStream tokens){
+    public JavaToCobolListenerPD(TokenStream tokens) {
+        this(tokens, Collections.emptyMap());
+    }
+
+    public JavaToCobolListenerPD(TokenStream tokens,
+                              Map<String, ClassInfoExtractor.ClassInfo> classInfoMap) {
         this.tokens = tokens;
-        intrinsicFunctionConverter= new IntrinsicFunctionConverter();
+        this.classInfoMap = classInfoMap == null ? Collections.emptyMap() : classInfoMap;
+        intrinsicFunctionConverter = new IntrinsicFunctionConverter();
         cobolCodePD.append(INDENT).append("PROCEDURE DIVISION.\n\n");
     }
     public String getCobolCodePD(){
@@ -297,6 +361,17 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
         return cobolCodePD.toString();
     }
+
+    @Override
+    public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
+        currentClassName = ctx.identifier().getText();
+    }
+
+    @Override
+    public void exitClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
+        currentClassName = null;
+    }
+
     //-----------Declaration types---------------
     @Override
     public void enterLocalVariableDeclaration(JavaParser.LocalVariableDeclarationContext ctx){
@@ -314,6 +389,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
+        text = replaceObjFieldRefs(replaceThisFieldRefs(replaceVarsWithCobolNames(text)));
         System.out.println("Text after "+text);
 
         if (text.contains("?") && text.contains(":") && text.contains("=")
@@ -339,6 +415,47 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
                 return;
             }
+        }
+
+        // ── OOP: object instantiation  ClassName var = new ClassName(args) ─
+        {
+            Pattern newObjPat = Pattern.compile(
+                "^(\\w+)\\s+(\\w+)\\s*=\\s*new\\s+(\\w+)\\s*\\(([^)]*)\\)\\s*;?$");
+            Matcher nm = newObjPat.matcher(text.trim());
+            if (nm.matches()) {
+                String typeName = nm.group(1);
+                String varName = nm.group(2);
+                String ctorName = nm.group(3);
+                String argList = nm.group(4);
+                if (classInfoMap.containsKey(typeName)) {
+                    objectVariables.put(varName, typeName);
+                    ClassInfoExtractor.ClassInfo cls = classInfoMap.get(typeName);
+                    List<String> args = splitArgs(argList);
+                    String instRecord = typeName.toUpperCase() + "-" + varName.toUpperCase() + "-INST";
+                    emitCobol(INDENT + "INITIALIZE " + instRecord + "\n");
+                    if (!cls.constructors.isEmpty()) {
+                        ClassInfoExtractor.MethodInfo constructor = cls.constructors.get(0);
+                        emitCobol(INDENT + "MOVE " + instRecord + " TO "
+                                + typeName.toUpperCase() + "-OBJ\n");
+                        for (int ci = 0; ci < Math.min(constructor.paramNames.size(), args.size()); ci++) {
+                        emitCobol(INDENT + "MOVE "
+                                + translateArgumentExpression(args.get(ci))
+                                + " TO " + oopParameterName(typeName, "INIT",
+                                        constructor.paramNames.get(ci)) + "\n");
+                        }
+                        emitCobol(INDENT + "PERFORM " + typeName.toUpperCase() + "-INIT-PARA\n");
+                        emitCobol(INDENT + "MOVE " + typeName.toUpperCase() + "-OBJ TO "
+                                + instRecord + "\n");
+                    }
+                    return;
+                }
+            }
+        }
+        // ─────────────────────────────────────────────────────────────────
+
+        // Declarations can initialise from an instance method with a return value.
+        if (handleAssignmentWithMethodCalls(text)) {
+            return;
         }
 
         //check for chars
@@ -762,6 +879,99 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     }
 
+    // ── OOP helpers ────────────────────────────────────────────────────────
+
+    /**
+     * Splits a comma-separated argument list, respecting nested parentheses.
+     * e.g. splitArgs("\"Rex\", 3, foo(a,b)") → ["\"Rex\"", "3", "foo(a,b)"]
+     */
+    private List<String> splitArgs(String argList) {
+        List<String> args = new ArrayList<>();
+        if (argList == null || argList.trim().isEmpty()) return args;
+        int depth = 0;
+        StringBuilder curr = new StringBuilder();
+        for (char c : argList.toCharArray()) {
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == ',' && depth == 0) {
+                args.add(curr.toString().trim());
+                curr.setLength(0);
+                continue;
+            }
+            curr.append(c);
+        }
+        if (curr.length() > 0) args.add(curr.toString().trim());
+        return args;
+    }
+
+    /**
+     * Replaces all "objVar.fieldName" references in text with their flat
+     * COBOL record field name: CLASSNAME-VARNAME-INST-FIELDNAME.
+     * Called at the top of statementTranslation before any pattern matching.
+     */
+    private String replaceObjFieldRefs(String text) {
+        if (objectVariables.isEmpty() || classInfoMap == null || classInfoMap.isEmpty()) return text;
+        Pattern p = Pattern.compile("\\b(\\w+)\\.(\\w+)\\b");
+        Matcher m = p.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            String obj = m.group(1);
+            String field = m.group(2);
+            String className = objectVariables.get(obj);
+            if (className != null && classInfoMap.containsKey(className)) {
+                boolean fieldExists = classHasField(className, field);
+                if (fieldExists) {
+                    String cobolRef = className.toUpperCase() + "-"
+                                    + obj.toUpperCase() + "-INST-"
+                                    + field.toUpperCase();
+                    m.appendReplacement(sb, Matcher.quoteReplacement(cobolRef));
+                    continue;
+                }
+            }
+            m.appendReplacement(sb, Matcher.quoteReplacement(m.group(0)));
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
+
+    private String oopParameterName(String className, String methodName, String parameterName) {
+        return className.toUpperCase() + "-" + methodName.toUpperCase() + "-" + parameterName.toUpperCase();
+    }
+
+    private boolean classHasField(String className, String fieldName) {
+        ClassInfoExtractor.ClassInfo info = classInfoMap.get(className);
+        if (info == null) return false;
+        for (ClassInfoExtractor.FieldInfo field : info.fields) {
+            if (field.name.equals(fieldName)) return true;
+        }
+        return info.parentClass != null && classHasField(info.parentClass, fieldName);
+    }
+
+    private String replaceThisFieldRefs(String text) {
+        if (currentClassName == null) return text;
+        Matcher matcher = Pattern.compile("\\bthis\\.(\\w+)\\b").matcher(text);
+        StringBuffer result = new StringBuffer();
+        while (matcher.find()) {
+            String fieldName = matcher.group(1);
+            String replacement = classHasField(currentClassName, fieldName)
+                    ? currentClassName.toUpperCase() + "-OBJ-" + fieldName.toUpperCase()
+                    : matcher.group();
+            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+        }
+        matcher.appendTail(result);
+        return result.toString();
+    }
+
+    private String returnVariableForCurrentMethod() {
+        if (currentMethod != null && currentMethod.contains("#")) {
+            String[] parts = currentMethod.split("#", 2);
+            return "RETURN-" + parts[0].toUpperCase() + "-" + parts[1].toUpperCase();
+        }
+        return "RETURN-" + currentMethod;
+    }
+
     private String replaceVarsWithCobolNames(String line){
         String[] tokens=line.split("\\W+");
         Set<String>seen=new HashSet<>();
@@ -834,11 +1044,57 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
 
-        //to check for strings
-        // ---- Ternary operator: must run before any other pattern ----
+        // ── OOP: replace obj.field references before any pattern matching ──
+        text = replaceObjFieldRefs(text);
+        text = replaceVarsWithCobolNames(text);
+
+        // ── OOP: handle this.field = value ────────────────────────────────
+        if (text.startsWith("this.")) {
+            String stripped = text.substring(5);
+            int eqIdx = stripped.indexOf('=');
+            if (eqIdx > 0) {
+                String fieldName = stripped.substring(0, eqIdx).trim();
+                String rhs = replaceThisFieldRefs(
+                        stripped.substring(eqIdx + 1).replaceAll(";$", "").trim());
+                if (currentClassName != null) {
+                    String cobolField = currentClassName.toUpperCase()
+                                      + "-OBJ-" + fieldName.toUpperCase();
+                    String rhsArg = translateArgumentExpression(rhs);
+                    emitCobol(INDENT + "MOVE " + rhsArg + " TO " + cobolField
+                            + (insideblock ? "\n" : ".\n"));
+                }
+            }
+            return;
+        }
+
+        // ── OOP: handle super(args) ────────────────────────────────────────
+        if (text.startsWith("super(") && text.contains(")")) {
+            if (currentClassName != null && classInfoMap.containsKey(currentClassName)) {
+                String parentName = classInfoMap.get(currentClassName).parentClass;
+                if (parentName != null && classInfoMap.containsKey(parentName)) {
+                    int ps = text.indexOf('(');
+                    int pe = text.lastIndexOf(')');
+                    String argList = (ps >= 0 && pe > ps) ? text.substring(ps + 1, pe) : "";
+                    List<String> args = splitArgs(argList);
+                    List<ClassInfoExtractor.FieldInfo> parentFields = classInfoMap.get(parentName).fields;
+                    for (int si = 0; si < Math.min(parentFields.size(), args.size()); si++) {
+                        String cobolField = currentClassName.toUpperCase()
+                                          + "-OBJ-" + parentFields.get(si).name.toUpperCase();
+                        emitCobol(INDENT + "MOVE "
+                                + translateArgumentExpression(args.get(si))
+                                + " TO " + cobolField + "\n");
+                    }
+                }
+            }
+            return;
+        }
+
+        // ── Ternary operator: must run before other pattern matching ───────
         if (text.contains("?") && text.contains(":") && text.contains("=")) {
             if (handleTernaryAssignment(text)) return;
         }
+
+        //to check for strings
 
         if (handleAssignmentWithMethodCalls(text)) {
             return;
@@ -887,6 +1143,40 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             emitCobol(INDENT + "PERFORM " + methodName + "\n");
             return;
         }
+        // ── OOP: instance method call  obj.method(args) ───────────────────
+        {
+            Pattern dotCallPat = Pattern.compile(
+                "^(\\w+)\\.(\\w+)\\s*\\(([^)]*)\\)\\s*;?$");
+            Matcher dotMatcher = dotCallPat.matcher(text.trim());
+            if (dotMatcher.matches()) {
+                String objVar = dotMatcher.group(1);
+                String methName = dotMatcher.group(2);
+                String argList = dotMatcher.group(3);
+                String className = objectVariables.get(objVar);
+                if (className != null && classInfoMap.containsKey(className)) {
+                    String instRecord = className.toUpperCase() + "-" + objVar.toUpperCase() + "-INST";
+                    String paraName = className.toUpperCase() + "-" + methName.toUpperCase() + "-PARA";
+                    emitCobol(INDENT + "MOVE " + instRecord + " TO " + className.toUpperCase() + "-OBJ\n");
+                    List<String> argValues = splitArgs(argList);
+                    ClassInfoExtractor.ClassInfo cls = classInfoMap.get(className);
+                    ClassInfoExtractor.MethodInfo method = cls.methods.stream()
+                        .filter(mm -> mm.name.equals(methName))
+                        .findFirst().orElse(null);
+                    if (method != null) {
+                        for (int mi = 0; mi < Math.min(method.paramNames.size(), argValues.size()); mi++) {
+                            emitCobol(INDENT + "MOVE "
+                                + translateArgumentExpression(argValues.get(mi))
+                                + " TO " + oopParameterName(className, methName,
+                                        method.paramNames.get(mi)) + "\n");
+                        }
+                    }
+                    emitCobol(INDENT + "PERFORM " + paraName + "\n");
+                    emitCobol(INDENT + "MOVE " + className.toUpperCase() + "-OBJ TO " + instRecord + "\n");
+                    return;
+                }
+            }
+        }
+        // ─────────────────────────────────────────────────────────────────
         // System.out.println("Statement:"+text);
 
         for (char c : text.toCharArray()) {
@@ -1279,18 +1569,28 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             emitCobol((INDENT)+("EXIT PERFORM")+(insideblock?"\n":".\n"));
         }
         else if(text.equals("continue;")){
-            // continue → EXIT PERFORM CYCLE (GnuCOBOL 3.x) skips to next iteration
-            emitCobol(INDENT + "EXIT PERFORM CYCLE" + (insideblock ? "\n" : ".\n"));
+            emitCobol((INDENT)+("EXIT PERFORM CYCLE")+(insideblock?"\n":".\n"));
         }
         else if(text.startsWith("return ") && text.endsWith(";")){
-            // return expr; — move return value to a well-known var then GOBACK
-            String retExpr = text.substring(7, text.length()-1).trim();
+            String retExpr = text.substring(7, text.length() - 1).trim();
             String retVal = translateArgumentExpression(retExpr);
-            emitCobol(INDENT + "MOVE " + retVal + " TO RETURN-" + currentMethod + "\n");
-            emitCobol(INDENT + "EXIT PARAGRAPH" + (insideblock?"\n":".\n"));
+            if (currentMethod != null) {
+                emitCobol(INDENT + "MOVE " + retVal + " TO "
+                        + returnVariableForCurrentMethod() + "\n");
+            }
+            emitCobol((INDENT)+("EXIT PARAGRAPH")+(insideblock?"\n":".\n"));
         }
         else if(text.equals("return;")){
             emitCobol((INDENT)+("EXIT PARAGRAPH")+(insideblock?"\n":".\n"));
+        }
+        else if (text.matches(".*\\s*=\\s*(\"[^\"]*\"|'[^']*')\\s*;?")) {
+            String[] parts = text.split("=", 2);
+            if (parts.length == 2) {
+                String lhs = parts[0].trim();
+                String rhs = parts[1].replace(";", "").trim();
+                String targetVar = lhs.replaceAll(".*\\s+", "").trim();
+                emitCobol((INDENT)+("MOVE ")+(rhs)+(" TO ")+(targetVar)+(insideblock?"\n":".\n"));
+            }
         }
         else if(text.matches(".*\\b(boolean)?\\s*\\w+\\s*=\\s*(true|false)\\s*;?")){
             //handles both boolean abc = true/false, abc = true/false
@@ -1349,7 +1649,6 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
         else if (text.matches("\\w+\\s*\\+=\\s*\\w+\\s*;?") || text.matches("\\w+\\s*-=\\s*\\w+\\s*;?") || text.matches("\\w+\\s*\\*=\\s*\\w+\\s*;?") || text.matches("\\w+\\s*/=\\s*\\w+\\s*;?") || text.matches("\\w+\\s*%=\\s*\\w+\\s*;?")) {
             // Handle a += b or a -= b or a*=b or a/=b or a%=b
-            System.out.println("Hello sir "+text);
             String operator = text.contains("+=") ? "+" : (text.contains("-=")? "-" : (text.contains("*=")? "*" : (text.contains("/=")? "/": "%")));
             String[] parts=null;
             if(operator.equals("+")){
@@ -1511,6 +1810,14 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 }
             }
         }
+        else if (text.matches(".*\\s*=\\s*\"[^\"]*\"\\s*;?" ) || text.matches(".*\\s*=\\s*'[^']*'\\s*;?")) {
+            String[] parts = text.split("=", 2);
+            if (parts.length == 2) {
+                String lhs = parts[0].trim();
+                String rhs = parts[1].replace(";", "").trim();
+                emitCobol((INDENT) + ("MOVE ") + (rhs) + (" TO ") + (lhs) + (insideblock ? "\n" : ".\n"));
+            }
+        }
         else if (text.matches("\\s*[\\w()\\s+\\-*/%]+\\s*=\\s*[^;]+;?")) {
             String[] parts = text.split("=", 2);
             if (parts.length == 2) {
@@ -1548,12 +1855,18 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 postMatcher.appendTail(sbPost);
                 rhs = sbPost.toString();
             
-                // 🔥 THIS IS THE MISSING LINE
+                if ((rhs.startsWith("\"") && rhs.endsWith("\"")) || (rhs.startsWith("'") && rhs.endsWith("'"))) {
+                    emitCobol(INDENT + "MOVE " + rhs + " TO " + targetVar + (insideblock ? "\n" : ".\n"));
+                    return;
+                }
+
                 rhs = reduceExpression(rhs);
             
-                for (String pre : preOps) {
-                    emitCobol(INDENT + pre + "\n");
+                if (!hasArithmetic(rhs) && !rhs.contains("(") && !rhs.contains(")") && !rhs.contains("+") && !rhs.contains("-") && !rhs.contains("*") && !rhs.contains("/") && !rhs.contains("%")) {
+                    emitCobol(INDENT + "MOVE " + rhs + " TO " + targetVar + (insideblock ? "\n" : ".\n"));
+                    return;
                 }
+
             
                 emitCobol(INDENT
                         + "COMPUTE "
@@ -2177,7 +2490,38 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     /** Lowers calls to Java methods with a return value into PERFORM and RETURN-* references. */
     private String processExpressionWithCalls(String expression) {
-        String lowered = expression.trim();
+        String lowered = replaceObjFieldRefs(expression == null ? "" : expression.trim());
+
+        Matcher instanceCall = Pattern.compile("^(\\w+)\\.(\\w+)\\s*\\(([^()]*)\\)$").matcher(lowered);
+        if (instanceCall.matches()) {
+            String objectName = instanceCall.group(1);
+            String methodName = instanceCall.group(2);
+            String className = objectVariables.get(objectName);
+            if (className != null && classInfoMap.containsKey(className)) {
+                ClassInfoExtractor.MethodInfo method = classInfoMap.get(className).methods.stream()
+                        .filter(candidate -> candidate.name.equals(methodName)
+                                && !"void".equals(candidate.returnType))
+                        .findFirst()
+                        .orElse(null);
+                if (method != null) {
+                    String classPrefix = className.toUpperCase();
+                    String instanceRecord = classPrefix + "-" + objectName.toUpperCase() + "-INST";
+                    emitCobol(INDENT + "MOVE " + instanceRecord + " TO " + classPrefix + "-OBJ\n");
+                    List<String> arguments = splitArguments(instanceCall.group(3));
+                    for (int i = 0; i < Math.min(arguments.size(), method.paramNames.size()); i++) {
+                        String argument = translateArgumentExpression(
+                                processExpressionWithCalls(arguments.get(i)));
+                        emitCobol(INDENT + "MOVE " + argument + " TO "
+                                + oopParameterName(className, methodName, method.paramNames.get(i)) + "\n");
+                    }
+                    emitCobol(INDENT + "PERFORM " + classPrefix + "-"
+                            + methodName.toUpperCase() + "-PARA\n");
+                    emitCobol(INDENT + "MOVE " + classPrefix + "-OBJ TO " + instanceRecord + "\n");
+                    return "RETURN-" + classPrefix + "-" + methodName.toUpperCase();
+                }
+            }
+        }
+
         Pattern innerCall = Pattern.compile("([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(([^()]*)\\)");
 
         while (true) {
@@ -2237,15 +2581,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     
     //-----------------Helper function for DISPLAY based statements----------------
     private String processDisplayExpression(String expr) {
-        expr = stripJavaCasts(expr).trim();
-        
+        expr = replaceObjFieldRefs(stripJavaCasts(expr).trim());
+
+        // Convert String method calls and FUNCTION references before anything else.
         expr = intrinsicFunctionConverter.accomodateIntrinsicFunctions(expr);
 
         // Literal string
         if (expr.startsWith("\"") && expr.endsWith("\"")) {
             return expr;
         }
-    
+
         String lowered = processExpressionWithCalls(expr);
         if (!lowered.equals(expr)) {
             if (!hasArithmetic(lowered)) {
@@ -2256,17 +2601,14 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             return temp;
         }
 
-        // Variable only
+        // Variable or FUNCTION expression with no arithmetic
         if (!hasArithmetic(expr)) {
             return replaceVarsWithCobolNames(expr);
         }
-    
-        // Expression → temp
+
+        // Arithmetic expression → temp
         String temp = newTemp();
-    
-        // Reuse your existing assignment translation logic
         statementTranslation(temp + " = " + expr + ";");
-    
         return temp;
     }
     
@@ -2299,14 +2641,11 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             if (ch == ')') nested--;
 
             if (ch == '+' && nested == 0) {
-                // Only split on + for string concatenation.
-                // If either side is a string literal, treat as concatenation.
-                // Otherwise keep the whole expression as one arithmetic unit.
                 String leftSide = curr.toString().trim();
                 int peek = i + 1;
                 while (peek < inner.length() && inner.charAt(peek) == ' ') peek++;
                 char nextCh = peek < inner.length() ? inner.charAt(peek) : 0;
-                boolean leftIsString  = leftSide.startsWith("\"");
+                boolean leftIsString = leftSide.startsWith("\"");
                 boolean rightIsString = nextCh == '"';
                 if (leftIsString || rightIsString) {
                     parts.add(leftSide);
@@ -2606,7 +2945,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     public String translateCondition(String conditionText) {
 
-        conditionText = stripRedundantParens(stripJavaCasts(conditionText));
+        conditionText = replaceObjFieldRefs(stripRedundantParens(stripJavaCasts(conditionText)));
 
         List<String> atomicExprs = extractAtomicExpressions(conditionText);
         Map<String, String> exprToTemp = new LinkedHashMap<>();
@@ -2668,7 +3007,8 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     private String translateArgumentExpression(String argText) {
 
-        argText = stripJavaCasts(argText).trim();
+        argText = replaceObjFieldRefs(replaceThisFieldRefs(
+                replaceVarsWithCobolNames(stripJavaCasts(argText).trim())));
 
         String finalArg = argText;
 
@@ -2720,6 +3060,11 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
     // ------ Helper for COMPUTE to handle % ----------
 
     public String reduceExpression(String expr) {
+        if (expr == null) return "";
+        expr = expr.trim();
+        if ((expr.startsWith("\"") && expr.endsWith("\"")) || (expr.startsWith("'") && expr.endsWith("'"))) {
+            return expr;
+        }
 
         Stack<String> operands = new Stack<>();
         Stack<String> operators = new Stack<>();
@@ -2806,17 +3151,39 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
                 continue;
             }
 
+            // quoted literal
+            if (c == '"' || c == '\'') {
+                char quote = c;
+                StringBuilder sb = new StringBuilder();
+                sb.append(c);
+                i++;
+                while (i < expr.length()) {
+                    char ch = expr.charAt(i);
+                    sb.append(ch);
+                    if (ch == quote) {
+                        i++;
+                        break;
+                    }
+                    i++;
+                }
+                tokens.add(sb.toString());
+                continue;
+            }
+
             // identifier or number
             if (Character.isLetterOrDigit(c) || c == '_') {
                 StringBuilder sb = new StringBuilder();
                 while (i < expr.length()) {
                     char ch = expr.charAt(i);
-                    // Return variables use a COBOL hyphenated name. Preserve that
-                    // hyphen while still treating ordinary Java a-b as subtraction.
-                    boolean returnNameHyphen = ch == '-' && sb.toString().startsWith("RETURN")
+                    // Preserve generated upper-case COBOL data names such as
+                    // COUNTER-OBJ-VALUE while keeping Java a-b as subtraction.
+                    boolean cobolNameHyphen = ch == '-' && !sb.isEmpty()
+                            && Character.isUpperCase(sb.charAt(0))
                             && i + 1 < expr.length()
-                            && (Character.isLetterOrDigit(expr.charAt(i + 1)) || expr.charAt(i + 1) == '_');
-                    if (Character.isLetterOrDigit(ch) || ch == '_' || returnNameHyphen) {
+                            && (Character.isUpperCase(expr.charAt(i + 1))
+                                || Character.isDigit(expr.charAt(i + 1))
+                                || expr.charAt(i + 1) == '_');
+                    if (Character.isLetterOrDigit(ch) || ch == '_' || cobolNameHyphen) {
                         sb.append(ch);
                         i++;
                     } else break;
@@ -2875,7 +3242,7 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     private ConditionResult translateConditionWithTemps(String conditionText) {
 
-        conditionText = stripRedundantParens(stripJavaCasts(conditionText));
+        conditionText = replaceObjFieldRefs(stripRedundantParens(stripJavaCasts(conditionText)));
 
         List<String> precompute = new ArrayList<>();
         List<String> recompute = new ArrayList<>();

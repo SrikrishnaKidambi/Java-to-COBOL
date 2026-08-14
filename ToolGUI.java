@@ -13,6 +13,34 @@ import java.util.regex.Pattern;
 
 public class ToolGUI {
     private static final String DEFAULT_CODE = "public class Test {\n    // code comes here\n}";
+
+    private static String findEntryClassName(String javaCode) {
+        Pattern publicClassPattern = Pattern.compile("(?s)\\bpublic\\s+class\\s+(\\w+)");
+        Matcher publicMatcher = publicClassPattern.matcher(javaCode);
+        if (publicMatcher.find()) {
+            return publicMatcher.group(1);
+        }
+
+        Pattern mainClassPattern = Pattern.compile("(?s)\\bclass\\s+(\\w+)\\b[^{]*\\bpublic\\s+static\\s+void\\s+main\\s*\\(");
+        Matcher mainMatcher = mainClassPattern.matcher(javaCode);
+        if (mainMatcher.find()) {
+            return mainMatcher.group(1);
+        }
+
+        Pattern classPattern = Pattern.compile("(?s)\\b(?:public\\s+)?class\\s+(\\w+)");
+        Matcher classMatcher = classPattern.matcher(javaCode);
+        if (classMatcher.find()) {
+            return classMatcher.group(1);
+        }
+
+        return null;
+    }
+
+    private static String rewriteEntryClassToTest(String javaCode, String entryClassName) {
+        String pattern = "(?s)\\b(?:public\\s+)?class\\s+" + Pattern.quote(entryClassName);
+        return javaCode.replaceFirst(pattern, "public class Test");
+    }
+
     public static void main(String[] args) {
         // Create the main frame
         JFrame frame = new JFrame("RISHA LAB - Java to COBOL");
@@ -197,13 +225,9 @@ public class ToolGUI {
                 try {
                     String content = Files.readString(file.toPath());
 
-                    // Extract class name
-                    Pattern pattern = Pattern.compile("public\\s+class\\s+(\\w+)");
-                    Matcher matcher = pattern.matcher(content);
-                    if (matcher.find()) {
-                        classname[0] = matcher.group(1);
-                        // Replace original class name with "Test"
-                        // content = content.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
+                    String entryClass = findEntryClassName(content);
+                    if (entryClass != null) {
+                        classname[0] = entryClass;
                     } else {
                         classname[0] = "Unknown";
                     }
@@ -226,18 +250,16 @@ public class ToolGUI {
             try {
                 String javaCode = javaCodeArea.getText();
 
-                Pattern pattern = Pattern.compile("public\\s+class\\s+(\\w+)");
-                Matcher matcher = pattern.matcher(javaCode);
-
-                if (matcher.find()) {
-                    if(classname[0].equals("Unknown") || !classname[0].equals(matcher.group(1))){
-                        classname[0] = matcher.group(1); // Save the original class name
-                    }
-                    javaCode = javaCode.replaceFirst("public\\s+class\\s+" + classname[0], "public class Test");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "No valid public class found.");
+                String entryClass = findEntryClassName(javaCode);
+                if (entryClass == null) {
+                    JOptionPane.showMessageDialog(frame, "No valid entry class found. Please use a class with a main method or a public top-level class.");
                     return;
                 }
+
+                if (classname[0].equals("Unknown") || !classname[0].equals(entryClass)) {
+                    classname[0] = entryClass;
+                }
+                javaCode = rewriteEntryClassToTest(javaCode, classname[0]);
 
                 // Write the modified code to Test.java
                 File file = new File("Antlr/Test.java");

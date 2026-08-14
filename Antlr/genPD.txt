@@ -6,12 +6,13 @@
            STOP RUN.
 
 
+       TESTSCOPED-SPEAK-PARA.
+       DISPLAY name
+       EXIT.
+
+
        MAIN-PARA.
-       MOVE 9.7 TO d_main
-       COMPUTE x_main = FUNCTION INTEGER-PART(d_main)
-       DISPLAY x_main
-       MOVE 7 TO a_main
-       MOVE a_main TO b_main
-       DISPLAY b_main
+       MOVE "Rex" TO d_main.name
+       DISPLAY d_main.age
        EXIT.
 

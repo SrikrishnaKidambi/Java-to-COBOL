@@ -1,12 +1,13 @@
-Scope:Method:main->Class:TestScoped->GLOBAL
+Scope:Class:TestScoped->GLOBAL
+  Type:null
+    name
+    age
+
+Scope:Method:main->Class:Main->GLOBAL
   Type:String
     args_main [size=[]]
 
-Scope:Block->Method:main->Class:TestScoped->GLOBAL
-  Type:double
+Scope:Block->Method:main->Class:Main->GLOBAL
+  Type:Dog
     d_main
-    b_main
-  Type:int
-    x_main
-    a_main
 

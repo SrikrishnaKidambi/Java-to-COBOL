@@ -194,10 +194,10 @@ public class VariableListenerScoped extends JavaParserBaseListener{
     }
 
     @Override
-    public void enterFieldDeclaration(JavaParser.FieldDeclarationContext ctx){
-        if(ctx.typeType() != null){
-            curr_Type = ctx.typeType().getText();
-        }
+    public void enterFieldDeclaration(JavaParser.FieldDeclarationContext ctx) {
+        // Field declarations are handled by OopDataDivisionGen, not variables.txt
+        // Set curr_Type to null so exitFieldDeclaration doesn't emit them
+        curr_Type = null;
     }
 
     @Override

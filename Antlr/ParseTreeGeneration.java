@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -30,10 +31,14 @@ public class ParseTreeGeneration {
         ParseTree tree = parser.compilationUnit(); // entry rule for Java
 
         System.out.println(tree.toStringTree(parser));  // print the parse tree
+
+        ParseTreeWalker walker = new ParseTreeWalker();
+        ClassInfoExtractor classExtractor = new ClassInfoExtractor();
+        walker.walk(classExtractor, tree);
+        Map<String, ClassInfoExtractor.ClassInfo> classInfoMap = classExtractor.classes;
         
         //cobol code generation
-        ParseTreeWalker walker = new ParseTreeWalker();
-        JavaToCobolListenerPD pdListener = new JavaToCobolListenerPD(tokens);
+        JavaToCobolListenerPD pdListener = new JavaToCobolListenerPD(tokens, classInfoMap);
         walker.walk(pdListener, tree);
         System.out.println("Generated COBOL:\n" + pdListener.getCobolCodePD());
         pdDivision = pdListener.getCobolCodePD();
@@ -43,6 +48,11 @@ public class ParseTreeGeneration {
         VariableExtractor idDdListener = new VariableExtractor();
         VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars());
         idDdDivisions = idDdListener.getIdentificationDataDivisions();
+        java.io.StringWriter oopData = new java.io.StringWriter();
+        try (java.io.PrintWriter oopWriter = new java.io.PrintWriter(oopData)) {
+            OopDataDivisionGen.generateClassRecords(classInfoMap, pdListener.getObjectVariables(), oopWriter);
+        }
+        idDdDivisions += oopData;
         Path outputPath = Paths.get("../finalCobolCode.cbl");
         // System.out.println("----------------Data division starts-----------------");
         // System.out.println(idDdDivisions);

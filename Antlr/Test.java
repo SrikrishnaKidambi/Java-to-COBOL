@@ -1,10 +1,14 @@
 public class Test {
+    String name;
+    int age;
+    void speak() { System.out.println(name); }
+}
+class Main {
     public static void main(String[] args) {
-        double d = 9.7;
-        int x = (int) d;
-        System.out.println(x);
-        int a = 7;
-        double b = (double) a;
-        System.out.println(b);
+        Dog d = new Dog();
+        d.name = "Rex";
+        d.age = 3;
+        d.speak();
+        System.out.println(d.age);
     }
 }
