@@ -2,7 +2,7 @@
 
 [Tool website link](https://srikrishnakidambi.github.io/Java-to-COBOL/)
 ## About the tool :
-- This project is a tool that converts a given Java Program into COBOL program. The convertion from Java to cobol is done using Rule-based method using the Java 14 grammar. We used the grammar files that are provided by ANTLR grammar repository. The conversion is being done from the Java program to an eqivalent COBOL 85 program.
+- This project is a tool that converts a `given Java Program into COBOL program. The convertion from Java to cobol is done using Rule-based method using the Java 14 grammar. We used the grammar files that are provided by ANTLR grammar repository. The conversion is being done from the Java program to an eqivalent COBOL 85 program.
 
 - One of the limitation we are having in this current version of the project is - It is not possible to map all the Java constructs to equivalent COBOL constructs. For example, Java's Object Oriented Programming paradigm cannot be accurately mapped to an equivalent COBOL 85 constructs as the COBOL 85 does not have Object Oriented Programming paradigm.
 

@@ -19,7 +19,8 @@ public class ParseTreeGeneration {
     private static String pdDivision;
     public static void main(String[] args) throws Exception {
         System.out.println("Executing ParseTree Generation class");
-        String code = Files.readString(Paths.get("TestScoped.java"));  // input Java code
+        Path inputPath = args.length > 1 ? Paths.get(args[1]) : Paths.get("TestScoped.java");
+        String code = Files.readString(inputPath);
         String className = args[0];
         CharStream input = CharStreams.fromString(code);
         JavaLexer lexer = new JavaLexer(input);
@@ -40,7 +41,7 @@ public class ParseTreeGeneration {
         Files.writeString(pdOutputPath, pdDivision, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         System.out.println("Procedure division written to genPD.txt");
         VariableExtractor idDdListener = new VariableExtractor();
-        VariableExtractor.variableExtractor(className);
+        VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars());
         idDdDivisions = idDdListener.getIdentificationDataDivisions();
         Path outputPath = Paths.get("../finalCobolCode.cbl");
         // System.out.println("----------------Data division starts-----------------");

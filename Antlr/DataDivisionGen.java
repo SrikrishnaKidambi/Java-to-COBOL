@@ -7,10 +7,14 @@ public class DataDivisionGen {
 
     private static String mapJavaTypeToCobolPic(String javaType) {
         javaType = javaType.toLowerCase();
-        if (javaType.contains("int") || javaType.contains("long")) {
-            return "PIC S9(5).";
-        } else if (javaType.contains("float") || javaType.contains("double")) {
-            return "PIC S9(5)V9(2).";
+        if (javaType.contains("long")) {
+            return "PIC S9(18).";
+        } else if (javaType.contains("int") || javaType.contains("short") || javaType.contains("byte")) {
+            return "PIC S9(9).";
+        } else if (javaType.contains("double")) {
+            return "PIC S9(9)V9(6).";
+        } else if (javaType.contains("float")) {
+            return "PIC S9(5)V9(4).";
         } else if (javaType.contains("char")) {
             return "PIC X(1).";
         } else if (javaType.contains("boolean")) {
@@ -21,6 +25,11 @@ public class DataDivisionGen {
     }
 
     public static void generateDataDivision(String inputFile,String outputFile,String className)throws IOException{
+        generateDataDivision(inputFile, outputFile, className, Collections.emptyMap());
+    }
+
+    public static void generateDataDivision(String inputFile, String outputFile, String className,
+                                            Map<String, String> returnVars) throws IOException {
         try(BufferedReader reader=new BufferedReader(new FileReader(inputFile));
         PrintWriter writer=new PrintWriter(new FileWriter(outputFile))){
             String[] cblPgmID=outputFile.split("\\.");    // extracting the name of the cobol file
@@ -156,6 +165,11 @@ public class DataDivisionGen {
                         }
                     }
                 }
+            }
+
+            for (Map.Entry<String, String> returnVar : returnVars.entrySet()) {
+                writer.printf("       01  %-15s %s%n", "RETURN-" + returnVar.getKey(),
+                        mapJavaTypeToCobolPic(returnVar.getValue()));
             }
 
             // Write additional data division files for methods
