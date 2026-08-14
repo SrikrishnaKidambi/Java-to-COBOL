@@ -11,9 +11,21 @@ public class VariableListenerScoped extends JavaParserBaseListener{
     private final Deque<String> scopeStack=new ArrayDeque<>();      // initialising a stack that stores the curret scope of the variables.
     private String curr_Type=null;  // a variable that stores the type of the variable that is being visited which can be used for storing the type of the variable as a key for the list of variables at a particular scope
     private String currentMethod=null;
+    private boolean insideFieldDeclaration=false; // true while walking a class-level field declaration
+    // Names of classes discovered by ClassInfoExtractor. Fields of these classes
+    // and local variables typed as one of these classes are OOP-owned storage
+    // (handled by OopDataDivisionGen) and must NOT also be declared here as
+    // plain flat variables, or DATA DIVISION ends up with dead/duplicate items
+    // (e.g. a bogus "01 name PIC X(100)." alongside the real "DOG-OBJ-NAME").
+    private final Set<String> oopClassNames;
 
     public VariableListenerScoped(){
+        this(Collections.emptySet());
+    }
+
+    public VariableListenerScoped(Set<String> oopClassNames){
         scopeStack.push("GLOBAL");
+        this.oopClassNames = oopClassNames == null ? Collections.emptySet() : oopClassNames;
     }
 
     // method that returns the current scope as a path.
@@ -47,6 +59,9 @@ public class VariableListenerScoped extends JavaParserBaseListener{
             for(JavaParser.FormalParameterContext parameterCtx : parameters.formalParameterList().formalParameter()){
                 String parameterType = parameterCtx.typeType().getText();
                 String parameterName = parameterCtx.variableDeclaratorId().getText();
+                if(oopClassNames.contains(parameterType)){
+                    continue; // object-typed parameter — OOP-owned storage
+                }
                 addVariable(parameterType, parameterName, null);
             }
         }
@@ -149,6 +164,20 @@ public class VariableListenerScoped extends JavaParserBaseListener{
 
     @Override
     public void enterVariableDeclarators(JavaParser.VariableDeclaratorsContext ctx){
+        // Skip class-level field declarations entirely — OopDataDivisionGen
+        // owns their storage.
+        if(insideFieldDeclaration){
+            return;
+        }
+        // Skip locals/parameters whose declared type is itself a known OOP
+        // class (e.g. "Dog d = new Dog(...)") — OopDataDivisionGen already
+        // emits the proper "CLASSNAME-VAR-INST" group record for these, so
+        // registering "d" again here as a flat PIC X(100) creates dead,
+        // misleading storage that a bug could silently read/write instead
+        // of the real object record.
+        if(curr_Type != null && oopClassNames.contains(curr_Type)){
+            return;
+        }
         for(JavaParser.VariableDeclaratorContext variableCtx : ctx.variableDeclarator()){
             String variableName = variableCtx.variableDeclaratorId().getText();
             String size = null;
@@ -195,13 +224,18 @@ public class VariableListenerScoped extends JavaParserBaseListener{
 
     @Override
     public void enterFieldDeclaration(JavaParser.FieldDeclarationContext ctx) {
-        // Field declarations are handled by OopDataDivisionGen, not variables.txt
-        // Set curr_Type to null so exitFieldDeclaration doesn't emit them
+        // Class-level fields are declared by OopDataDivisionGen as
+        // CLASSNAME-OBJ-FIELDNAME / CLASSNAME-VAR-INST-FIELDNAME records, so
+        // they must be skipped here entirely rather than registered with a
+        // null/guessed type (which previously still emitted a bogus flat
+        // "01 fieldName PIC X(100)." item that shadowed the real OOP field).
+        insideFieldDeclaration = true;
         curr_Type = null;
     }
 
     @Override
     public void exitFieldDeclaration(JavaParser.FieldDeclarationContext ctx){
+        insideFieldDeclaration = false;
         curr_Type = null;
     }
 

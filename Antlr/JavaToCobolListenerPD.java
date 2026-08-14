@@ -316,6 +316,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         if(globalVarNameMap.containsKey(javaVar)){
             return globalVarNameMap.get(javaVar);
         }
+
+        // ── OOP: bare identifier that isn't a parameter or local variable.
+        // If we're inside an instance method/constructor of a class that
+        // declares a field with this name, Java treats it as an implicit
+        // `this.field` reference. Resolve it to the scratch object record
+        // (CLASSNAME-OBJ-FIELDNAME) so it round-trips through the same
+        // record that PERFORM-based method dispatch already MOVEs in/out of.
+        if (currentClassName != null && currentMethod != null
+                && currentMethod.startsWith(currentClassName + "#")
+                && classHasField(currentClassName, javaVar)) {
+            return currentClassName.toUpperCase() + "-OBJ-" + javaVar.toUpperCase();
+        }
+
         return javaVar;
     }
 
@@ -389,7 +402,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
         System.out.println("Text before "+text);
         text = convertArrayAccessToCobol(text);
-        text = replaceObjFieldRefs(replaceThisFieldRefs(replaceVarsWithCobolNames(text)));
+        // Order matters: resolve qualified refs (this.field / obj.field) using
+        // their RAW field names first, then let the generic bare-identifier
+        // pass (replaceVarsWithCobolNames) run last. Reversing this order lets
+        // the generic pass rewrite a bare field name inside "this.field" before
+        // replaceThisFieldRefs sees it, producing a double-prefixed reference
+        // like DOG-OBJ-DOG-OBJ-NAME.
+        text = replaceVarsWithCobolNames(replaceObjFieldRefs(replaceThisFieldRefs(text)));
         System.out.println("Text after "+text);
 
         if (text.contains("?") && text.contains(":") && text.contains("=")
@@ -1044,13 +1063,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         text = convertArrayAccessToCobol(text);
         System.out.println("Text after "+text);
 
-        // ── OOP: replace obj.field references before any pattern matching ──
-        text = replaceObjFieldRefs(text);
-        text = replaceVarsWithCobolNames(text);
-
-        // ── OOP: handle this.field = value ────────────────────────────────
-        if (text.startsWith("this.")) {
-            String stripped = text.substring(5);
+        // ── OOP: handle this.field = value ──────────────────────────────────
+        // IMPORTANT: this must run on the text BEFORE replaceObjFieldRefs /
+        // replaceVarsWithCobolNames, and extract fieldName from the RAW text.
+        // Both of those substitution passes resolve bare identifiers that
+        // match a class field to CLASSNAME-OBJ-FIELDNAME (see getCobolVarName),
+        // which would otherwise also rewrite the "name" inside "this.name"
+        // before we get here, producing a double-prefixed field reference
+        // (e.g. DOG-OBJ-DOG-OBJ-NAME) when this branch re-applies the prefix.
+        if (text.trim().startsWith("this.")) {
+            String stripped = text.trim().substring(5);
             int eqIdx = stripped.indexOf('=');
             if (eqIdx > 0) {
                 String fieldName = stripped.substring(0, eqIdx).trim();
@@ -1068,7 +1090,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
         }
 
         // ── OOP: handle super(args) ────────────────────────────────────────
-        if (text.startsWith("super(") && text.contains(")")) {
+        // Same ordering rationale as the this.field branch above: must run
+        // on raw text, before generic field-name resolution.
+        if (text.trim().startsWith("super(") && text.contains(")")) {
             if (currentClassName != null && classInfoMap.containsKey(currentClassName)) {
                 String parentName = classInfoMap.get(currentClassName).parentClass;
                 if (parentName != null && classInfoMap.containsKey(parentName)) {
@@ -1088,6 +1112,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
             }
             return;
         }
+
+        // ── OOP: replace obj.field references before any further pattern matching ──
+        text = replaceObjFieldRefs(text);
+        text = replaceVarsWithCobolNames(text);
 
         // ── Ternary operator: must run before other pattern matching ───────
         if (text.contains("?") && text.contains(":") && text.contains("=")) {
@@ -3007,8 +3035,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
 
     private String translateArgumentExpression(String argText) {
 
-        argText = replaceObjFieldRefs(replaceThisFieldRefs(
-                replaceVarsWithCobolNames(stripJavaCasts(argText).trim())));
+        // Same ordering rule as elsewhere: resolve this./obj.-qualified field
+        // refs using their raw names FIRST, then run the generic bare-word
+        // pass last, or a bare field name inside a qualified reference gets
+        // rewritten before the qualified handler ever sees it.
+        argText = replaceVarsWithCobolNames(replaceObjFieldRefs(replaceThisFieldRefs(
+                stripJavaCasts(argText).trim())));
 
         String finalArg = argText;
 

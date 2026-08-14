@@ -1,0 +1,218 @@
+diff --git a/Antlr/JavaToCobolListenerPD.java b/Antlr/JavaToCobolListenerPD.java
+index 1bd6232..76fcaf6 100644
+--- a/Antlr/JavaToCobolListenerPD.java
++++ b/Antlr/JavaToCobolListenerPD.java
+@@ -316,6 +316,19 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+         if(globalVarNameMap.containsKey(javaVar)){
+             return globalVarNameMap.get(javaVar);
+         }
++
++        // ── OOP: bare identifier that isn't a parameter or local variable.
++        // If we're inside an instance method/constructor of a class that
++        // declares a field with this name, Java treats it as an implicit
++        // `this.field` reference. Resolve it to the scratch object record
++        // (CLASSNAME-OBJ-FIELDNAME) so it round-trips through the same
++        // record that PERFORM-based method dispatch already MOVEs in/out of.
++        if (currentClassName != null && currentMethod != null
++                && currentMethod.startsWith(currentClassName + "#")
++                && classHasField(currentClassName, javaVar)) {
++            return currentClassName.toUpperCase() + "-OBJ-" + javaVar.toUpperCase();
++        }
++
+         return javaVar;
+     }
+ 
+@@ -389,7 +402,13 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+         text = intrinsicFunctionConverter.accomodateIntrinsicFunctions(text);
+         System.out.println("Text before "+text);
+         text = convertArrayAccessToCobol(text);
+-        text = replaceObjFieldRefs(replaceThisFieldRefs(replaceVarsWithCobolNames(text)));
++        // Order matters: resolve qualified refs (this.field / obj.field) using
++        // their RAW field names first, then let the generic bare-identifier
++        // pass (replaceVarsWithCobolNames) run last. Reversing this order lets
++        // the generic pass rewrite a bare field name inside "this.field" before
++        // replaceThisFieldRefs sees it, producing a double-prefixed reference
++        // like DOG-OBJ-DOG-OBJ-NAME.
++        text = replaceVarsWithCobolNames(replaceObjFieldRefs(replaceThisFieldRefs(text)));
+         System.out.println("Text after "+text);
+ 
+         if (text.contains("?") && text.contains(":") && text.contains("=")
+@@ -1044,13 +1063,16 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+         text = convertArrayAccessToCobol(text);
+         System.out.println("Text after "+text);
+ 
+-        // ── OOP: replace obj.field references before any pattern matching ──
+-        text = replaceObjFieldRefs(text);
+-        text = replaceVarsWithCobolNames(text);
+-
+-        // ── OOP: handle this.field = value ────────────────────────────────
+-        if (text.startsWith("this.")) {
+-            String stripped = text.substring(5);
++        // ── OOP: handle this.field = value ──────────────────────────────────
++        // IMPORTANT: this must run on the text BEFORE replaceObjFieldRefs /
++        // replaceVarsWithCobolNames, and extract fieldName from the RAW text.
++        // Both of those substitution passes resolve bare identifiers that
++        // match a class field to CLASSNAME-OBJ-FIELDNAME (see getCobolVarName),
++        // which would otherwise also rewrite the "name" inside "this.name"
++        // before we get here, producing a double-prefixed field reference
++        // (e.g. DOG-OBJ-DOG-OBJ-NAME) when this branch re-applies the prefix.
++        if (text.trim().startsWith("this.")) {
++            String stripped = text.trim().substring(5);
+             int eqIdx = stripped.indexOf('=');
+             if (eqIdx > 0) {
+                 String fieldName = stripped.substring(0, eqIdx).trim();
+@@ -1068,7 +1090,9 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+         }
+ 
+         // ── OOP: handle super(args) ────────────────────────────────────────
+-        if (text.startsWith("super(") && text.contains(")")) {
++        // Same ordering rationale as the this.field branch above: must run
++        // on raw text, before generic field-name resolution.
++        if (text.trim().startsWith("super(") && text.contains(")")) {
+             if (currentClassName != null && classInfoMap.containsKey(currentClassName)) {
+                 String parentName = classInfoMap.get(currentClassName).parentClass;
+                 if (parentName != null && classInfoMap.containsKey(parentName)) {
+@@ -1089,6 +1113,10 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+             return;
+         }
+ 
++        // ── OOP: replace obj.field references before any further pattern matching ──
++        text = replaceObjFieldRefs(text);
++        text = replaceVarsWithCobolNames(text);
++
+         // ── Ternary operator: must run before other pattern matching ───────
+         if (text.contains("?") && text.contains(":") && text.contains("=")) {
+             if (handleTernaryAssignment(text)) return;
+@@ -3007,8 +3035,12 @@ public class JavaToCobolListenerPD extends JavaParserBaseListener{
+ 
+     private String translateArgumentExpression(String argText) {
+ 
+-        argText = replaceObjFieldRefs(replaceThisFieldRefs(
+-                replaceVarsWithCobolNames(stripJavaCasts(argText).trim())));
++        // Same ordering rule as elsewhere: resolve this./obj.-qualified field
++        // refs using their raw names FIRST, then run the generic bare-word
++        // pass last, or a bare field name inside a qualified reference gets
++        // rewritten before the qualified handler ever sees it.
++        argText = replaceVarsWithCobolNames(replaceObjFieldRefs(replaceThisFieldRefs(
++                stripJavaCasts(argText).trim())));
+ 
+         String finalArg = argText;
+ 
+diff --git a/Antlr/ParseTreeGeneration.java b/Antlr/ParseTreeGeneration.java
+index fc71521..7c15afb 100644
+--- a/Antlr/ParseTreeGeneration.java
++++ b/Antlr/ParseTreeGeneration.java
+@@ -46,7 +46,8 @@ public class ParseTreeGeneration {
+         Files.writeString(pdOutputPath, pdDivision, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+         System.out.println("Procedure division written to genPD.txt");
+         VariableExtractor idDdListener = new VariableExtractor();
+-        VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars());
++        VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars(),
++                classInfoMap.keySet());
+         idDdDivisions = idDdListener.getIdentificationDataDivisions();
+         java.io.StringWriter oopData = new java.io.StringWriter();
+         try (java.io.PrintWriter oopWriter = new java.io.PrintWriter(oopData)) {
+diff --git a/Antlr/VariableExtractor.java b/Antlr/VariableExtractor.java
+index 4732a49..22ec5b6 100644
+--- a/Antlr/VariableExtractor.java
++++ b/Antlr/VariableExtractor.java
+@@ -16,6 +16,12 @@ public class VariableExtractor {
+ 
+     public static void variableExtractor(String className, String inputFile,
+                                          Map<String, String> returnVars) throws Exception{
++        variableExtractor(className, inputFile, returnVars, Collections.emptySet());
++    }
++
++    public static void variableExtractor(String className, String inputFile,
++                                         Map<String, String> returnVars,
++                                         java.util.Set<String> oopClassNames) throws Exception{
+         CharStream codeStream = CharStreams.fromFileName(inputFile);
+         String codeTxt = codeStream.toString();
+         
+@@ -26,7 +32,7 @@ public class VariableExtractor {
+ 
+         ParseTree tree = parser.compilationUnit();    // generating parse tree
+         ParseTreeWalker walker = new ParseTreeWalker();
+-        VariableListenerScoped extractor = new VariableListenerScoped();
++        VariableListenerScoped extractor = new VariableListenerScoped(oopClassNames);
+         walker.walk(extractor, tree);
+ 
+         extractor.writeToFile("variables.txt");
+diff --git a/Antlr/VariableListenerScoped.java b/Antlr/VariableListenerScoped.java
+index 26399bd..24247a0 100644
+--- a/Antlr/VariableListenerScoped.java
++++ b/Antlr/VariableListenerScoped.java
+@@ -11,9 +11,21 @@ public class VariableListenerScoped extends JavaParserBaseListener{
+     private final Deque<String> scopeStack=new ArrayDeque<>();      // initialising a stack that stores the curret scope of the variables.
+     private String curr_Type=null;  // a variable that stores the type of the variable that is being visited which can be used for storing the type of the variable as a key for the list of variables at a particular scope
+     private String currentMethod=null;
++    private boolean insideFieldDeclaration=false; // true while walking a class-level field declaration
++    // Names of classes discovered by ClassInfoExtractor. Fields of these classes
++    // and local variables typed as one of these classes are OOP-owned storage
++    // (handled by OopDataDivisionGen) and must NOT also be declared here as
++    // plain flat variables, or DATA DIVISION ends up with dead/duplicate items
++    // (e.g. a bogus "01 name PIC X(100)." alongside the real "DOG-OBJ-NAME").
++    private final Set<String> oopClassNames;
+ 
+     public VariableListenerScoped(){
++        this(Collections.emptySet());
++    }
++
++    public VariableListenerScoped(Set<String> oopClassNames){
+         scopeStack.push("GLOBAL");
++        this.oopClassNames = oopClassNames == null ? Collections.emptySet() : oopClassNames;
+     }
+ 
+     // method that returns the current scope as a path.
+@@ -47,6 +59,9 @@ public class VariableListenerScoped extends JavaParserBaseListener{
+             for(JavaParser.FormalParameterContext parameterCtx : parameters.formalParameterList().formalParameter()){
+                 String parameterType = parameterCtx.typeType().getText();
+                 String parameterName = parameterCtx.variableDeclaratorId().getText();
++                if(oopClassNames.contains(parameterType)){
++                    continue; // object-typed parameter — OOP-owned storage
++                }
+                 addVariable(parameterType, parameterName, null);
+             }
+         }
+@@ -149,6 +164,20 @@ public class VariableListenerScoped extends JavaParserBaseListener{
+ 
+     @Override
+     public void enterVariableDeclarators(JavaParser.VariableDeclaratorsContext ctx){
++        // Skip class-level field declarations entirely — OopDataDivisionGen
++        // owns their storage.
++        if(insideFieldDeclaration){
++            return;
++        }
++        // Skip locals/parameters whose declared type is itself a known OOP
++        // class (e.g. "Dog d = new Dog(...)") — OopDataDivisionGen already
++        // emits the proper "CLASSNAME-VAR-INST" group record for these, so
++        // registering "d" again here as a flat PIC X(100) creates dead,
++        // misleading storage that a bug could silently read/write instead
++        // of the real object record.
++        if(curr_Type != null && oopClassNames.contains(curr_Type)){
++            return;
++        }
+         for(JavaParser.VariableDeclaratorContext variableCtx : ctx.variableDeclarator()){
+             String variableName = variableCtx.variableDeclaratorId().getText();
+             String size = null;
+@@ -195,13 +224,18 @@ public class VariableListenerScoped extends JavaParserBaseListener{
+ 
+     @Override
+     public void enterFieldDeclaration(JavaParser.FieldDeclarationContext ctx) {
+-        // Field declarations are handled by OopDataDivisionGen, not variables.txt
+-        // Set curr_Type to null so exitFieldDeclaration doesn't emit them
++        // Class-level fields are declared by OopDataDivisionGen as
++        // CLASSNAME-OBJ-FIELDNAME / CLASSNAME-VAR-INST-FIELDNAME records, so
++        // they must be skipped here entirely rather than registered with a
++        // null/guessed type (which previously still emitted a bogus flat
++        // "01 fieldName PIC X(100)." item that shadowed the real OOP field).
++        insideFieldDeclaration = true;
+         curr_Type = null;
+     }
+ 
+     @Override
+     public void exitFieldDeclaration(JavaParser.FieldDeclarationContext ctx){
++        insideFieldDeclaration = false;
+         curr_Type = null;
+     }
+ 

@@ -1,8 +1,3 @@
-Scope:Class:TestScoped->GLOBAL
-  Type:null
-    name
-    age
-
 Scope:Method:main->Class:Main->GLOBAL
   Type:String
     args_main [size=[]]

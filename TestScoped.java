@@ -1,0 +1,7 @@
+/**
+ * TestScoped
+ */
+public class TestScoped {
+
+    
+}

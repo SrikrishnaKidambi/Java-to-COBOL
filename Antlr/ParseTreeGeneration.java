@@ -46,7 +46,8 @@ public class ParseTreeGeneration {
         Files.writeString(pdOutputPath, pdDivision, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         System.out.println("Procedure division written to genPD.txt");
         VariableExtractor idDdListener = new VariableExtractor();
-        VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars());
+        VariableExtractor.variableExtractor(className, inputPath.toString(), pdListener.getReturnVars(),
+                classInfoMap.keySet());
         idDdDivisions = idDdListener.getIdentificationDataDivisions();
         java.io.StringWriter oopData = new java.io.StringWriter();
         try (java.io.PrintWriter oopWriter = new java.io.PrintWriter(oopData)) {

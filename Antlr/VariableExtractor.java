@@ -16,6 +16,12 @@ public class VariableExtractor {
 
     public static void variableExtractor(String className, String inputFile,
                                          Map<String, String> returnVars) throws Exception{
+        variableExtractor(className, inputFile, returnVars, Collections.emptySet());
+    }
+
+    public static void variableExtractor(String className, String inputFile,
+                                         Map<String, String> returnVars,
+                                         java.util.Set<String> oopClassNames) throws Exception{
         CharStream codeStream = CharStreams.fromFileName(inputFile);
         String codeTxt = codeStream.toString();
         
@@ -26,7 +32,7 @@ public class VariableExtractor {
 
         ParseTree tree = parser.compilationUnit();    // generating parse tree
         ParseTreeWalker walker = new ParseTreeWalker();
-        VariableListenerScoped extractor = new VariableListenerScoped();
+        VariableListenerScoped extractor = new VariableListenerScoped(oopClassNames);
         walker.walk(extractor, tree);
 
         extractor.writeToFile("variables.txt");

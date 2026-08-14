@@ -7,7 +7,7 @@
 
 
        TESTSCOPED-SPEAK-PARA.
-       DISPLAY name
+       DISPLAY TESTSCOPED-OBJ-NAME
        EXIT.
 
 
